@@ -1,0 +1,14 @@
+<div class="mb-8">
+    <span>Search through animations provided by Gates Of Hell.</span>
+</div>
+
+<input [(ngModel)]="query" class="border border-slate-200 rounded-md p-3 w-full" placeholder="Search for animation name..." type="text" />
+
+<div class="flex flex-col gap-4 mt-4">
+    @for (name of animationNames$ | async | filter:query(); track name) {
+        <button type="button" (click)="copyAnimationName(name)" class="w-full flex justify-between items-center cursor-pointer p-4 border border-slate-200 hover:border-slate-400 rounded-md">
+            <span>{{ name }}</span>
+            <ng-icon name="tablerCopy"></ng-icon>
+        </button>
+    }
+</div>
