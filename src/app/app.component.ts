@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { tablerBrandGithub, tablerCoffee, tablerEyeSearch } from '@ng-icons/tabler-icons';
+import { inject } from '@vercel/analytics';
 
 @Component({
   selector: 'app-root',
@@ -16,5 +17,8 @@ import { tablerBrandGithub, tablerCoffee, tablerEyeSearch } from '@ng-icons/tabl
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  ngOnInit(): void {
+    inject();
+  }
 }
