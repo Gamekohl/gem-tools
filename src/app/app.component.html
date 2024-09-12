@@ -1,11 +1,21 @@
-<div class="container mx-auto flex">
+<div class="w-[960px] mx-auto flex">
   <a routerLink="/" class="w-56">
     <img src="/assets/gem-tools-logo.png" />
   </a>
-  <div class="flex items-center">
-    <a routerLink="/search/animations" routerLinkActive="active" class="flex justify-center items-center gap-2 cursor-pointer hover:bg-black hover:bg-opacity-10 p-2 rounded-md">
+  <div class="flex justify-between items-center">
+    <a routerLink="/search/animations" routerLinkActive="active" class="flex justify-center items-center gap-2 cursor-pointer hover:bg-black hover:bg-opacity-5 p-2 rounded-md">
       <ng-icon name="tablerEyeSearch"></ng-icon>
-      <span class="font-semibold">Search animations</span>
+      <span>Search animations</span>
+    </a>
+  </div>
+  <div class="flex-1"></div>
+  <div class="flex justify-center items-center gap-1">
+    <span class="text-sm">created by Gamekohl</span>
+    <a title="GitHub" href="https://github.com/Gamekohl" target="_blank" class="border border-slate-200 flex justify-center items-center rounded-md p-2 bg-[#181818] hover:bg-[#202020] text-white">
+      <ng-icon name="tablerBrandGithub"></ng-icon>
+    </a>
+    <a title="BuyMeACoffee" href="https://buymeacoffee.com/gamekohl" target="_blank" class="border border-slate-200 flex justify-center items-center rounded-md p-2 bg-[#fd0] hover:bg-[#dbbe00]">
+      <ng-icon name="tablerCoffee"></ng-icon>
     </a>
   </div>
 </div>

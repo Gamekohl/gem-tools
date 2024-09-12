@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { tablerEyeSearch } from '@ng-icons/tabler-icons';
+import { tablerBrandGithub, tablerCoffee, tablerEyeSearch } from '@ng-icons/tabler-icons';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { tablerEyeSearch } from '@ng-icons/tabler-icons';
     RouterLink,
     RouterLinkActive
   ],
-  viewProviders: [provideIcons({ tablerEyeSearch })],
+  viewProviders: [provideIcons({ tablerEyeSearch, tablerBrandGithub, tablerCoffee })],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
