@@ -23,7 +23,7 @@ export class AnimationsComponent implements OnInit {
   query = model<string>('');
 
   ngOnInit(): void {
-    this.animationNames$ = this.http.get<{ names: string[] }>('http://localhost:4200/assets/animation_names.json').pipe(
+    this.animationNames$ = this.http.get<{ names: string[] }>('assets/animation_names.json').pipe(
       map(({ names }) => names)
     );
   }
