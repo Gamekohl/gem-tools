@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { tablerBrandGithub, tablerCoffee, tablerEyeSearch } from '@ng-icons/tabler-icons';
+import { tablerArrowsRandom, tablerBox, tablerBrandGithub, tablerCoffee } from '@ng-icons/tabler-icons';
 import { inject } from '@vercel/analytics';
 
 @Component({
@@ -13,7 +13,7 @@ import { inject } from '@vercel/analytics';
     RouterLink,
     RouterLinkActive
   ],
-  viewProviders: [provideIcons({ tablerEyeSearch, tablerBrandGithub, tablerCoffee })],
+  viewProviders: [provideIcons({ tablerBox, tablerBrandGithub, tablerCoffee, tablerArrowsRandom })],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
