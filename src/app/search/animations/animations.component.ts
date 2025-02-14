@@ -8,12 +8,12 @@ import { map, Observable } from 'rxjs';
 import { FilterPipe } from '../../pipes/filter.pipe';
 
 @Component({
-  selector: 'app-animations',
-  standalone: true,
-  imports: [AsyncPipe, NgIconComponent, FilterPipe, FormsModule],
-  templateUrl: './animations.component.html',
-  styleUrl: './animations.component.scss',
-  viewProviders: [provideIcons({ tablerCopy })]
+    selector: 'app-animations',
+    standalone: true,
+    imports: [AsyncPipe, NgIconComponent, FilterPipe, FormsModule],
+    templateUrl: './animations.component.html',
+    styleUrl: './animations.component.scss',
+    viewProviders: [provideIcons({ tablerCopy })]
 })
 export class AnimationsComponent implements OnInit {
   private readonly http = inject(HttpClient);

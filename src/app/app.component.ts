@@ -6,13 +6,13 @@ import { inject } from '@vercel/analytics';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     RouterOutlet,
     NgIconComponent,
     RouterLink,
     RouterLinkActive
   ],
+  standalone: true,
   viewProviders: [provideIcons({ tablerBox, tablerBrandGithub, tablerCoffee, tablerArrowsRandom })],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

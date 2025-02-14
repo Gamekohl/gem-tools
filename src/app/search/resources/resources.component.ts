@@ -10,13 +10,13 @@ import { tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFold
 import { debounceTime, filter } from 'rxjs';
 
 @Component({
-  selector: 'app-resources',
-  standalone: true,
-  imports: [MatTreeModule, NgIconComponent, ReactiveFormsModule, ClipboardModule],
-  templateUrl: './resources.component.html',
-  styleUrl: './resources.component.scss',
-  viewProviders: [provideIcons({ tablerFolder, tablerFolderOpen, tablerCopy, tablerBox, tablerArrowNarrowRight })],
-  schemas: [NO_ERRORS_SCHEMA]
+    selector: 'app-resources',
+    standalone: true,
+    imports: [MatTreeModule, NgIconComponent, ReactiveFormsModule, ClipboardModule],
+    templateUrl: './resources.component.html',
+    styleUrl: './resources.component.scss',
+    viewProviders: [provideIcons({ tablerFolder, tablerFolderOpen, tablerCopy, tablerBox, tablerArrowNarrowRight })],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class ResourcesComponent implements OnInit {
   private readonly http = inject(HttpClient);
