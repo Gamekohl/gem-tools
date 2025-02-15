@@ -1,10 +1,9 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { FlatTreeControl } from '@angular/cdk/tree';
 import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, ElementRef, inject, NO_ERRORS_SCHEMA, OnInit, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatTreeFlatDataSource, MatTreeFlattener, MatTreeModule } from '@angular/material/tree';
+import {MatTree, MatTreeModule} from '@angular/material/tree';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen } from '@ng-icons/tabler-icons';
 import { debounceTime, filter } from 'rxjs';
@@ -16,7 +15,6 @@ import { debounceTime, filter } from 'rxjs';
     templateUrl: './resources.component.html',
     styleUrl: './resources.component.scss',
     viewProviders: [provideIcons({ tablerFolder, tablerFolderOpen, tablerCopy, tablerBox, tablerArrowNarrowRight })],
-    schemas: [NO_ERRORS_SCHEMA]
 })
 export class ResourcesComponent implements OnInit {
   private readonly http = inject(HttpClient);
@@ -25,14 +23,7 @@ export class ResourcesComponent implements OnInit {
   private _data: ResourceNode[] = [];
   private currentQuery = '';
   private treeContainer = viewChild<ElementRef<HTMLDivElement>>('treeContainer');
-
-  private _transformer = (node: ResourceNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      level: level,
-    };
-  }
+  private tree = viewChild<MatTree<ResourceNode, ResourceNode>>('tree');
 
   currentPath: string[] = [];
 
@@ -40,30 +31,21 @@ export class ResourcesComponent implements OnInit {
     search: [''],
   });
 
-  treeControl = new FlatTreeControl<FlatNode>(
-    node => node.level,
-    node => node.expandable
-  );
+  dataSource: ResourceNode[] = [];
 
-  treeFlattener = new MatTreeFlattener(
-    this._transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node.children
-  );
+  childrenAccessor = (node: ResourceNode) => node.children ?? [];
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-  hasChild = (_: number, node: FlatNode) => node.expandable;
+  hasChild = (_: number, node: ResourceNode) => !!node.children && node.children.length > 0;
 
   ngOnInit(): void {
-    this.http.get<ResourceNode[]>('/assets/structure.json').subscribe({
-      next: data => {
-        this.dataSource.data = data;
-        this._data = data;
-        this.trackScrolling();
-      },
-    });
+    this.http.get<ResourceNode[]>('/assets/structure.json')
+      .subscribe({
+        next: data => {
+          this.dataSource = data;
+          this._data = data;
+          this.trackScrolling();
+        }
+      });
 
     this.form.get('search')?.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),
@@ -80,9 +62,9 @@ export class ResourcesComponent implements OnInit {
     this.filterTree(query);
 
     if (query) {
-      this.treeControl.expandAll();
+      this.tree()?.expandAll();
     } else {
-      this.treeControl.collapseAll();
+      this.tree()?.collapseAll();
     }
   }
 
@@ -93,14 +75,14 @@ export class ResourcesComponent implements OnInit {
     return name.replace(regex, match => `<mark>${match}</mark>`);
   }
 
-  toggle(node: FlatNode): void {
-    if (this.treeControl.isExpanded(node)) {
+  toggle(node: ResourceNode): void {
+    if (this.tree()?.isExpanded(node)) {
       this.trackScrolling();
     }
   }
 
   private filterTree(query: string): void {
-    this.dataSource.data = this.filterRecursive(query, this._data);
+    this.dataSource = this.filterRecursive(query, this._data);
   }
 
   private filterRecursive(
@@ -149,7 +131,7 @@ export class ResourcesComponent implements OnInit {
   }
 
   private updatePath(nodeName: string): void {
-    const path = this.findPath(nodeName, this.dataSource.data);
+    const path = this.findPath(nodeName, this.dataSource);
 
     if (path) {
       this.currentPath = path;
@@ -165,7 +147,7 @@ export class ResourcesComponent implements OnInit {
 
       if (node.children) {
         const childPath = this.findPath(target, node.children, newPath);
-        if (childPath) 
+        if (childPath)
           return childPath;
       }
     }
@@ -177,10 +159,4 @@ export class ResourcesComponent implements OnInit {
 interface ResourceNode {
   name: string;
   children: ResourceNode[];
-}
-
-interface FlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
 }
