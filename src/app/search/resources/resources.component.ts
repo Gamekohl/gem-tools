@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, ElementRef, inject, NO_ERRORS_SCHEMA, OnInit, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import {MatTree, MatTreeModule} from '@angular/material/tree';
+import { MatTree, MatTreeModule } from '@angular/material/tree';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen } from '@ng-icons/tabler-icons';
 import { debounceTime, filter } from 'rxjs';
@@ -43,7 +43,7 @@ export class ResourcesComponent implements OnInit {
         next: data => {
           this.dataSource = data;
           this._data = data;
-          this.trackScrolling();
+          // this.trackScrolling();
         }
       });
 
@@ -60,7 +60,7 @@ export class ResourcesComponent implements OnInit {
   applyFilter(query: string): void {
     this.currentQuery = query;
     this.filterTree(query);
-
+    
     if (query) {
       this.tree()?.expandAll();
     } else {
