@@ -2,7 +2,7 @@
     <span>Search through all resources provided by Call to Arms - Gates Of Hell.</span>
 </div>
 
-@if (currentPath.length) {
+<!--@if (currentPath.length) {
     <div class="breadcrumb text-sm text-gray-600 mb-4 fixed top-0 w-full max-w-[960px] bg-white p-4 flex items-center gap-2 border border-slate-200 rounded-md rounded-tl-none rounded-tr-none shadow-md">
         @for (part of currentPath; let last = $last; let idx = $index; track part + idx) {
             <span [class.font-bold]="last">{{ part }}</span>
@@ -11,7 +11,7 @@
             }
         }
     </div>
-}
+}-->
 
 <form [formGroup]="form">
     <input formControlName="search" class="border border-slate-200 rounded-md p-3 w-full" placeholder="Search for name..." type="text" />
@@ -19,13 +19,13 @@
 
 <div #treeContainer class="mt-4">
     <mat-tree #tree class="border border-slate-200 rounded-md" [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
-        <mat-tree-node class="group w-full hover:!font-semibold flex gap-2 items-center cursor-pointer p-4 border-b border-b-slate-200 hover:bg-slate-100 last:border-b-0" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodeToggle>
+        <mat-tree-node [cdkCopyToClipboard]="node.name" class="group w-full hover:!font-semibold flex gap-2 items-center cursor-pointer p-4 border-b border-b-slate-200 hover:bg-slate-100 last:border-b-0" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodeToggle>
             <ng-icon name="tablerBox"></ng-icon>
             <span [innerHTML]="getText(node.name)" class="flex-1"></span>
             <ng-icon name="tablerCopy" class="!hidden group-hover:!inline-block transition-all"></ng-icon>
         </mat-tree-node>
 
-        <mat-tree-node (click)="toggle(node)" [attr.data-node]="tree.isExpanded(node) ? node.name : ''" class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-slate-200 last:border-b-0 hover:bg-slate-100 transition-colors" *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
+        <mat-tree-node [attr.data-node]="tree.isExpanded(node) ? node.name : ''" class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-slate-200 last:border-b-0 hover:bg-slate-100 transition-colors" *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
             <button class="p-2 flex items-center" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
                 <ng-icon [name]="tree.isExpanded(node) ? 'tablerFolderOpen' : 'tablerFolder'"></ng-icon>
             </button>
