@@ -1,29 +1,49 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { NgIconComponent } from '@ng-icons/core';
+import * as vercelAnalytics from '@vercel/analytics';
 import { AppComponent } from './app.component';
 
+jest.mock('@vercel/analytics', () => ({
+  inject: jest.fn()
+}));
+
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        AppComponent,
+        NgIconComponent
+      ],
+      providers: [
+        provideRouter([])
+      ]
     }).compileComponents();
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it(`should have the 'gem-tools' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('gem-tools');
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  it('should call inject() from vercel analytics on initialization', () => {
+    component.ngOnInit();
+    
+    expect(vercelAnalytics.inject).toHaveBeenCalled();
+    expect(vercelAnalytics.inject).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render without errors', () => {
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, gem-tools');
+    expect(fixture.nativeElement).toBeTruthy();
   });
 });

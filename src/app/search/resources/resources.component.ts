@@ -22,7 +22,6 @@ export class ResourcesComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private _data: ResourceNode[] = [];
   private currentQuery = '';
-  private treeContainer = viewChild<ElementRef<HTMLDivElement>>('treeContainer');
   private tree = viewChild<MatTree<ResourceNode, ResourceNode>>('tree');
 
   currentPath: string[] = [];
@@ -43,7 +42,6 @@ export class ResourcesComponent implements OnInit {
         next: data => {
           this.dataSource = data;
           this._data = data;
-          //this.trackScrolling();
         }
       });
 
@@ -60,7 +58,7 @@ export class ResourcesComponent implements OnInit {
   applyFilter(query: string): void {
     this.currentQuery = query;
     this.filterTree(query);
-
+    
     if (query) {
       this.tree()?.expandAll();
     } else {
@@ -73,12 +71,6 @@ export class ResourcesComponent implements OnInit {
 
     const regex = new RegExp(this.currentQuery, 'gi');
     return name.replace(regex, match => `<mark>${match}</mark>`);
-  }
-
-  toggle(node: ResourceNode): void {
-    if (this.tree()?.isExpanded(node)) {
-      this.trackScrolling();
-    }
   }
 
   private filterTree(query: string): void {
@@ -108,26 +100,6 @@ export class ResourcesComponent implements OnInit {
 
         return false;
       });
-  }
-
-  private trackScrolling(): void {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        const nodeName = entry.target.getAttribute('data-node');
-
-        if (nodeName !== '') {
-          if (entry.isIntersecting) {
-            this.currentPath = this.currentPath.filter(path => path !== nodeName);
-            return;
-          }
-
-          this.updatePath(nodeName!);
-        }
-      }
-    });
-
-    const treeNodes = this.treeContainer()!.nativeElement.children[0].querySelectorAll('.tree-node');
-    treeNodes.forEach(node => observer.observe(node));
   }
 
   private updatePath(nodeName: string): void {
