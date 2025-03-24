@@ -42,7 +42,6 @@ export class ResourcesComponent implements OnInit {
         next: data => {
           this.dataSource = data;
           this._data = data;
-          // this.trackScrolling();
         }
       });
 
