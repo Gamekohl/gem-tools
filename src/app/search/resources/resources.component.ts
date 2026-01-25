@@ -1,17 +1,15 @@
-import { ClipboardModule } from '@angular/cdk/clipboard';
 import { HttpClient } from '@angular/common/http';
-import { Component, DestroyRef, ElementRef, inject, NO_ERRORS_SCHEMA, OnInit, viewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatTree, MatTreeModule } from '@angular/material/tree';
+import { MatTree, MatTreeModule } from "@angular/material/tree";
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen } from '@ng-icons/tabler-icons';
 import { debounceTime, filter } from 'rxjs';
 
 @Component({
     selector: 'app-resources',
-    standalone: true,
-    imports: [MatTreeModule, NgIconComponent, ReactiveFormsModule, ClipboardModule],
+    imports: [NgIconComponent, ReactiveFormsModule, MatTree, MatTreeModule],
     templateUrl: './resources.component.html',
     styleUrl: './resources.component.scss',
     viewProviders: [provideIcons({ tablerFolder, tablerFolderOpen, tablerCopy, tablerBox, tablerArrowNarrowRight })],
