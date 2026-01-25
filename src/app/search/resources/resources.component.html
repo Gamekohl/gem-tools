@@ -14,7 +14,7 @@
             <ng-icon name="tablerCopy" class="!hidden group-hover:!inline-block transition-all"></ng-icon>
         </mat-tree-node>
 
-        <mat-tree-node (click)="toggle(node)" [attr.data-node]="tree.isExpanded(node) ? node.name : ''" class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-slate-200 last:border-b-0 hover:bg-slate-100 transition-colors" *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
+        <mat-tree-node [attr.data-node]="tree.isExpanded(node) ? node.name : ''" class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-slate-200 last:border-b-0 hover:bg-slate-100 transition-colors" *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
             <button class="p-2 flex items-center" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
                 <ng-icon [name]="tree.isExpanded(node) ? 'tablerFolderOpen' : 'tablerFolder'"></ng-icon>
             </button>
