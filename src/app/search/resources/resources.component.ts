@@ -1,3 +1,4 @@
+import {Clipboard} from "@angular/cdk/clipboard";
 import {HttpClient} from '@angular/common/http';
 import {
     ChangeDetectionStrategy,
@@ -12,6 +13,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormControl, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatTree, MatTreeModule} from "@angular/material/tree";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen, tablerX} from '@ng-icons/tabler-icons';
@@ -30,6 +32,8 @@ export class ResourcesComponent implements OnInit {
     private readonly fb = inject(NonNullableFormBuilder);
     private readonly destroyRef = inject(DestroyRef);
     private readonly cdr = inject(ChangeDetectorRef);
+    private readonly clipboard = inject(Clipboard);
+    private readonly snackbar = inject(MatSnackBar);
 
     private _data: ResourceNode[] = [];
     private currentQuery = '';
@@ -93,6 +97,12 @@ export class ResourcesComponent implements OnInit {
         return name.replace(regex, match => `<mark>${match}</mark>`);
     }
 
+    copyName(name: string): void {
+        this.clipboard.copy(name);
+
+        this.snackbar.open(`"${name}" copied to clipboard`, '', { duration: 2000 });
+    }
+
     private filterTree(query: string): void {
         if (query.length === 0) {
             this.dataSource = this._data;
@@ -151,7 +161,6 @@ export class ResourcesComponent implements OnInit {
 
         for (const root of roots) dfs(root);
     }
-
 }
 
 interface ResourceNode {

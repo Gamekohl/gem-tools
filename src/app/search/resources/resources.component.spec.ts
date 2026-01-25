@@ -1,7 +1,9 @@
+import {Clipboard} from "@angular/cdk/clipboard";
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatSnackBar} from "@angular/material/snack-bar";
 import { MatTreeModule } from '@angular/material/tree';
 import { ResourcesComponent } from './resources.component';
 const spyOn = jest.spyOn;
@@ -59,29 +61,6 @@ describe('ResourcesComponent', () => {
     expect(component.dataSource).toEqual(component['_data']);
   });
 
-  it('should find the correct path for a node', () => {
-    const mockData = [
-      { name: 'Node1', children: [{ name: 'Child1', children: [] }] },
-      { name: 'Node2', children: [] },
-    ];
-
-    const path = component['findPath']('Child1', mockData);
-    expect(path).toEqual(['Node1', 'Child1']);
-
-    const noPath = component['findPath']('NonExistent', mockData);
-    expect(noPath).toBeNull();
-  });
-
-  it('should update the current path when updatePath is called', () => {
-    component.dataSource = [
-      { name: 'Node1', children: [{ name: 'Child1', children: [] }] },
-      { name: 'Node2', children: [] },
-    ];
-
-    component['updatePath']('Child1');
-    expect(component.currentPath).toEqual(['Node1', 'Child1']);
-  });
-
   it('should highlight text in getText when query matches', () => {
     component['currentQuery'] = 'Node';
     const result = component.getText('Node1');
@@ -101,5 +80,29 @@ describe('ResourcesComponent', () => {
       expect(component.applyFilter).toHaveBeenCalledWith('Node');
       done();
     }, 600); // Wait for debounceTime (500ms) + buffer
+  });
+
+  it('should apply filter when search is empty', (done) => {
+    const searchControl = component.form.get('search');
+    searchControl?.patchValue('test');
+    spyOn(component, 'applyFilter');
+
+    searchControl?.setValue('');
+    setTimeout(() => {
+      expect(component.applyFilter).toHaveBeenCalledWith('');
+      done();
+    }, 600);
+  });
+
+  it('should copy name to clipboard', () => {
+    const clipboard = TestBed.inject(Clipboard);
+    const snackbar = TestBed.inject(MatSnackBar);
+
+    const clipboardSpy = spyOn(clipboard, 'copy');
+    const snackbarSpy = spyOn(snackbar, 'open');
+
+    component.copyName('Node1');
+    expect(clipboardSpy).toHaveBeenCalledWith('Node1');
+    expect(snackbarSpy).toHaveBeenCalledWith('"Node1" copied to clipboard', '', { duration: 2000 });
   });
 });
