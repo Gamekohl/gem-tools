@@ -2,13 +2,19 @@
     <span>Search through animations provided by Call to Arms - Gates Of Hell.</span>
 </div>
 
-<input [(ngModel)]="query" class="border border-slate-200 rounded-md p-3 w-full" placeholder="Search for animation name..." type="text" />
+<input [(ngModel)]="query" class="border border-slate-200 rounded-md p-3 w-full"
+       placeholder="Search for animation name..." type="text"/>
 
 <div class="flex flex-col mt-4 border border-slate-200 rounded-md">
-    @for (name of animationNames$ | async | filter:query(); track name) {
-        <button type="button" (click)="copyAnimationName(name)" class="w-full flex justify-between border-b border-slate-200 last:border-b-0 hover:bg-slate-100 items-center cursor-pointer p-4">
-            <span>{{ name }}</span>
-            <ng-icon name="tablerCopy"></ng-icon>
-        </button>
+    @if (animationNames.hasValue()) {
+        @for (name of animationNames.value()!.names | filter:query(); track name) {
+            <button type="button" (click)="copyAnimationName(name)"
+                    class="w-full flex justify-between border-b border-slate-200 last:border-b-0 hover:bg-slate-100 items-center cursor-pointer p-4">
+                <span>{{ name }}</span>
+                <ng-icon name="tablerCopy"></ng-icon>
+            </button>
+        }
+    } @else if (animationNames.isLoading()) {
+        <span>Loading...</span>
     }
 </div>
