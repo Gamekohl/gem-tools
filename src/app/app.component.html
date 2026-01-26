@@ -1,6 +1,6 @@
-<div class="max-w-[960px] mx-auto flex max-lg:px-4">
+<div class="max-w-240 mx-auto flex max-lg:px-4">
   <a routerLink="/" class="w-56">
-    <img src="/assets/gem-tools-logo.png" />
+    <img ngSrc="/assets/gem-tools-logo.png" alt="Logo" height="105" width="350" priority />
   </a>
   <div class="flex justify-between items-center">
     <a routerLink="/search/resources" routerLinkActive="active" class="flex justify-center items-center gap-2 cursor-pointer hover:bg-black/5 p-2 rounded-md">
@@ -11,9 +11,9 @@
       <ng-icon name="tablerArrowsRandom"></ng-icon>
       <span>Animations</span>
     </a>
-    <a disabled class="flex justify-center items-center gap-2 cursor-pointer text-black/25 p-2 rounded-md">
+    <a class="flex justify-center items-center gap-2 cursor-pointer text-black/25 p-2 rounded-md">
       <ng-icon name="tablerPhotoEdit"></ng-icon>
-      <span class="!text-black/25">Editor</span>
+      <span class="text-black/25!">Editor</span>
     </a>
   </div>
   <div class="flex-1"></div>
@@ -27,6 +27,6 @@
     </a>
   </div>
 </div>
-<div class="max-w-[960px] mt-8 mx-auto max-lg:px-4">
+<div class="max-w-240 mt-8 mx-auto max-lg:px-4">
   <router-outlet></router-outlet>
 </div>
