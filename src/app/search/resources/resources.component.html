@@ -2,41 +2,69 @@
     <span>Search through all resources provided by Call to Arms - Gates Of Hell.</span>
 </div>
 
-<form [formGroup]="form" class="sticky top-0 bg-white">
-    <mat-form-field appearance="outline" class="w-full mt-4">
+<div class="sticky top-0 bg-white z-10">
+    <mat-form-field appearance="outline" class="w-full mt-4" subscriptSizing="dynamic" hintLabel="Type at least 3 characters">
         <mat-label>Filter by name</mat-label>
-        <input matInput formControlName="search" type="text" />
-        @if (searchControl.value.length) {
-            <button matSuffix (click)="searchControl.reset()" class="p-2 mr-4 cursor-pointer rounded-full hover:bg-slate-100">
+        <input matInput [(ngModel)]="search" type="text" />
+        @if (search().length) {
+            <button matSuffix (click)="search.set('')" class="p-2 mr-4 cursor-pointer rounded-full hover:bg-gray-100">
                 <ng-icon name="tablerX"></ng-icon>
             </button>
         }
     </mat-form-field>
-</form>
+    <div class="flex justify-between mt-4">
+        <!--<button (click)="toggleExpansion()" type="button" class="hover:bg-gray-100 rounded-md px-2 flex justify-center items-center gap-2 cursor-pointer">
+            <ng-icon
+                    [name]="allExpanded() ? 'tablerArrowsDiagonalMinimize' : 'tablerArrowsDiagonal'"
+                    [class.rotate-45]="allExpanded()"
+                    [class.-rotate-45]="!allExpanded()"
+            ></ng-icon>
+            <span>{{ allExpanded() ? 'Collapse' : 'Expand' }} All</span>
+        </button>-->
+        <div></div>
+        <mat-checkbox [checked]="showFavorites()" (change)="showFavorites.set($event.checked)">Show Favorites</mat-checkbox>
+    </div>
+</div>
 
 <div class="my-4">
     <app-preview-image [resolveUrl]="resolvePreviewUrl"></app-preview-image>
 
-    <mat-tree #tree class="border border-slate-200 rounded-md" [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
+    <mat-tree #tree [class]="dataSource.length ? 'border border-gray-200 rounded-md' : ''" [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
         <mat-tree-node
                 (mouseenter)="openPreview(nodeElement, node)"
                 (mouseleave)="closePreview()"
                 (click)="copyName(node.name)"
-                class="group w-full hover:font-semibold! flex gap-2 items-center cursor-pointer p-4 border-b border-b-slate-200 hover:bg-slate-100 last:border-b-0"
+                class="group w-full hover:font-semibold! flex gap-2 items-center cursor-pointer p-4 border-b border-b-gray-200 hover:bg-gray-100 last:border-b-0"
                 *matTreeNodeDef="let node"
                 matTreeNodePadding
                 matTreeNodeToggle
                 #nodeElement>
+            <button
+                    type="button"
+                    class="mr-1 opacity-70 hover:opacity-100"
+                    (click)="toggleFavorite(node); $event.stopPropagation()"
+                    [attr.aria-pressed]="isFavorite(node) ? 'true' : 'false'"
+                    title="Toggle favorite"
+            >
+                <ng-icon [name]="isFavorite(node) ? 'tablerStarFill' : 'tablerStar'"></ng-icon>
+            </button>
+
             <ng-icon name="tablerBox"></ng-icon>
             <span [innerHTML]="getText(node.name)" class="flex-1"></span>
             <ng-icon name="tablerCopy" class="hidden! group-hover:inline-block! transition-all"></ng-icon>
         </mat-tree-node>
 
-        <mat-tree-node [attr.data-node]="tree.isExpanded(node) ? node.name : ''" class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-slate-200 last:border-b-0 hover:bg-slate-100 transition-colors" *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
+        <mat-tree-node [attr.data-node]="tree.isExpanded(node) ? node.name : ''" class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-gray-200 last:border-b-0 hover:bg-gray-100 transition-colors" *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
             <button class="p-2 flex items-center" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
                 <ng-icon [name]="tree.isExpanded(node) ? 'tablerFolderOpen' : 'tablerFolder'"></ng-icon>
             </button>
             <span [class.font-bold]="tree.isExpanded(node)" [innerHTML]="getText(node.name)" class="cursor-pointer">{{ node.name }}</span>
         </mat-tree-node>
     </mat-tree>
+
+    @if (dataSource.length === 0) {
+        <div class="w-full flex justify-center mt-4">
+            <span class="text-center text-black/50!">No resources found.</span>
+        </div>
+    }
 </div>

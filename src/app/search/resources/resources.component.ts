@@ -3,45 +3,100 @@ import {isPlatformBrowser} from "@angular/common";
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component,
+    Component, computed,
     DestroyRef, ElementRef, Inject,
-    inject,
-    OnInit, PLATFORM_ID,
+    inject, model,
+    OnInit, PLATFORM_ID, signal,
     viewChild
 } from '@angular/core';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {FormControl, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
+import {FormsModule} from '@angular/forms';
+import {MatCheckbox} from "@angular/material/checkbox";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatTree, MatTreeModule} from "@angular/material/tree";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
-import {tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen, tablerX} from '@ng-icons/tabler-icons';
+import {
+    tablerArrowNarrowRight, tablerArrowsDiagonal, tablerArrowsDiagonalMinimize,
+    tablerBox,
+    tablerCopy,
+    tablerFolder,
+    tablerFolderOpen,
+    tablerStar,
+    tablerX
+} from '@ng-icons/tabler-icons';
+import {tablerStarFill} from "@ng-icons/tabler-icons/fill";
 import {debounceTime, filter} from 'rxjs';
 import {PreviewImageComponent} from "../../preview-image/preview-image.component";
+import {FavoritesStore} from "../../store/favorites-store";
+
 @Component({
     selector: 'app-resources',
-    imports: [NgIconComponent, ReactiveFormsModule, MatTree, MatTreeModule, MatInputModule, MatFormFieldModule, PreviewImageComponent],
+    imports: [
+        NgIconComponent,
+        MatTree,
+        MatTreeModule,
+        MatInputModule,
+        MatFormFieldModule,
+        PreviewImageComponent,
+        FormsModule,
+        MatCheckbox
+    ],
     templateUrl: './resources.component.html',
     styleUrl: './resources.component.scss',
-    viewProviders: [provideIcons({tablerFolder, tablerFolderOpen, tablerCopy, tablerBox, tablerArrowNarrowRight, tablerX})],
+    viewProviders: [
+        provideIcons({
+            tablerFolder,
+            tablerFolderOpen,
+            tablerCopy,
+            tablerBox,
+            tablerArrowNarrowRight,
+            tablerX,
+            tablerStar,
+            tablerStarFill,
+            tablerArrowsDiagonalMinimize,
+            tablerArrowsDiagonal
+        })],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResourcesComponent implements OnInit {
-    private readonly fb = inject(NonNullableFormBuilder);
     private readonly destroyRef = inject(DestroyRef);
     private readonly cdr = inject(ChangeDetectorRef);
     private readonly clipboard = inject(Clipboard);
     private readonly snackbar = inject(MatSnackBar);
 
+    favoritesStore = inject(FavoritesStore);
+
     private _data: ResourceNode[] = [];
-    private currentQuery = '';
 
     private preview = viewChild.required(PreviewImageComponent);
     private tree = viewChild<MatTree<ResourceNode, ResourceNode>>('tree');
 
-    form = this.fb.group({
-        search: [''],
+    showFavorites = signal<boolean>(false);
+
+    search = model<string>('');
+
+    allExpanded = signal<boolean>(false);
+
+    viewData = computed(() => {
+        const showFavorites = this.showFavorites();
+        const favorites = this.favoritesStore.favorites();
+        const query = this.search();
+
+        let data = this._data;
+
+        if (showFavorites) {
+            data = this.filterTreeByFavorites(data, favorites);
+        }
+
+        if (query.length === 0) {
+            return data;
+        } else if (query.length >= 3) {
+            data = this.filterRecursive(query, this._data);
+        }
+
+        return data;
     });
 
     dataSource: ResourceNode[] = [];
@@ -53,11 +108,17 @@ export class ResourcesComponent implements OnInit {
     resolvePreviewUrl = (node: ResourceNode) =>
         node.path ? `/objects${node.path}.webp` : null;
 
-    get searchControl(): FormControl<string> {
-        return this.form.get('search') as FormControl<string>;
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+        toObservable(this.viewData).pipe(
+            takeUntilDestroyed(this.destroyRef),
+        )
+            .subscribe({
+                next: data => {
+                    this.dataSource = data;
+                    this.applyFilter();
+                }
+            });
     }
-
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
     ngOnInit(): void {
         if (!isPlatformBrowser(this.platformId))
@@ -68,39 +129,25 @@ export class ResourcesComponent implements OnInit {
         this._data = dataWithPaths;
 
         this.cdr.markForCheck();
-
-        this.form.get('search')?.valueChanges.pipe(
-            takeUntilDestroyed(this.destroyRef),
-            filter(query => query.length >= 3 || query.length === 0),
-            debounceTime(500)
-        )
-            .subscribe({
-                next: query => this.applyFilter(query),
-            });
     }
 
-    applyFilter(query: string): void {
-        this.currentQuery = query;
-        this.filterTree(query);
-
-        this.cdr.markForCheck();
-
+    applyFilter(): void {
         if (isPlatformBrowser(this.platformId)) {
             queueMicrotask(() => {
                 const tree = this.tree();
                 tree?.collapseAll();
 
-                if (query.length) {
-                    this.expandPathsToMatches(query, this.dataSource);
+                if (this.search().length >= 3) {
+                    this.expandPathsToMatches(this.search(), this.dataSource);
                 }
             });
         }
     }
 
     getText(name: string): string {
-        if (!this.currentQuery) return name;
+        if (!this.search()) return name;
 
-        const regex = new RegExp(this.currentQuery, 'gi');
+        const regex = new RegExp(this.search(), 'gi');
         return name.replace(regex, match => `<mark>${match}</mark>`);
     }
 
@@ -120,14 +167,28 @@ export class ResourcesComponent implements OnInit {
         this.preview().close();
     }
 
-    private filterTree(query: string): void {
-        if (query.length === 0) {
-            this.dataSource = this._data;
+    toggleFavorite({ path }: ResourceNode): void {
+        if (!path) return;
 
-            return;
+        this.favoritesStore.toggle(path);
+    }
+
+    isFavorite({ path }: ResourceNode): boolean {
+        if (!path) return false;
+
+        return this.favoritesStore.isFavorite(path);
+    }
+
+    toggleExpansion(): void {
+        if (this.allExpanded()) {
+            this.tree()?.collapseAll();
+        } else {
+            this.tree()?.expandAll();
         }
 
-        this.dataSource = this.filterRecursive(query, this._data);
+        this.allExpanded.set(!this.allExpanded());
+
+        this.cdr.markForCheck();
     }
 
     private filterRecursive(
@@ -191,6 +252,30 @@ export class ResourcesComponent implements OnInit {
                     : [],
             };
         });
+    }
+
+    private filterTreeByFavorites(data: ResourceNode[], favs: Set<string>): ResourceNode[] {
+        const out: ResourceNode[] = [];
+
+        for (const node of data) {
+            const filteredChildren = node.children?.length
+                ? this.filterTreeByFavorites(node.children, favs)
+                : [];
+
+            if (!node.path)
+                continue;
+
+            const isFav = favs.has(node.path);
+
+            if (isFav || filteredChildren.length) {
+                out.push({
+                    ...node,
+                    children: filteredChildren,
+                });
+            }
+        }
+
+        return out;
     }
 }
 
