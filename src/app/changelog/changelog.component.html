@@ -1,0 +1,77 @@
+<!-- changelog.component.html
+     Assumes:
+     - entries: ChangelogEntry[] (sorted newest -> oldest)
+     - selected: ChangelogEntry
+     - select(entry) sets selected
+-->
+
+<div class="mx-auto max-w-6xl p-6 lg:p-10">
+    <div class="flex items-start justify-between gap-6">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Changelog</h1>
+            <p class="mt-1 text-sm text-slate-500">
+                Latest updates, fixes, and improvements.
+            </p>
+        </div>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[360px_1fr]">
+        <aside class="rounded-2xl border border-slate-200 bg-white overflow-hidden h-fit">
+            <div class="px-4 py-3 border-b border-slate-200">
+                <div class="text-sm font-medium text-slate-900">Releases</div>
+                <div class="text-xs text-slate-500 mt-0.5">Select a version to view details</div>
+            </div>
+
+            <div class="max-h-[70vh] overflow-auto">
+                @for (change of changelog; track change.version) {
+                    <button
+                            type="button"
+                            class="w-full text-left px-4 py-3 border-b cursor-pointer border-l-4 border-l-transparent border-slate-100 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                            (click)="selectEntry(change)"
+                            [class.border-l-slate-200!]="selectedEntry()?.version === change.version"
+                            [attr.aria-current]="selectedEntry()?.version === change.version ? 'true' : null"
+                            [class.bg-slate-50]="selectedEntry()?.version === change.version"
+                    >
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-semibold text-slate-900">{{ change.version }}</span>
+                                </div>
+                                <div class="mt-1 text-sm text-slate-700 line-clamp-2">
+                                    {{ change.title }}
+                                </div>
+                            </div>
+
+                            <div class="shrink-0 text-xs text-slate-500">
+                                {{ change.date | date:'mediumDate' }}
+                            </div>
+                        </div>
+                    </button>
+                }
+            </div>
+        </aside>
+
+        <!-- Right: selected entry -->
+        <section class="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+            <div class="px-6 py-5 border-b border-slate-200">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-lg font-semibold text-slate-900">
+                                {{ selectedEntry()?.version }}
+                            </h2>
+                            <span class="text-sm text-slate-500">{{ selectedEntry()?.date | date:'mediumDate' }}</span>
+                        </div>
+                        <div class="mt-1 text-slate-800 font-medium">
+                            {{ selectedEntry()?.title }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-6">
+                <pre class="whitespace-pre-wrap text-sm text-slate-800">{{ selectedEntry()?.markdown }}</pre>
+            </div>
+        </section>
+    </div>
+</div>

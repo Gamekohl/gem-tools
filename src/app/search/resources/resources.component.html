@@ -15,8 +15,18 @@
 </form>
 
 <div class="my-4">
+    <app-preview-image [resolveUrl]="resolvePreviewUrl"></app-preview-image>
+
     <mat-tree #tree class="border border-slate-200 rounded-md" [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
-        <mat-tree-node (click)="copyName(node.name)" class="group w-full hover:font-semibold! flex gap-2 items-center cursor-pointer p-4 border-b border-b-slate-200 hover:bg-slate-100 last:border-b-0" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodeToggle>
+        <mat-tree-node
+                (mouseenter)="openPreview(nodeElement, node)"
+                (mouseleave)="closePreview()"
+                (click)="copyName(node.name)"
+                class="group w-full hover:font-semibold! flex gap-2 items-center cursor-pointer p-4 border-b border-b-slate-200 hover:bg-slate-100 last:border-b-0"
+                *matTreeNodeDef="let node"
+                matTreeNodePadding
+                matTreeNodeToggle
+                #nodeElement>
             <ng-icon name="tablerBox"></ng-icon>
             <span [innerHTML]="getText(node.name)" class="flex-1"></span>
             <ng-icon name="tablerCopy" class="hidden! group-hover:inline-block! transition-all"></ng-icon>

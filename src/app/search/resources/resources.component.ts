@@ -4,7 +4,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    DestroyRef, Inject,
+    DestroyRef, ElementRef, Inject,
     inject,
     OnInit, PLATFORM_ID,
     viewChild
@@ -18,11 +18,10 @@ import {MatTree, MatTreeModule} from "@angular/material/tree";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen, tablerX} from '@ng-icons/tabler-icons';
 import {debounceTime, filter} from 'rxjs';
-import {ResourceNode, structureData} from "./data/structure";
-
+import {PreviewImageComponent} from "../../preview-image/preview-image.component";
 @Component({
     selector: 'app-resources',
-    imports: [NgIconComponent, ReactiveFormsModule, MatTree, MatTreeModule, MatInputModule, MatFormFieldModule],
+    imports: [NgIconComponent, ReactiveFormsModule, MatTree, MatTreeModule, MatInputModule, MatFormFieldModule, PreviewImageComponent],
     templateUrl: './resources.component.html',
     styleUrl: './resources.component.scss',
     viewProviders: [provideIcons({tablerFolder, tablerFolderOpen, tablerCopy, tablerBox, tablerArrowNarrowRight, tablerX})],
@@ -37,6 +36,8 @@ export class ResourcesComponent implements OnInit {
 
     private _data: ResourceNode[] = [];
     private currentQuery = '';
+
+    private preview = viewChild.required(PreviewImageComponent);
     private tree = viewChild<MatTree<ResourceNode, ResourceNode>>('tree');
 
     form = this.fb.group({
@@ -49,6 +50,9 @@ export class ResourcesComponent implements OnInit {
 
     hasChild = (_: number, node: ResourceNode) => !!node.children && node.children.length > 0;
 
+    resolvePreviewUrl = (node: ResourceNode) =>
+        node.path ? `/objects${node.path}.webp` : null;
+
     get searchControl(): FormControl<string> {
         return this.form.get('search') as FormControl<string>;
     }
@@ -59,8 +63,9 @@ export class ResourcesComponent implements OnInit {
         if (!isPlatformBrowser(this.platformId))
             return;
 
-        this.dataSource = structureData;
-        this._data = structureData;
+        const dataWithPaths = this.assignPaths(structureData);
+        this.dataSource = dataWithPaths;
+        this._data = dataWithPaths;
 
         this.cdr.markForCheck();
 
@@ -105,6 +110,14 @@ export class ResourcesComponent implements OnInit {
 
             this.snackbar.open(`"${name}" copied to clipboard`, '', { duration: 2000 });
         }
+    }
+
+    openPreview(el: HTMLElement, node: ResourceNode): void {
+        this.preview().open(new ElementRef(el), node);
+    }
+
+    closePreview(): void {
+        this.preview().close();
     }
 
     private filterTree(query: string): void {
@@ -165,4 +178,20 @@ export class ResourcesComponent implements OnInit {
 
         for (const root of roots) dfs(root);
     }
+
+    private assignPaths(nodes: ResourceNode[], parentPath = ''): ResourceNode[] {
+        return nodes.map(n => {
+            const path = parentPath ? `${parentPath}/${n.name}` : `/${n.name}`;
+
+            return {
+                ...n,
+                path,
+                children: n.children
+                    ? this.assignPaths(n.children, path)
+                    : [],
+            };
+        });
+    }
 }
+
+import {ResourceNode, structureData} from "./data/structure";

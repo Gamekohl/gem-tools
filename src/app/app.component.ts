@@ -4,6 +4,7 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {tablerArrowsRandom, tablerBox, tablerBrandGithub, tablerCoffee, tablerPhotoEdit} from '@ng-icons/tabler-icons';
 import {inject} from '@vercel/analytics';
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ import {inject} from '@vercel/analytics';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
+  readonly version = environment.version;
+
   ngOnInit(): void {
     inject();
   }
