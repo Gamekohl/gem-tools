@@ -1,12 +1,12 @@
 import {Clipboard} from "@angular/cdk/clipboard";
-import {HttpClient} from '@angular/common/http';
+import {isPlatformBrowser} from "@angular/common";
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    DestroyRef,
+    DestroyRef, Inject,
     inject,
-    OnInit,
+    OnInit, PLATFORM_ID,
     viewChild
 } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -18,6 +18,7 @@ import {MatTree, MatTreeModule} from "@angular/material/tree";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen, tablerX} from '@ng-icons/tabler-icons';
 import {debounceTime, filter} from 'rxjs';
+import {ResourceNode, structureData} from "./data/structure";
 
 @Component({
     selector: 'app-resources',
@@ -28,7 +29,6 @@ import {debounceTime, filter} from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResourcesComponent implements OnInit {
-    private readonly http = inject(HttpClient);
     private readonly fb = inject(NonNullableFormBuilder);
     private readonly destroyRef = inject(DestroyRef);
     private readonly cdr = inject(ChangeDetectorRef);
@@ -53,16 +53,16 @@ export class ResourcesComponent implements OnInit {
         return this.form.get('search') as FormControl<string>;
     }
 
-    ngOnInit(): void {
-        this.http.get<ResourceNode[]>('/assets/structure.json')
-            .subscribe({
-                next: data => {
-                    this.dataSource = data;
-                    this._data = data;
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-                    this.cdr.markForCheck();
-                }
-            });
+    ngOnInit(): void {
+        if (!isPlatformBrowser(this.platformId))
+            return;
+
+        this.dataSource = structureData;
+        this._data = structureData;
+
+        this.cdr.markForCheck();
 
         this.form.get('search')?.valueChanges.pipe(
             takeUntilDestroyed(this.destroyRef),
@@ -80,14 +80,16 @@ export class ResourcesComponent implements OnInit {
 
         this.cdr.markForCheck();
 
-        queueMicrotask(() => {
-            const tree = this.tree();
-            tree?.collapseAll();
+        if (isPlatformBrowser(this.platformId)) {
+            queueMicrotask(() => {
+                const tree = this.tree();
+                tree?.collapseAll();
 
-            if (query.length) {
-                this.expandPathsToMatches(query, this.dataSource);
-            }
-        });
+                if (query.length) {
+                    this.expandPathsToMatches(query, this.dataSource);
+                }
+            });
+        }
     }
 
     getText(name: string): string {
@@ -98,9 +100,11 @@ export class ResourcesComponent implements OnInit {
     }
 
     copyName(name: string): void {
-        this.clipboard.copy(name);
+        if (isPlatformBrowser(this.platformId)) {
+            this.clipboard.copy(name);
 
-        this.snackbar.open(`"${name}" copied to clipboard`, '', { duration: 2000 });
+            this.snackbar.open(`"${name}" copied to clipboard`, '', { duration: 2000 });
+        }
     }
 
     private filterTree(query: string): void {
@@ -161,9 +165,4 @@ export class ResourcesComponent implements OnInit {
 
         for (const root of roots) dfs(root);
     }
-}
-
-interface ResourceNode {
-    name: string;
-    children: ResourceNode[];
 }

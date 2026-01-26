@@ -1,6 +1,6 @@
 import {Clipboard} from "@angular/cdk/clipboard";
 import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -11,7 +11,6 @@ const spyOn = jest.spyOn;
 describe('ResourcesComponent', () => {
   let component: ResourcesComponent;
   let fixture: ComponentFixture<ResourcesComponent>;
-  let httpMock: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,26 +23,11 @@ describe('ResourcesComponent', () => {
 
     fixture = TestBed.createComponent(ResourcesComponent);
     component = fixture.componentInstance;
-    httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
   });
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should initialize with data from the HTTP request', () => {
-    const mockData = [
-      { name: 'Node1', children: [{ name: 'Child1', children: [] }] },
-      { name: 'Node2', children: [] },
-    ];
-
-    const req = httpMock.expectOne('/assets/structure.json');
-    expect(req.request.method).toBe('GET');
-    req.flush(mockData);
-
-    expect(component.dataSource).toEqual(mockData);
-    expect(component['_data']).toEqual(mockData);
   });
 
   it('should filter the tree based on the query', () => {

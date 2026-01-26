@@ -1,11 +1,21 @@
 import {Clipboard} from "@angular/cdk/clipboard";
-import {httpResource} from '@angular/common/http';
-import {ChangeDetectionStrategy, Component, inject, model} from '@angular/core';
+import {isPlatformBrowser} from "@angular/common";
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    Inject,
+    inject,
+    model,
+    PLATFORM_ID,
+    signal
+} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {tablerCopy} from '@ng-icons/tabler-icons';
 import {FilterPipe} from '../../pipes/filter.pipe';
+import {animationNamesData} from "./data/animationNames";
 
 @Component({
     selector: 'app-animations',
@@ -18,12 +28,18 @@ import {FilterPipe} from '../../pipes/filter.pipe';
 export class AnimationsComponent {
     private readonly clipboard = inject(Clipboard);
     private readonly snackbar = inject(MatSnackBar);
-
-    animationNames = httpResource<{ names: string[] }>(() => 'assets/animation_names.json');
+    private readonly cdr = inject(ChangeDetectorRef);
 
     query = model<string>('');
 
+    animationNames = signal<string[]>(animationNamesData.names);
+
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
     copyAnimationName(name: string): void {
+        if(!isPlatformBrowser(this.platformId))
+            return;
+
         this.clipboard.copy(name);
 
         this.snackbar.open(`"${name}" copied to clipboard`, '', {duration: 2000});

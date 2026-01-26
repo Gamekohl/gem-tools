@@ -6,15 +6,11 @@
        placeholder="Search for animation name..." type="text"/>
 
 <div class="flex flex-col mt-4 border border-slate-200 rounded-md">
-    @if (animationNames.hasValue()) {
-        @for (name of animationNames.value()!.names | filter:query(); track name) {
-            <button type="button" (click)="copyAnimationName(name)"
-                    class="w-full flex justify-between border-b border-slate-200 last:border-b-0 hover:bg-slate-100 items-center cursor-pointer p-4">
-                <span>{{ name }}</span>
-                <ng-icon name="tablerCopy"></ng-icon>
-            </button>
-        }
-    } @else if (animationNames.isLoading()) {
-        <span>Loading...</span>
+    @for (name of animationNames() | filter:query(); track name) {
+        <button type="button" (click)="copyAnimationName(name)"
+                class="w-full flex justify-between border-b border-slate-200 last:border-b-0 hover:bg-slate-100 items-center cursor-pointer p-4">
+            <span>{{ name }}</span>
+            <ng-icon name="tablerCopy"></ng-icon>
+        </button>
     }
 </div>
