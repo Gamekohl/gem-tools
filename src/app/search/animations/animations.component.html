@@ -2,10 +2,19 @@
     <span>Search through animations provided by Call to Arms - Gates Of Hell.</span>
 </div>
 
-<input [(ngModel)]="query" class="border border-slate-200 rounded-md p-3 w-full"
-       placeholder="Search for animation name..." type="text"/>
+<div class="top-0 bg-white sticky">
+    <mat-form-field appearance="outline" class="w-full mt-4">
+        <mat-label>Filter by name</mat-label>
+        <input matInput [(ngModel)]="query" type="text" />
+        @if (query().length) {
+            <button matSuffix (click)="query.set('')" class="p-2 mr-4 cursor-pointer rounded-full hover:bg-slate-100">
+                <ng-icon name="tablerX"></ng-icon>
+            </button>
+        }
+    </mat-form-field>
+</div>
 
-<div class="flex flex-col mt-4 border border-slate-200 rounded-md">
+<div class="flex flex-col my-4 border border-slate-200 rounded-md">
     @for (name of animationNames() | filter:query(); track name) {
         <button type="button" (click)="copyAnimationName(name)"
                 class="w-full flex justify-between border-b border-slate-200 last:border-b-0 hover:bg-slate-100 items-center cursor-pointer p-4">

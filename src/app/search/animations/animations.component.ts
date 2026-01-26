@@ -10,19 +10,20 @@ import {
     PLATFORM_ID,
     signal
 } from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatFormField, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
-import {tablerCopy} from '@ng-icons/tabler-icons';
+import {tablerCopy, tablerX} from '@ng-icons/tabler-icons';
 import {FilterPipe} from '../../pipes/filter.pipe';
 import {animationNamesData} from "./data/animationNames";
 
 @Component({
     selector: 'app-animations',
-    imports: [NgIconComponent, FilterPipe, FormsModule],
+    imports: [NgIconComponent, FilterPipe, FormsModule, MatFormField, MatInput, MatLabel, MatSuffix, ReactiveFormsModule],
     templateUrl: './animations.component.html',
     styleUrl: './animations.component.scss',
-    viewProviders: [provideIcons({tablerCopy})],
+    viewProviders: [provideIcons({tablerCopy, tablerX})],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AnimationsComponent {
