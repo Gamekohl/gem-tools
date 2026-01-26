@@ -1,6 +1,5 @@
 import {DatePipe} from "@angular/common";
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
-import {RouterLink} from "@angular/router";
 import {CHANGELOG, ChangelogEntry} from "../../content/changelog/changelog.data";
 
 @Component({
@@ -8,7 +7,6 @@ import {CHANGELOG, ChangelogEntry} from "../../content/changelog/changelog.data"
   templateUrl: './changelog.component.html',
   styleUrl: './changelog.component.scss',
   imports: [
-    RouterLink,
     DatePipe
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
