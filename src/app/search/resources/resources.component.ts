@@ -29,6 +29,7 @@ import {
 import {tablerStarFill} from "@ng-icons/tabler-icons/fill";
 import {PreviewImageComponent} from "../../preview-image/preview-image.component";
 import {FavoritesStore} from "../../store/favorites-store";
+import {ResourceNode, structureData} from "./data/structure";
 
 @Component({
     selector: 'app-resources',
@@ -116,7 +117,7 @@ export class ResourcesComponent implements OnInit {
         if (!isPlatformBrowser(this.platformId))
             return;
 
-        this._data = this.assignPaths(structureData);
+        this._data = structureData;
 
         this.cdr.markForCheck();
     }
@@ -218,20 +219,6 @@ export class ResourcesComponent implements OnInit {
         for (const root of roots) dfs(root);
     }
 
-    private assignPaths(nodes: ResourceNode[], parentPath = ''): ResourceNode[] {
-        return nodes.map(n => {
-            const path = parentPath ? `${parentPath}/${n.name}` : `/${n.name}`;
-
-            return {
-                ...n,
-                path,
-                children: n.children
-                    ? this.assignPaths(n.children, path)
-                    : [],
-            };
-        });
-    }
-
     private filterTreeByFavorites(data: ResourceNode[], favs: Set<string>): ResourceNode[] {
         const out: ResourceNode[] = [];
 
@@ -256,5 +243,3 @@ export class ResourcesComponent implements OnInit {
         return out;
     }
 }
-
-import {ResourceNode, structureData} from "./data/structure";
