@@ -5,8 +5,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { MatTreeModule } from '@angular/material/tree';
+import {testStructureData} from "../../../testing/data/structure";
 import { ResourcesComponent } from './resources.component';
 const spyOn = jest.spyOn;
+
+const mockData = testStructureData;
+
+// We mock the data here to prevent loading the whole JSON file
+jest.mock('./data/structure', () => {
+  const structureData = testStructureData;
+
+  return { structureData }
+});
 
 describe('ResourcesComponent', () => {
   let component: ResourcesComponent;
@@ -31,18 +41,13 @@ describe('ResourcesComponent', () => {
   });
 
   it('should filter the tree based on the query', () => {
-    component['_data'] = [
-      { name: 'Node1', children: [{ name: 'Child1', children: [] }] },
-      { name: 'Node2', children: [] },
-    ];
+    // component['_data'] = mockData;
 
     component.applyFilter('Node1');
-    expect(component.dataSource).toEqual([
-      { name: 'Node1', children: [{ name: 'Child1', children: [] }] },
-    ]);
+    expect(component.dataSource).toEqual([mockData[0]]);
 
     component.applyFilter('');
-    expect(component.dataSource).toEqual(component['_data']);
+    expect(component.dataSource).toEqual(mockData);
   });
 
   it('should highlight text in getText when query matches', () => {
