@@ -19,6 +19,8 @@ import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {tablerArrowNarrowRight, tablerBox, tablerCopy, tablerFolder, tablerFolderOpen, tablerX} from '@ng-icons/tabler-icons';
 import {debounceTime, filter} from 'rxjs';
 import {PreviewImageComponent} from "../../preview-image/preview-image.component";
+import {ResourceNode, structureData} from "./data/structure";
+
 @Component({
     selector: 'app-resources',
     imports: [NgIconComponent, ReactiveFormsModule, MatTree, MatTreeModule, MatInputModule, MatFormFieldModule, PreviewImageComponent],
@@ -63,9 +65,8 @@ export class ResourcesComponent implements OnInit {
         if (!isPlatformBrowser(this.platformId))
             return;
 
-        const dataWithPaths = this.assignPaths(structureData);
-        this.dataSource = dataWithPaths;
-        this._data = dataWithPaths;
+        this._data = structureData;
+        this.dataSource = structureData;
 
         this.cdr.markForCheck();
 
@@ -178,20 +179,4 @@ export class ResourcesComponent implements OnInit {
 
         for (const root of roots) dfs(root);
     }
-
-    private assignPaths(nodes: ResourceNode[], parentPath = ''): ResourceNode[] {
-        return nodes.map(n => {
-            const path = parentPath ? `${parentPath}/${n.name}` : `/${n.name}`;
-
-            return {
-                ...n,
-                path,
-                children: n.children
-                    ? this.assignPaths(n.children, path)
-                    : [],
-            };
-        });
-    }
 }
-
-import {ResourceNode, structureData} from "./data/structure";
