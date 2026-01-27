@@ -1,4 +1,5 @@
 import {Clipboard} from "@angular/cdk/clipboard";
+import {ScrollingModule} from "@angular/cdk/scrolling";
 import {isPlatformBrowser} from "@angular/common";
 import {
     ChangeDetectionStrategy,
@@ -19,7 +20,7 @@ import {animationNamesData} from "./data/animationNames";
 
 @Component({
     selector: 'app-animations',
-    imports: [NgIconComponent, FilterPipe, FormsModule, ReactiveFormsModule],
+    imports: [NgIconComponent, FilterPipe, FormsModule, ReactiveFormsModule, ScrollingModule],
     templateUrl: './animations.component.html',
     styleUrl: './animations.component.scss',
     viewProviders: [provideIcons({tablerCopy, tablerX})],

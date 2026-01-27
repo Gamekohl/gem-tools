@@ -1,4 +1,4 @@
-import {DatePipe} from "@angular/common";
+import {DatePipe, NgClass} from "@angular/common";
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {CHANGELOG, ChangelogEntry} from "../../content/changelog/changelog.data";
 
@@ -6,9 +6,10 @@ import {CHANGELOG, ChangelogEntry} from "../../content/changelog/changelog.data"
   selector: 'app-changelog',
   templateUrl: './changelog.component.html',
   styleUrl: './changelog.component.scss',
-  imports: [
-    DatePipe
-  ],
+    imports: [
+        DatePipe,
+        NgClass
+    ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangelogComponent {

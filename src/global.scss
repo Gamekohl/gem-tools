@@ -1,5 +1,21 @@
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
-span {
-  color: #181818;
+:root {
+  --text-color: #181818;
+  --bg-color: #fff;
+
+  background-color: var(--bg-color);
+
+  a, span, h1 {
+    color: var(--text-color);
+  }
+}
+
+html.dark {
+  --text-color: #e0e0e0;
+  --bg-color: #181818;
+  --ng-icon__color: #e0e0e0;
+
+  // Material colors
+  --mat-tree-container-background-color: #181818;
 }

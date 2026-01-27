@@ -43,44 +43,21 @@ describe('ResourcesComponent', () => {
   it('should filter the tree based on the query', () => {
     // component['_data'] = mockData;
 
-    component.applyFilter('Node1');
-    expect(component.dataSource).toEqual([mockData[0]]);
+    component.search.set('Node1');
+    expect(component.viewData()).toEqual([mockData[0]]);
 
-    component.applyFilter('');
-    expect(component.dataSource).toEqual(mockData);
+    component.search.set('');
+    expect(component.viewData()).toEqual(mockData);
   });
 
   it('should highlight text in getText when query matches', () => {
-    component['currentQuery'] = 'Node';
+    component.search.set('Node');
     const result = component.getText('Node1');
     expect(result).toContain('<mark>Node</mark>1');
 
-    component['currentQuery'] = '';
+    component.search.set('');
     const noHighlight = component.getText('Node1');
     expect(noHighlight).toBe('Node1');
-  });
-
-  it('should debounce search input and apply filter', (done) => {
-    const searchControl = component.form.get('search');
-    spyOn(component, 'applyFilter');
-
-    searchControl?.setValue('Node');
-    setTimeout(() => {
-      expect(component.applyFilter).toHaveBeenCalledWith('Node');
-      done();
-    }, 600); // Wait for debounceTime (500ms) + buffer
-  });
-
-  it('should apply filter when search is empty', (done) => {
-    const searchControl = component.form.get('search');
-    searchControl?.patchValue('test');
-    spyOn(component, 'applyFilter');
-
-    searchControl?.setValue('');
-    setTimeout(() => {
-      expect(component.applyFilter).toHaveBeenCalledWith('');
-      done();
-    }, 600);
   });
 
   it('should copy name to clipboard', () => {
