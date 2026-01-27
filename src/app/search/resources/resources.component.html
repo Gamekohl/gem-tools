@@ -12,16 +12,7 @@
             </button>
         }
     </mat-form-field>
-    <div class="flex justify-between mt-4">
-        <!--<button (click)="toggleExpansion()" type="button" class="hover:bg-gray-100 rounded-md px-2 flex justify-center items-center gap-2 cursor-pointer">
-            <ng-icon
-                    [name]="allExpanded() ? 'tablerArrowsDiagonalMinimize' : 'tablerArrowsDiagonal'"
-                    [class.rotate-45]="allExpanded()"
-                    [class.-rotate-45]="!allExpanded()"
-            ></ng-icon>
-            <span>{{ allExpanded() ? 'Collapse' : 'Expand' }} All</span>
-        </button>-->
-        <div></div>
+    <div class="flex justify-end mt-4">
         <mat-checkbox [checked]="showFavorites()" (change)="showFavorites.set($event.checked)">Show Favorites</mat-checkbox>
     </div>
 </div>
@@ -29,7 +20,7 @@
 <div class="my-4">
     <app-preview-image [resolveUrl]="resolvePreviewUrl"></app-preview-image>
 
-    <mat-tree #tree [class]="dataSource.length ? 'border border-gray-200 rounded-md' : ''" [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
+    <mat-tree #tree [class]="viewData().length ? 'border border-gray-200 rounded-md' : ''" [dataSource]="viewData()" [childrenAccessor]="childrenAccessor">
         <mat-tree-node
                 (mouseenter)="openPreview(nodeElement, node)"
                 (mouseleave)="closePreview()"
@@ -41,7 +32,7 @@
                 #nodeElement>
             <button
                     type="button"
-                    class="mr-1 opacity-70 hover:opacity-100"
+                    class="px-2 opacity-70 hover:opacity-100 flex items-center"
                     (click)="toggleFavorite(node); $event.stopPropagation()"
                     [attr.aria-pressed]="isFavorite(node) ? 'true' : 'false'"
                     title="Toggle favorite"
@@ -62,7 +53,7 @@
         </mat-tree-node>
     </mat-tree>
 
-    @if (dataSource.length === 0) {
+    @if (viewData().length === 0) {
         <div class="w-full flex justify-center mt-4">
             <span class="text-center text-black/50!">No resources found.</span>
         </div>

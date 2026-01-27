@@ -27,7 +27,6 @@ import {
     tablerX
 } from '@ng-icons/tabler-icons';
 import {tablerStarFill} from "@ng-icons/tabler-icons/fill";
-import {debounceTime, filter} from 'rxjs';
 import {PreviewImageComponent} from "../../preview-image/preview-image.component";
 import {FavoritesStore} from "../../store/favorites-store";
 
@@ -77,8 +76,6 @@ export class ResourcesComponent implements OnInit {
 
     search = model<string>('');
 
-    allExpanded = signal<boolean>(false);
-
     viewData = computed(() => {
         const showFavorites = this.showFavorites();
         const favorites = this.favoritesStore.favorites();
@@ -99,8 +96,6 @@ export class ResourcesComponent implements OnInit {
         return data;
     });
 
-    dataSource: ResourceNode[] = [];
-
     childrenAccessor = (node: ResourceNode) => node.children ?? [];
 
     hasChild = (_: number, node: ResourceNode) => !!node.children && node.children.length > 0;
@@ -113,10 +108,7 @@ export class ResourcesComponent implements OnInit {
             takeUntilDestroyed(this.destroyRef),
         )
             .subscribe({
-                next: data => {
-                    this.dataSource = data;
-                    this.applyFilter();
-                }
+                next: () => this.applyFilter()
             });
     }
 
@@ -124,9 +116,7 @@ export class ResourcesComponent implements OnInit {
         if (!isPlatformBrowser(this.platformId))
             return;
 
-        const dataWithPaths = this.assignPaths(structureData);
-        this.dataSource = dataWithPaths;
-        this._data = dataWithPaths;
+        this._data = this.assignPaths(structureData);
 
         this.cdr.markForCheck();
     }
@@ -138,7 +128,7 @@ export class ResourcesComponent implements OnInit {
                 tree?.collapseAll();
 
                 if (this.search().length >= 3) {
-                    this.expandPathsToMatches(this.search(), this.dataSource);
+                    this.expandPathsToMatches(this.search(), this.viewData());
                 }
             });
         }
@@ -177,18 +167,6 @@ export class ResourcesComponent implements OnInit {
         if (!path) return false;
 
         return this.favoritesStore.isFavorite(path);
-    }
-
-    toggleExpansion(): void {
-        if (this.allExpanded()) {
-            this.tree()?.collapseAll();
-        } else {
-            this.tree()?.expandAll();
-        }
-
-        this.allExpanded.set(!this.allExpanded());
-
-        this.cdr.markForCheck();
     }
 
     private filterRecursive(
