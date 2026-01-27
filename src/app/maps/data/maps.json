@@ -1,0 +1,352 @@
+﻿{
+  "maps": [
+    {
+      "name": "dcg_mikli_winter"
+    },
+    {
+      "name": "dcg_mikli"
+    },
+    {
+      "name": "dcg_maupertus_airfield"
+    },
+    {
+      "name": "dcg_natramala"
+    },
+    {
+      "name": "dcg_puhoksen"
+    },
+    {
+      "name": "dcg_pont_hebert"
+    },
+    {
+      "name": "dcg_natramala_winter"
+    },
+    {
+      "name": "dcg_lalobbe"
+    },
+    {
+      "name": "dcg_lakhta_Winter"
+    },
+    {
+      "name": "dcg_lakhta"
+    },
+    {
+      "name": "dcg_la_vallee"
+    },
+    {
+      "name": "dcg_martinville_ridge"
+    },
+    {
+      "name": "dcg_mannerheim"
+    },
+    {
+      "name": "dcg_malschbach"
+    },
+    {
+      "name": "dcg_puhoksen_winter"
+    },
+    {
+      "name": "dcg_tormasenvaara"
+    },
+    {
+      "name": "dcg_sieg_river"
+    },
+    {
+      "name": "dcg_semois_river"
+    },
+    {
+      "name": "dcg_utah_beach"
+    },
+    {
+      "name": "dcg_verviers_airfield"
+    },
+    {
+      "name": "dcg_Vainikalan_winter"
+    },
+    {
+      "name": "dcg_Vainikalan"
+    },
+    {
+      "name": "dcg_rouncy"
+    },
+    {
+      "name": "dcg_ranes"
+    },
+    {
+      "name": "dcg_purple_heart_lane"
+    },
+    {
+      "name": "dcg_sainte_marie_du_mont"
+    },
+    {
+      "name": "dcg_schoppen"
+    },
+    {
+      "name": "dcg_samree_depot"
+    },
+    {
+      "name": "dcg_samree"
+    },
+    {
+      "name": "dcg_hanhijarvi"
+    },
+    {
+      "name": "dcg_gullheim_airfield"
+    },
+    {
+      "name": "dcg_flooded_lowlands"
+    },
+    {
+      "name": "dcg_hanhijarvi_winter"
+    },
+    {
+      "name": "dcg_honsfeld"
+    },
+    {
+      "name": "dcg_hill_331"
+    },
+    {
+      "name": "dcg_heistern"
+    },
+    {
+      "name": "dcg_bubingen"
+    },
+    {
+      "name": "dcg_atzerath_valley"
+    },
+    {
+      "name": "dcg_anciens"
+    },
+    {
+      "name": "dcg_cadran_chateau"
+    },
+    {
+      "name": "dcg_dom_burtgen"
+    },
+    {
+      "name": "dcg_deulin_chataeu"
+    },
+    {
+      "name": "dcg_crisbecq_battery"
+    },
+    {
+      "name": "dcg_hotton"
+    },
+    {
+      "name": "dcg_kylmapuro_winter"
+    },
+    {
+      "name": "dcg_kylmapuro"
+    },
+    {
+      "name": "dcg_kirkenes_airfield"
+    },
+    {
+      "name": "dcg_Kymhi_Airfield"
+    },
+    {
+      "name": "dcg_Laisniemi_Winter"
+    },
+    {
+      "name": "dcg_Laisniemi"
+    },
+    {
+      "name": "dcg_Kymhi_Airfield_Winter"
+    },
+    {
+      "name": "dcg_isigny_ruins"
+    },
+    {
+      "name": "dcg_hurtgenwald"
+    },
+    {
+      "name": "dcg_houdremont"
+    },
+    {
+      "name": "dcg_karvola"
+    },
+    {
+      "name": "dcg_kirjavala_winter"
+    },
+    {
+      "name": "dcg_kirjavala"
+    },
+    {
+      "name": "dcg_karvola_winter"
+    },
+    {
+      "name": "1944_10_skirmish_hurtgen_forest"
+    },
+    {
+      "name": "1944_08_skirmish_falaise_pocket"
+    },
+    {
+      "name": "1944_08_mortain"
+    },
+    {
+      "name": "1944_12_hill400"
+    },
+    {
+      "name": "1945_03_cologne"
+    },
+    {
+      "name": "1944_12_skirmish_bulge"
+    },
+    {
+      "name": "1944_12_hotton"
+    },
+    {
+      "name": "1941_08-fin_polar_fox_alakurtti"
+    },
+    {
+      "name": "1941_07-fin_petrozavodsk"
+    },
+    {
+      "name": "1940_02-fin_honkaniemi"
+    },
+    {
+      "name": "1944_07-fin_ilomantsi"
+    },
+    {
+      "name": "1944_07_skirmish_operation_cobra"
+    },
+    {
+      "name": "1944_07_hedgerow_hell"
+    },
+    {
+      "name": "1944_06_pointe_du_hoc"
+    },
+    {
+      "name": "1944_06_01_pathfinders"
+    },
+    {
+      "name": "1944_12_03_bastogne"
+    },
+    {
+      "name": "1944_12_02_elsenborn"
+    },
+    {
+      "name": "1944_12_01_noville"
+    },
+    {
+      "name": "1945_04_30_elbe"
+    },
+    {
+      "name": "1945_04_yugoslavia"
+    },
+    {
+      "name": "1944_03_trap"
+    },
+    {
+      "name": "1941_12_feodosia"
+    },
+    {
+      "name": "1944_06_04_la-fiere_bridge"
+    },
+    {
+      "name": "1944_06_03_brecourt_manor"
+    },
+    {
+      "name": "1944_06_02_sainte_mere_eglise"
+    },
+    {
+      "name": "1944_06_05_carentan"
+    },
+    {
+      "name": "1944_09_02_veghel"
+    },
+    {
+      "name": "1944_09_01_nijmegen"
+    },
+    {
+      "name": "1944_06_06_bloody_gulch"
+    },
+    {
+      "name": "1944_03_narva"
+    },
+    {
+      "name": "1942_06_sevastopol"
+    },
+    {
+      "name": "1945_04-rus_seelow_heights"
+    },
+    {
+      "name": "1944_09_yugoslavia"
+    },
+    {
+      "name": "1944_08_07_luttich"
+    },
+    {
+      "name": "1944_06_saint_lo_hills"
+    },
+    {
+      "name": "1945_03_spring-awakening"
+    },
+    {
+      "name": "1943_11_kiev"
+    },
+    {
+      "name": "1943_07_ponyri"
+    },
+    {
+      "name": "1942_09_pavlovs_house"
+    },
+    {
+      "name": "1945_04_konigsberg"
+    },
+    {
+      "name": "1944_07-rus_op_bagration"
+    },
+    {
+      "name": "1942_10-rus_stalingrad_volga"
+    },
+    {
+      "name": "1941_07-rus_smolensk"
+    },
+    {
+      "name": "1944_08_19_falaise_escape"
+    },
+    {
+      "name": "1940_01_Raate_Road"
+    },
+    {
+      "name": "1939_12_summa"
+    },
+    {
+      "name": "1939_12_kollaa"
+    },
+    {
+      "name": "1941_08_ino_station"
+    },
+    {
+      "name": "1944_10_tornio"
+    },
+    {
+      "name": "1944_06_tali-ilhantala"
+    },
+    {
+      "name": "1941_08_porlampi"
+    },
+    {
+      "name": "1945_04_ruhr_pocket"
+    },
+    {
+      "name": "1945_01_thirimont"
+    },
+    {
+      "name": "1944_12_samree"
+    },
+    {
+      "name": "1941_11-ger_moscow"
+    },
+    {
+      "name": "1945-04-ger_berlin"
+    },
+    {
+      "name": "1943_02-ger_kharkov"
+    },
+    {
+      "name": "1942_11-ger_mamayev_kurgan"
+    }
+  ]
+}

@@ -1,25 +1,51 @@
-<div class="mb-8">
-    <span>Search through animations provided by Call to Arms - Gates Of Hell.</span>
-</div>
+<div class="mx-auto max-w-6xl p-6 lg:p-10">
+    <div class="flex items-start justify-between gap-6">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Animations</h1>
+            <p class="mt-1 text-sm text-slate-500">
+                Browse through animations provided by Call to Arms – Gates of Hell.
+            </p>
+        </div>
 
-<div class="top-0 bg-white sticky">
-    <mat-form-field appearance="outline" class="w-full mt-4">
-        <mat-label>Filter by name</mat-label>
-        <input matInput [(ngModel)]="query" type="text" />
-        @if (query().length) {
-            <button matSuffix (click)="query.set('')" class="p-2 mr-4 cursor-pointer rounded-full hover:bg-slate-100">
-                <ng-icon name="tablerX"></ng-icon>
-            </button>
-        }
-    </mat-form-field>
-</div>
+        <div class="flex items-center gap-3">
+            <input
+                    class="w-64 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                    placeholder="Search animations..."
+                    id="search"
+                    [value]="query()"
+                    (input)="query.set(($any($event.target).value ?? '').trim())"
+            />
+        </div>
+    </div>
 
-<div class="flex flex-col my-4 border border-slate-200 rounded-md">
-    @for (name of animationNames() | filter:query(); track name) {
-        <button type="button" (click)="copyAnimationName(name)"
-                class="w-full flex justify-between border-b border-slate-200 last:border-b-0 hover:bg-slate-100 items-center cursor-pointer p-4">
-            <span>{{ name }}</span>
-            <ng-icon name="tablerCopy"></ng-icon>
-        </button>
-    }
+    <section class="mt-8 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-end gap-4">
+            <div class="text-xs text-slate-500">
+                @if (query().length) {
+                    Filtered by: <span class="font-medium text-slate-700">{{ query() }}</span>
+                } @else {
+                    Showing all animations
+                }
+            </div>
+        </div>
+
+        <div class="max-h-[70vh] overflow-auto">
+            @for (name of animationNames() | filter:query(); track name) {
+                <button
+                        type="button"
+                        (click)="copyAnimationName(name)"
+                        class="w-full flex items-center justify-between gap-4 px-4 py-3 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 text-left"
+                >
+                    <span class="text-sm text-slate-900 truncate">{{ name }}</span>
+                    <ng-icon name="tablerCopy" class="shrink-0 opacity-70 hover:opacity-100"></ng-icon>
+                </button>
+            }
+
+            @if ((animationNames() | filter:query()).length === 0) {
+                <div class="p-6 text-sm text-slate-600">
+                    No animations match your search.
+                </div>
+            }
+        </div>
+    </section>
 </div>

@@ -2,15 +2,19 @@ import {RenderMode, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: 'search/resources',
+    path: 'resources',
     renderMode: RenderMode.Prerender,
   },
   {
-    path: 'search/animations',
+    path: 'animations',
     renderMode: RenderMode.Prerender,
   },
   {
     path: 'changelog',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'maps',
     renderMode: RenderMode.Prerender,
   },
   {
