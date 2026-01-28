@@ -10,11 +10,9 @@ Its goal is to centralize knowledge, tooling, and documentation for modders, map
 The GEM Editor is powerful, but learning resources, tooling, and best practices are scattered across forums, videos, and personal notes.  
 GEM-Tools exists to solve this by providing:
 
+- Flexible search through Editor Assets 
 - Structured tutorials
-- Visual references for editor concepts
-- Reusable tooling assets
 - A collaborative documentation format
-- A modern UX focused on clarity and usability
 
 This project is a **knowledge and tooling hub** around the GEM Editor.
 
