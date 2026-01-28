@@ -13,7 +13,8 @@
     "preset": "jest-preset-angular",
     "setupFilesAfterEnv": [
       "<rootDir>/setup-jest.ts"
-    ]
+    ],
+    "testPathIgnorePatterns": ["<rootDir>/src/testing/"]
   },
   "private": true,
   "dependencies": {

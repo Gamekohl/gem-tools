@@ -26,10 +26,11 @@ import {
     tablerX
 } from '@ng-icons/tabler-icons';
 import {tablerStarFill} from "@ng-icons/tabler-icons/fill";
+import {ResourceNode} from "../../../interfaces";
 import {PreviewImageComponent} from "../../preview-image/preview-image.component";
 import {SeoService} from "../../services/seo.service";
 import {FavoritesStore} from "../../store/favorites-store";
-import {ResourceNode, structureData} from "./data/structure";
+import {structureData} from "./data/structure";
 
 @Component({
     selector: 'app-resources',

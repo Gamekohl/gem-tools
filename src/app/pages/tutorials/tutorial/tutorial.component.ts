@@ -75,7 +75,7 @@ export class TutorialComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.manifestSvc.getManifest$().pipe(
+    this.manifestSvc.manifest$.asObservable().pipe(
         tap(manifest => this.manifest.set(manifest)),
         switchMap(() => this.route.paramMap),
         map(params => params.get('id') ?? null),

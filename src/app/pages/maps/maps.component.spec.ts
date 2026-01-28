@@ -31,9 +31,7 @@ describe('MapsComponent', () => {
     });
 
     it('should initialize maps from mapData in constructor', () => {
-        const comp = new MapsComponent();
-
-        const names = comp.maps().map(m => m.name);
+        const names = component.maps().map(m => m.name);
         expect(names).toEqual([
             'dcg_deulin_chateau',
             'urban ruins',
@@ -42,48 +40,41 @@ describe('MapsComponent', () => {
     });
 
     it('visibleMaps should sort maps by name (localeCompare) when no query', () => {
-        const comp = new MapsComponent();
-
-        const names = comp.visibleMaps().map(m => m.name);
+        const names = component.visibleMaps().map(m => m.name);
 
         expect(names).toHaveLength(3);
         expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
     });
 
     it('visibleMaps should filter case-insensitively by query', () => {
-        const comp = new MapsComponent();
+        component.query.set('forest');
+        expect(component.visibleMaps().map(m => m.name)).toEqual(['Forest_Battle']);
 
-        comp.query.set('forest');
-        expect(comp.visibleMaps().map(m => m.name)).toEqual(['Forest_Battle']);
+        component.query.set('URBAN');
+        expect(component.visibleMaps().map(m => m.name)).toEqual(['urban ruins']);
 
-        comp.query.set('URBAN');
-        expect(comp.visibleMaps().map(m => m.name)).toEqual(['urban ruins']);
-
-        comp.query.set('not-existing');
-        expect(comp.visibleMaps()).toEqual([]);
+        component.query.set('not-existing');
+        expect(component.visibleMaps()).toEqual([]);
     });
 
     it('onPreviewError should mark map as missing and previewUrl should return _missing.webp afterwards', () => {
-        const comp = new MapsComponent();
         const m: MapItem = {name: 'dcg_deulin_chateau'} as any;
 
-        expect(comp.previewUrl(m)).toBe('/assets/maps/dcg_deulin_chateau.webp');
+        expect(component.previewUrl(m)).toBe('/assets/maps/dcg_deulin_chateau.webp');
 
-        comp.onPreviewError(m);
+        component.onPreviewError(m);
 
-        expect(comp.previewUrl(m)).toBe('/assets/maps/_missing.webp');
+        expect(component.previewUrl(m)).toBe('/assets/maps/_missing.webp');
     });
 
     it('onPreviewError should not affect other maps', () => {
-        const comp = new MapsComponent();
-
         const a: MapItem = {name: 'dcg_deulin_chateau'} as any;
         const b: MapItem = {name: 'urban ruins'} as any;
 
-        comp.onPreviewError(a);
+        component.onPreviewError(a);
 
-        expect(comp.previewUrl(a)).toBe('/assets/maps/_missing.webp');
-        expect(comp.previewUrl(b)).toBe('/assets/maps/' + encodeURIComponent('urban ruins') + '.webp');
+        expect(component.previewUrl(a)).toBe('/assets/maps/_missing.webp');
+        expect(component.previewUrl(b)).toBe('/assets/maps/' + encodeURIComponent('urban ruins') + '.webp');
     });
 });
 

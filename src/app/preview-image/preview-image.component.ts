@@ -19,7 +19,7 @@ import {
   viewChild,
   ViewContainerRef
 } from "@angular/core";
-import {ResourceNode} from "../pages/resources/data/structure";
+import {ResourceNode} from "../../interfaces";
 
 export type PreviewUrlResolver<T> = (node: T) => string | null | undefined;
 

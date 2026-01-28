@@ -25,9 +25,9 @@ export class TutorialsComponent {
   private readonly seo = inject(SeoService);
   private readonly manifestSvc = inject(TutorialManifestService);
 
-  readonly manifest = toSignal<TutorialManifest>(
-      this.manifestSvc.getManifest$(),
-      { initialValue: null }
+  readonly manifest = toSignal<TutorialManifest | null>(
+      this.manifestSvc.manifest$.asObservable(),
+      { requireSync: true }
   );
 
   readonly query = signal('');
