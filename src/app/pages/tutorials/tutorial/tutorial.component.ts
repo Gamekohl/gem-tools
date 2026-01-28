@@ -9,9 +9,10 @@ import {
   viewChild, Inject, PLATFORM_ID, OnInit,
 } from '@angular/core';
 import {isPlatformBrowser, NgClass} from '@angular/common';
+import {Title} from "@angular/platform-browser";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
-import {tablerArrowLeft} from "@ng-icons/tabler-icons";
+import {tablerArrowLeft, tablerBrandGithub} from "@ng-icons/tabler-icons";
 import {filter, distinctUntilChanged, switchMap, tap} from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {map} from "rxjs/operators";
@@ -28,7 +29,7 @@ import {
   imports: [RouterLink, NgIconComponent, NgClass],
   templateUrl: './tutorial.component.html',
   viewProviders: [
-      provideIcons({ tablerArrowLeft })
+      provideIcons({ tablerArrowLeft, tablerBrandGithub })
   ]
 })
 export class TutorialComponent implements OnInit {
@@ -36,9 +37,11 @@ export class TutorialComponent implements OnInit {
   private readonly manifestSvc = inject(TutorialManifestService);
   private readonly contentSvc = inject(TutorialContentService);
   private readonly route = inject(ActivatedRoute);
+  private readonly titleService = inject(Title);
 
   readonly contentHost = viewChild<ElementRef<HTMLElement>>('contentHost');
 
+  private readonly isBrowser = signal<boolean>(false);
   readonly id = signal<string | null>(null);
   readonly manifest = signal<TutorialManifest | null>(null);
   readonly markdown = signal<string>('');
@@ -53,6 +56,8 @@ export class TutorialComponent implements OnInit {
   private io: IntersectionObserver | null = null;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser.set(isPlatformBrowser(this.platformId));
+
     effect(() => {
       const html = this.tutorialHtml();
       const toc = this.toc();
@@ -62,14 +67,12 @@ export class TutorialComponent implements OnInit {
 
       if (!host || !html || toc.length === 0) return;
 
-      queueMicrotask(() => this.setupIntersectionObserver(toc));
+      if(this.isBrowser())
+        queueMicrotask(() => this.setupIntersectionObserver(toc));
     });
   }
 
   ngOnInit(): void {
-    if (!isPlatformBrowser(this.platformId))
-      return;
-
     this.manifestSvc.getManifest$().pipe(
         tap(manifest => this.manifest.set(manifest)),
         switchMap(() => this.route.paramMap),
@@ -82,6 +85,7 @@ export class TutorialComponent implements OnInit {
           if (!item) return [''] as any; // should not happen; keeps the stream alive
 
           this.item.set(item);
+          this.titleService.setTitle(`Tutorial: ${item.title}`)
 
           return this.manifestSvc.getMarkdown$(item.file);
         }),
@@ -93,7 +97,8 @@ export class TutorialComponent implements OnInit {
             const firstSec = this.contentSvc.renderMarkdown(md).sections[0]?.id ?? '';
             this.activeSectionId.set(firstSec);
 
-            queueMicrotask(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            if(this.isBrowser())
+              queueMicrotask(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
           }
         });
   }
@@ -140,11 +145,14 @@ export class TutorialComponent implements OnInit {
   }
 
   private findItemById(id: string): ManifestItem | null {
-    const m = this.manifest();
-    for (const group of m?.groups ?? []) {
-      const found = group.items.find((x) => x.id === id);
-      if (found) return found;
+    const manifest = this.manifest();
+
+    const items = manifest ?? [];
+
+    for (const item of items) {
+      if (item.id === id) return item;
     }
+
     return null;
   }
 }

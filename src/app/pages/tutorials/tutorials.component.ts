@@ -5,7 +5,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import {tablerChevronRight} from "@ng-icons/tabler-icons";
 import {
-  ManifestItem,
   TutorialManifest,
   TutorialManifestService
 } from "./services/tutorial-manifest.service";
@@ -29,33 +28,22 @@ export class TutorialsComponent {
       { initialValue: null }
   );
 
-  // UI state
   readonly query = signal('');
   readonly difficulty = signal<DifficultyFilter>('All');
-
-  // Flatten items (keep group title for display)
-  readonly allItems = computed(() => {
-    const m = this.manifest();
-    const out: Array<ManifestItem & { groupTitle: string }> = [];
-
-    for (const g of m?.groups ?? []) {
-      for (const item of g.items ?? []) {
-        out.push({ ...item, groupTitle: g.title });
-      }
-    }
-    return out;
-  });
 
   readonly filteredItems = computed(() => {
     const q = this.query().trim().toLowerCase();
     const diff = this.difficulty();
 
-    return this.allItems().filter((item) => {
+    if (this.manifest() === null)
+      return [];
+
+    return this.manifest()!.filter(item => {
       const matchesDiff =
           diff === 'All' ? true : (item.difficulty ?? '') === diff;
 
       const hay =
-          `${item.title} ${item.subtitle} ${(item.tags ?? []).join(' ')} ${item.groupTitle}`.toLowerCase();
+          `${item.title} ${item.subtitle} ${(item.tags ?? []).join(' ')}`.toLowerCase();
 
       const matchesQuery = q ? hay.includes(q) : true;
 
@@ -64,23 +52,28 @@ export class TutorialsComponent {
   });
 
   readonly stats = computed(() => {
-    const total = this.allItems().length;
+    const total = this.manifest()?.length;
     const shown = this.filteredItems().length;
 
     // count by difficulty (for quick chips)
     const counts = { Beginner: 0, Intermediate: 0, Advanced: 0 };
-    for (const i of this.allItems()) {
-      if (i.difficulty === 'Beginner') counts.Beginner++;
-      if (i.difficulty === 'Intermediate') counts.Intermediate++;
-      if (i.difficulty === 'Advanced') counts.Advanced++;
-    }
 
-    return { total, shown, counts };
+    const manifest = this.manifest();
+
+    if (!manifest) {
+      return { total, shown, counts };
+    } else {
+      for (const i of manifest) {
+        if (i.difficulty === 'Beginner') counts.Beginner++;
+        if (i.difficulty === 'Intermediate') counts.Intermediate++;
+        if (i.difficulty === 'Advanced') counts.Advanced++;
+      }
+
+      return { total, shown, counts };
+    }
   });
 
-  setDifficulty(v: DifficultyFilter) {
+  setDifficulty(v: DifficultyFilter): void {
     this.difficulty.set(v);
   }
-
-  trackById = (_: number, item: ManifestItem & { groupTitle: string }) => item.id;
 }

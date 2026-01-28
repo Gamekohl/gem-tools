@@ -3,14 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {map, shareReplay} from 'rxjs/operators';
 import {firstValueFrom, Observable} from 'rxjs';
 
-export type TutorialManifest = {
-  groups: ManifestGroup[];
-};
-
-export type ManifestGroup = {
-  title: string;
-  items: ManifestItem[];
-};
+export type TutorialManifest = ManifestItem[];
 
 export type ManifestItem = {
   id: string;
@@ -31,7 +24,7 @@ export class TutorialManifestService {
   getIds(): Promise<string[]> {
     return firstValueFrom(
         this.getManifest$().pipe(
-            map(manifest => manifest.groups.flatMap(g => g.items).map(i => i.id))
+            map(manifest => manifest.map(item => item.id))
         )
     );
   }

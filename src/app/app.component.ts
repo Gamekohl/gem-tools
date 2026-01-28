@@ -1,6 +1,5 @@
 import {isPlatformBrowser, NgOptimizedImage} from "@angular/common";
 import {ChangeDetectionStrategy, Component, effect, Inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
-import {MatTooltip} from "@angular/material/tooltip";
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {
@@ -21,8 +20,7 @@ import {environment} from "../environments/environment";
         NgIconComponent,
         RouterLink,
         RouterLinkActive,
-        NgOptimizedImage,
-        MatTooltip
+        NgOptimizedImage
     ],
     viewProviders: [provideIcons({
         tablerBox,

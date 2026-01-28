@@ -1,41 +1,34 @@
-{
-  "groups": [
-    {
-      "title": "Editor Core",
-      "items": [
-        {
-          "id": "mapmaking-and-scripting-fundamentals",
-          "title": "Mapmaking & Scripting Fundamentals",
-          "subtitle": "Fundamentals Explained",
-          "difficulty": "Beginner",
-          "etaMinutes": 10,
-          "file": "mapmaking-and-scripting-fundamentals.md"
-        },
-        {
-          "id": "mission-scripting-with-events",
-          "title": "Mission Scripting with Events",
-          "subtitle": "Fundamentals Explained",
-          "difficulty": "Beginner",
-          "etaMinutes": 10,
-          "file": "mission-scripting-with-events.md"
-        },
-        {
-          "id": "applying-animations",
-          "title": "Applying Animations",
-          "subtitle": "Fundamentals Explained",
-          "difficulty": "Beginner",
-          "etaMinutes": 15,
-          "file": "applying-animations.md"
-        },
-        {
-          "id": "map-borders",
-          "title": "Map Borders",
-          "subtitle": "Fundamentals Explained",
-          "difficulty": "Beginner",
-          "etaMinutes": 5,
-          "file": "map-borders.md"
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "mapmaking-and-scripting-fundamentals",
+    "title": "Mapmaking & Scripting Fundamentals",
+    "subtitle": "Fundamentals Explained",
+    "difficulty": "Beginner",
+    "etaMinutes": 10,
+    "file": "mapmaking-and-scripting-fundamentals.md"
+  },
+  {
+    "id": "mission-scripting-with-events",
+    "title": "Mission Scripting with Events",
+    "subtitle": "Fundamentals Explained",
+    "difficulty": "Beginner",
+    "etaMinutes": 10,
+    "file": "mission-scripting-with-events.md"
+  },
+  {
+    "id": "applying-animations",
+    "title": "Applying Animations",
+    "subtitle": "Fundamentals Explained",
+    "difficulty": "Beginner",
+    "etaMinutes": 15,
+    "file": "applying-animations.md"
+  },
+  {
+    "id": "map-borders",
+    "title": "Map Borders",
+    "subtitle": "Fundamentals Explained",
+    "difficulty": "Beginner",
+    "etaMinutes": 5,
+    "file": "map-borders.md"
+  }
+]
