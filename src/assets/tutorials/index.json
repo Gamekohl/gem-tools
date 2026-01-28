@@ -1,5 +1,6 @@
 [
   {
+    "author": "Gamekohl",
     "id": "mapmaking-and-scripting-fundamentals",
     "title": "Mapmaking & Scripting Fundamentals",
     "subtitle": "Fundamentals Explained",
@@ -8,6 +9,7 @@
     "file": "mapmaking-and-scripting-fundamentals.md"
   },
   {
+    "author": "Gamekohl",
     "id": "mission-scripting-with-events",
     "title": "Mission Scripting with Events",
     "subtitle": "Fundamentals Explained",
@@ -16,6 +18,7 @@
     "file": "mission-scripting-with-events.md"
   },
   {
+    "author": "Gamekohl",
     "id": "applying-animations",
     "title": "Applying Animations",
     "subtitle": "Fundamentals Explained",
@@ -24,6 +27,7 @@
     "file": "applying-animations.md"
   },
   {
+    "author": "Gamekohl",
     "id": "map-borders",
     "title": "Map Borders",
     "subtitle": "Fundamentals Explained",

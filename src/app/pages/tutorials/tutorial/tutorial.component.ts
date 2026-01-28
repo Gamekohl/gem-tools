@@ -6,7 +6,7 @@ import {
   effect,
   inject,
   signal,
-  viewChild, Inject, PLATFORM_ID, OnInit,
+  viewChild, Inject, PLATFORM_ID, OnInit, OnDestroy,
 } from '@angular/core';
 import {isPlatformBrowser, NgClass} from '@angular/common';
 import {Title} from "@angular/platform-browser";
@@ -16,6 +16,7 @@ import {tablerArrowLeft, tablerBrandGithub} from "@ng-icons/tabler-icons";
 import {filter, distinctUntilChanged, switchMap, tap} from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {map} from "rxjs/operators";
+import {SeoService} from "../../../services/seo.service";
 import {TutorialContentService} from "../services/tutorial-content.service";
 import {
   ManifestItem,
@@ -32,7 +33,8 @@ import {
       provideIcons({ tablerArrowLeft, tablerBrandGithub })
   ]
 })
-export class TutorialComponent implements OnInit {
+export class TutorialComponent implements OnInit, OnDestroy {
+  private readonly seo = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly manifestSvc = inject(TutorialManifestService);
   private readonly contentSvc = inject(TutorialContentService);
@@ -79,16 +81,14 @@ export class TutorialComponent implements OnInit {
         map(params => params.get('id') ?? null),
         filter((id): id is string => !!id),
         distinctUntilChanged(),
-        switchMap((id) => {
-          const item = this.findItemById(id);
-
-          if (!item) return [''] as any; // should not happen; keeps the stream alive
-
+        map(id => this.findItemById(id)),
+        filter((item): item is ManifestItem => !!item),
+        tap(item => {
           this.item.set(item);
-          this.titleService.setTitle(`Tutorial: ${item.title}`)
-
-          return this.manifestSvc.getMarkdown$(item.file);
+          this.titleService.setTitle(`Tutorial: ${item.title}`);
+          this.setSeo();
         }),
+        switchMap(({ file }) => this.manifestSvc.getMarkdown$(file)),
         takeUntilDestroyed(this.destroyRef)
     )
         .subscribe({
@@ -101,6 +101,10 @@ export class TutorialComponent implements OnInit {
               queueMicrotask(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
           }
         });
+  }
+
+  ngOnDestroy(): void {
+    this.seo.removeJsonLd();
   }
 
   scrollToSection(id: string): void {
@@ -154,5 +158,29 @@ export class TutorialComponent implements OnInit {
     }
 
     return null;
+  }
+
+  private setSeo(): void {
+    const t = this.item();
+
+    if (!t)
+      return;
+
+    this.seo.apply({
+      title: t.title,
+      canonicalUrl: `https://gem-tools.vercel.app/tutorials/${t.id}`,
+      description: t.subtitle,
+      ogType: 'article',
+      image: '',
+      url: `https://gem-tools.vercel.app/tutorials/${t.id}`
+    });
+
+    this.seo.setJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: `${t.title} - GEM-Tools`,
+      description: t.subtitle,
+      author: { '@type': 'Person', name: t.author }
+    });
   }
 }

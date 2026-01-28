@@ -6,13 +6,14 @@ import {firstValueFrom, Observable} from 'rxjs';
 export type TutorialManifest = ManifestItem[];
 
 export type ManifestItem = {
+  author: string;
   id: string;
   title: string;
   subtitle: string;
   difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   etaMinutes?: number;
   tags?: string[];
-  file: string; // e.g. "tiles-layers-brushes.md"
+  file: string;
 };
 
 @Injectable({ providedIn: 'root' })

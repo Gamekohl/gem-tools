@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import {tablerChevronRight} from "@ng-icons/tabler-icons";
+import {SeoService} from "../../services/seo.service";
 import {
   TutorialManifest,
   TutorialManifestService
@@ -21,6 +22,7 @@ type DifficultyFilter = 'All' | 'Beginner' | 'Intermediate' | 'Advanced';
   ]
 })
 export class TutorialsComponent {
+  private readonly seo = inject(SeoService);
   private readonly manifestSvc = inject(TutorialManifestService);
 
   readonly manifest = toSignal<TutorialManifest>(
@@ -72,6 +74,25 @@ export class TutorialsComponent {
       return { total, shown, counts };
     }
   });
+
+  constructor() {
+    this.seo.apply({
+      title: 'Tutorials',
+      canonicalUrl: 'https://gem-tools.vercel.app/tutorials',
+      description: 'Tutorials for the GEM-Editor: Learn how to use GEM-Editor to create maps, missions and more.',
+      ogType: 'website',
+      image: '',
+      url: 'https://gem-tools.vercel.app/tutorials'
+    });
+
+    this.seo.setJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      headline: 'Tutorials - GEM-Tools',
+      description: 'Tutorials for the GEM-Editor: Learn how to use GEM-Editor to create maps, missions and more.',
+      author: { '@type': 'Organization', name: 'GEM-Tools' }
+    });
+  }
 
   setDifficulty(v: DifficultyFilter): void {
     this.difficulty.set(v);
