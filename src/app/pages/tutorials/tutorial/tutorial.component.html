@@ -1,0 +1,84 @@
+<div class="h-full w-full">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-4 lg:grid-cols-[280px_1fr_260px] gap-6">
+            <div></div>
+            <main class="min-w-0">
+                <button routerLink="/tutorials" class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2">
+                    <ng-icon name="tablerArrowLeft"></ng-icon>
+                    <span class="group-hover:underline">Back to Tutorials</span>
+                </button>
+
+                <div class="rounded-3xl bg-slate-50 dark:bg-white/5 p-6 mt-4">
+                    <div class="flex flex-wrap items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <h1 class="text-2xl font-semibold text-slate-900 truncate">
+                                {{ item()?.title }}
+                            </h1>
+
+                            @if (item()?.subtitle) {
+                                <p class="mt-2 text-sm text-slate-600 dark:text-white/50">
+                                    {{ item()!.subtitle }}
+                                </p>
+                            }
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+                            @if (item()?.difficulty) {
+                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs text-slate-600 dark:text-white/50 shadow-sm">
+                                        {{ item()!.difficulty }}
+                                  </span>
+                            }
+                            @if (item()?.etaMinutes) {
+                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs text-slate-600 dark:text-white/50 shadow-sm">
+                                        ~{{ item()!.etaMinutes }} min
+                                    </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <article
+                        #contentHost
+                        class="prose prose-slate dark:prose-invert max-w-none prose-h2:scroll-mt-24 prose-img:rounded-md prose-img:max-w-full prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline hover:prose-a:underline">
+                        <div [innerHTML]="tutorialHtml()"></div>
+                    </article>
+                </div>
+
+                <div class="h-12"></div>
+            </main>
+
+            <aside class="hidden lg:block lg:sticky lg:top-6 self-start">
+                <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-4">
+                    <div class="text-sm font-semibold text-slate-900 dark:text-white">On this page</div>
+
+                    <div class="mt-4 space-y-1">
+                        @if (toc().length) {
+                            @for (sec of toc(); track sec.id) {
+                                <button
+                                        type="button"
+                                        (click)="scrollToSection(sec.id)"
+                                        class="w-full text-left rounded-xl px-3 py-2 text-sm transition
+                         hover:bg-white dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                                        [ngClass]="{
+                                            'bg-white dark:bg-white/5': activeSectionId() === sec.id
+                                        }"
+                                        [class.font-medium]="activeSectionId() === sec.id">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <span class="truncate text-slate-800">{{ sec.title }}</span>
+                                        @if (activeSectionId() === sec.id) {
+                                            <span class="text-xs text-slate-500">•</span>
+                                        }
+                                    </div>
+                                </button>
+                            }
+                        } @else {
+                            <div class="text-sm text-slate-500">No sections found (add ## headings)</div>
+                        }
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</div>

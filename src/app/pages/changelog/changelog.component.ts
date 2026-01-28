@@ -1,6 +1,6 @@
 import {DatePipe, NgClass} from "@angular/common";
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
-import {CHANGELOG, ChangelogEntry} from "../../content/changelog/changelog.data";
+import {CHANGELOG, ChangelogEntry} from "../../../content/changelog/changelog.data";
 
 @Component({
   selector: 'app-changelog',
