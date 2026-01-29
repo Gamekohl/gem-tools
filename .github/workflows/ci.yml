@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  pull_request:
   push:
+  pull_request:
 
 jobs:
   test:
@@ -25,5 +25,37 @@ jobs:
       - name: Check every component has a spec
         run: node scripts/check-component-tests.mjs
 
-      - name: Run Jest tests
-        run: npm run ci
+      - name: Run Jest tests with coverage
+        run: npm run test:coverage
+
+      # 1) Upload complete HTML coverage report
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          if-no-files-found: error
+
+      # 2) Show coverage numbers in the GitHub Actions Summary
+      - name: Add coverage to job summary
+        if: always()
+        run: |
+          node -e "
+          const fs = require('fs');
+          const p = 'coverage/coverage-summary.json';
+          if (!fs.existsSync(p)) {
+            console.log('No coverage summary found at ' + p);
+            process.exit(0);
+          }
+          const s = JSON.parse(fs.readFileSync(p, 'utf8')).total;
+          const fmt = (x) => (x && typeof x.pct === 'number') ? x.pct.toFixed(2) + '%' : 'n/a';
+          const md = `## Test Coverage
+            | Metric | % | Covered / Total |
+            |---|---:|---:|
+            | Lines | ${fmt(s.lines)} | ${s.lines.covered} / ${s.lines.total} |
+            | Statements | ${fmt(s.statements)} | ${s.statements.covered} / ${s.statements.total} |
+            | Functions | ${fmt(s.functions)} | ${s.functions.covered} / ${s.functions.total} |
+            | Branches | ${fmt(s.branches)} | ${s.branches.covered} / ${s.branches.total} |
+            `;
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+          "

@@ -17,7 +17,15 @@
     "setupFilesAfterEnv": [
       "<rootDir>/setup-jest.ts"
     ],
-    "testPathIgnorePatterns": ["<rootDir>/src/testing/"]
+    "testPathIgnorePatterns": ["<rootDir>/src/testing/"],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
   },
   "private": true,
   "dependencies": {
