@@ -1,27 +1,66 @@
-# GemTools
+# GEM-Tools
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.4.
+A modern, web-based companion platform for the **GEM Editor** used in *Gates of Hell – Ostfront*.  
+Its goal is to centralize knowledge, tooling, and documentation for modders, map creators, and mission designers in a clean, maintainable, and community-friendly way.
 
-## Development server
+## Purpose
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+The GEM Editor is powerful, but learning resources, tooling, and best practices are scattered across forums, videos, and personal notes.  
+GEM-Tools exists to solve this by providing:
 
-## Code scaffolding
+- Flexible search through Editor Assets 
+- Structured tutorials
+- A collaborative documentation format
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+This project is a **knowledge and tooling hub** around the GEM Editor.
 
-## Build
+## Core Features
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Tutorials & Documentation
+- Markdown-based tutorials
+- Versionable and collaborative
 
-## Running unit tests
+### Editor References
+- Visual explanations of GEM Editor concepts
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Target Audience
 
-## Running end-to-end tests
+- GEM Editor beginners
+- Mission and map designers
+- Modders for *Gates of Hell – Ostfront*
+- Community contributors creating tutorials or tools
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Tech Stack
 
-## Further help
+- **Angular (21+)**
+- **Tailwind CSS**
+- Markdown-driven content rendering
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Project Philosophy
+
+Everything in this repository should be:
+- Understandable
+- Maintainable
+- Reusable
+- Explicitly documented
+
+## Contribution
+
+Contributions are welcome, especially in the form of:
+- Tutorials (Markdown)
+- Tooling scripts
+- Visual references
+- UX improvements
+
+Please keep content:
+- Clearly structured
+- Editor-relevant
+
+## Status
+
+This project is under active development.  
+APIs, structure, and features may evolve as GEM-Tools grows.
+
+## Disclaimer
+
+GEM-Tools is a **community project** and is not officially affiliated with the developers of *Gates of Hell – Ostfront*.
