@@ -7,6 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest",
+    "test:ci": "jest --ci",
+    "check:specs": "node scripts/check-component-tests.mjs",
+    "ci": "npm run check:specs && npm run test:ci",
     "serve:ssr": "node dist/gem-tools/server/server.mjs"
   },
   "jest": {
