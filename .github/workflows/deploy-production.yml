@@ -1,0 +1,13 @@
+name: Deploy Production
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  vercel-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Production
+        run: |
+          curl -fsSL -X POST "${{ secrets.VERCEL_PROD_DEPLOY_HOOK }}"
