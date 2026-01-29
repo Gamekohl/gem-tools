@@ -1,25 +1,48 @@
-<div class="mb-8">
-    <span>Search through animations provided by Call to Arms - Gates Of Hell.</span>
-</div>
+<div class="mx-auto max-w-6xl p-6 lg:p-10">
+    <div class="flex items-start justify-between gap-6">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Animations</h1>
+            <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
+                Browse through animations provided by Call to Arms – Gates of Hell.
+            </p>
+        </div>
+    </div>
 
-<div class="top-0 bg-white sticky">
-    <mat-form-field appearance="outline" class="w-full mt-4">
-        <mat-label>Filter by name</mat-label>
-        <input matInput [(ngModel)]="query" type="text" />
-        @if (query().length) {
-            <button matSuffix (click)="query.set('')" class="p-2 mr-4 cursor-pointer rounded-full hover:bg-slate-100">
-                <ng-icon name="tablerX"></ng-icon>
+    <div class="mt-8">
+        <input
+                class="w-full p-4 my-2 dark:text-white outline-none rounded-2xl border border-slate-200 dark:border-white/25"
+                placeholder="Search animation..."
+                id="search"
+                [value]="query()"
+                (input)="query.set(($any($event.target).value ?? '').trim())"
+        />
+    </div>
+    <div class="mb-4 flex items-center justify-end gap-4">
+        <div class="text-xs text-slate-500 dark:text-white/50">
+            @if (query().length) {
+                Filtered by: <span class="font-medium text-slate-700 dark:text-white/50">{{ query() }}</span>
+            } @else {
+                Showing all animations
+            }
+        </div>
+    </div>
+    <section class="rounded-2xl border border-slate-200 dark:border-white/5 overflow-hidden">
+        <cdk-virtual-scroll-viewport itemSize="52" class="h-[70vh] min-h-fit overflow-auto">
+            <button
+                    *cdkVirtualFor="let name of animationNames() | filter:query()"
+                    type="button"
+                    (click)="copyAnimationName(name)"
+                    class="w-full flex items-center justify-between gap-4 p-4 border-b border-slate-100 dark:border-white/5 last:border-b-0 hover:bg-slate-50 dark:hover:bg-white/5 text-left cursor-pointer"
+            >
+                <span class="text-sm text-slate-900 truncate">{{ name }}</span>
+                <ng-icon name="tablerCopy" class="shrink-0 opacity-70 hover:opacity-100"></ng-icon>
             </button>
-        }
-    </mat-form-field>
-</div>
+        </cdk-virtual-scroll-viewport>
 
-<div class="flex flex-col my-4 border border-slate-200 rounded-md">
-    @for (name of animationNames() | filter:query(); track name) {
-        <button type="button" (click)="copyAnimationName(name)"
-                class="w-full flex justify-between border-b border-slate-200 last:border-b-0 hover:bg-slate-100 items-center cursor-pointer p-4">
-            <span>{{ name }}</span>
-            <ng-icon name="tablerCopy"></ng-icon>
-        </button>
-    }
+        @if ((animationNames() | filter:query()).length === 0) {
+            <div class="p-6 text-sm text-slate-600">
+                No animations match your search.
+            </div>
+        }
+    </section>
 </div>

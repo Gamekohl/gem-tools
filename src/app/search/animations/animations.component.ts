@@ -1,4 +1,5 @@
 import {Clipboard} from "@angular/cdk/clipboard";
+import {ScrollingModule} from "@angular/cdk/scrolling";
 import {isPlatformBrowser} from "@angular/common";
 import {
     ChangeDetectionStrategy,
@@ -11,7 +12,6 @@ import {
     signal
 } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatFormField, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {tablerCopy, tablerX} from '@ng-icons/tabler-icons';
@@ -20,7 +20,7 @@ import {animationNamesData} from "./data/animationNames";
 
 @Component({
     selector: 'app-animations',
-    imports: [NgIconComponent, FilterPipe, FormsModule, MatFormField, MatInput, MatLabel, MatSuffix, ReactiveFormsModule],
+    imports: [NgIconComponent, FilterPipe, FormsModule, ReactiveFormsModule, ScrollingModule],
     templateUrl: './animations.component.html',
     styleUrl: './animations.component.scss',
     viewProviders: [provideIcons({tablerCopy, tablerX})],
