@@ -1,5 +1,6 @@
 import {NgOptimizedImage} from "@angular/common";
-import {Component, computed, signal} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
+import {SeoService} from "../../services/seo.service";
 import {mapData, MapItem} from "./data/maps";
 
 @Component({
@@ -9,6 +10,7 @@ import {mapData, MapItem} from "./data/maps";
   styleUrl: './maps.component.scss',
 })
 export class MapsComponent {
+  private readonly seo = inject(SeoService);
   private readonly previewBase = '/assets/maps';
 
   private missingPreview = signal<Set<string>>(new Set());
@@ -30,6 +32,23 @@ export class MapsComponent {
   });
 
   constructor() {
+    this.seo.apply({
+      title: 'Maps',
+      description: 'List of all maps in the GEM-Editor. Search for maps by name.',
+      ogType: 'website',
+      canonicalUrl: 'https://gem-tools.vercel.app/maps',
+      image: '',
+      url: 'https://gem-tools.vercel.app/maps'
+    });
+
+    this.seo.setJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      headline: 'Maps - GEM-Tools',
+      description: 'List of all maps in the GEM-Editor. Search for maps by name.',
+      author: { '@type': 'Organization', name: 'GEM-Tools' }
+    });
+
     this.maps.set(mapData);
   }
 

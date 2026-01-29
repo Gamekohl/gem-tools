@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /assets/
+Disallow: /*?*
+
+Sitemap: https://gem-tools.vercel.app/sitemap.xml

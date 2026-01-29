@@ -1,12 +1,17 @@
 {
   "name": "gem-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest",
+    "test:ci": "jest --ci",
+    "test:coverage": "jest --ci --coverage",
+    "ci": "npm run check:specs && npm run test:ci",
+    "update-version": "node scripts/update-version.mjs",
+    "prebuild": "npm run update-version",
     "check:specs": "node scripts/check-component-tests.mjs",
     "serve:ssr": "node dist/gem-tools/server/server.mjs"
   },
@@ -14,7 +19,16 @@
     "preset": "jest-preset-angular",
     "setupFilesAfterEnv": [
       "<rootDir>/setup-jest.ts"
-    ]
+    ],
+    "testPathIgnorePatterns": ["<rootDir>/src/testing/"],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
   },
   "private": true,
   "dependencies": {
@@ -34,7 +48,9 @@
     "@ng-icons/tabler-icons": "^33.0.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@vercel/analytics": "^1.6.1",
+    "@vercel/node": "^5.5.28",
     "express": "^5.1.0",
+    "marked": "^17.0.1",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",
     "zone.js": "~0.16.0"
@@ -43,6 +59,7 @@
     "@angular/build": "^21.1.1",
     "@angular/cli": "^21.1.1",
     "@angular/compiler-cli": "^21.1.1",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/express": "^5.0.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",

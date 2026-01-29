@@ -1,4 +1,4 @@
-import {ResourceNode} from "../../app/search/resources/data/structure";
+import {ResourceNode} from "../../interfaces";
 
 export const testStructureData: ResourceNode[] = [
     {

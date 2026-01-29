@@ -1,6 +1,5 @@
 import {isPlatformBrowser, NgOptimizedImage} from "@angular/common";
-import {ChangeDetectionStrategy, Component, effect, Inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
-import {MatTooltip} from "@angular/material/tooltip";
+import {ChangeDetectionStrategy, Component, effect, inject, Inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {
@@ -11,8 +10,9 @@ import {
     tablerMap, tablerMoon,
     tablerPhotoEdit, tablerSun
 } from '@ng-icons/tabler-icons';
-import {inject} from '@vercel/analytics';
+import {inject as injectAnalytics} from '@vercel/analytics';
 import {environment} from "../environments/environment";
+import {SeoService} from "./services/seo.service";
 
 @Component({
     selector: 'app-root',
@@ -21,8 +21,7 @@ import {environment} from "../environments/environment";
         NgIconComponent,
         RouterLink,
         RouterLinkActive,
-        NgOptimizedImage,
-        MatTooltip
+        NgOptimizedImage
     ],
     viewProviders: [provideIcons({
         tablerBox,
@@ -39,11 +38,21 @@ import {environment} from "../environments/environment";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
+    private readonly seo = inject(SeoService);
+
     readonly version = environment.version;
 
     theme = signal<'light' | 'dark'>('light');
 
     constructor(@Inject(PLATFORM_ID) platformId: Object) {
+        this.seo.setConfig({
+            siteName: 'GEM-Tools',
+            defaultTitle: 'GEM-Tools',
+            defaultDescription: 'Tools, Tutorials and Ressources for the GEM-Editor ',
+            baseUrl: 'https://gem-tools.vercel.app/',
+            defaultOgImage: 'https://gem-tools.vercel.app/assets/og/default.png'
+        });
+
         if(!isPlatformBrowser(platformId))
           return;
 
@@ -58,7 +67,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        inject();
+        injectAnalytics();
     }
 
     toggleTheme(): void {
