@@ -14,7 +14,7 @@ export type RenderedTutorial = {
 export class TutorialContentService {
   constructor(private sanitizer: DomSanitizer) {}
 
-  renderMarkdown(md: string): RenderedTutorial {
+  renderMarkdown(md: string, assetDir?: string): RenderedTutorial {
     const sections: TutorialSection[] = [];
     let pageTitle: string | undefined;
 
@@ -29,14 +29,26 @@ export class TutorialContentService {
 
     const renderer = new marked.Renderer();
 
-    // 1) Raw HTML aus Markdown komplett blocken
     renderer.html = () => '';
 
-    // 2) Links absichern (kein javascript:)
+    if (assetDir) {
+      const toAbs = (url: string) => {
+        if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('/')) return url;
+
+        return `${assetDir}/${url.replace(/^\.\//, '')}`;
+      };
+
+      renderer.image = ({ href, title, text }) => {
+        const src = toAbs(href ?? '');
+        const safeTitle = title ? ` title="${this.escapeHtmlAttr(title)}"` : '';
+        const alt = this.escapeHtmlAttr(text ?? '');
+        return `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"${safeTitle}>`;
+      };
+    }
+
     renderer.link = ({ href, title, text }) => {
       const safeHref = (href ?? '').trim();
 
-      // Allow: http(s), mailto, relative, hash
       const isSafe =
           safeHref.startsWith('#') ||
           safeHref.startsWith('/') ||
@@ -49,7 +61,6 @@ export class TutorialContentService {
       const finalHref = isSafe ? safeHref : '#';
 
       const t = title ? ` title="${this.escapeHtmlAttr(title)}"` : '';
-      // rel+target für externe Links
       const isExternal = finalHref.startsWith('http://') || finalHref.startsWith('https://');
       const rel = isExternal ? ' rel="noopener noreferrer"' : '';
       const target = isExternal ? ' target="_blank"' : '';

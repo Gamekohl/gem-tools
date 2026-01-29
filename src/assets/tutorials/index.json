@@ -4,35 +4,31 @@
     "id": "mapmaking-and-scripting-fundamentals",
     "title": "Mapmaking & Scripting Fundamentals",
     "subtitle": "Fundamentals Explained",
-    "difficulty": "Beginner",
-    "etaMinutes": 10,
-    "file": "mapmaking-and-scripting-fundamentals.md"
+    "difficulty": 1,
+    "file": "mapmaking-and-scripting-fundamentals/tutorial.md"
   },
   {
     "author": "Gamekohl",
     "id": "mission-scripting-with-events",
     "title": "Mission Scripting with Events",
     "subtitle": "Fundamentals Explained",
-    "difficulty": "Beginner",
-    "etaMinutes": 10,
-    "file": "mission-scripting-with-events.md"
+    "difficulty": 1,
+    "file": "mission-scripting-with-events/tutorial.md"
   },
   {
     "author": "Gamekohl",
     "id": "applying-animations",
     "title": "Applying Animations",
     "subtitle": "Fundamentals Explained",
-    "difficulty": "Beginner",
-    "etaMinutes": 15,
-    "file": "applying-animations.md"
+    "difficulty": 1,
+    "file": "applying-animations/tutorial.md"
   },
   {
     "author": "Gamekohl",
     "id": "map-borders",
     "title": "Map Borders",
     "subtitle": "Fundamentals Explained",
-    "difficulty": "Beginner",
-    "etaMinutes": 5,
-    "file": "map-borders.md"
+    "difficulty": 1,
+    "file": "map-borders/tutorial.md"
   }
 ]

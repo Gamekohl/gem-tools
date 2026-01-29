@@ -1,4 +1,6 @@
-export const mockMarked = (activeRenderer: any) => {
+export const mockMarked = () => {
+    let activeRenderer: any;
+
     class Renderer {
     }
 
@@ -29,6 +31,14 @@ export const mockMarked = (activeRenderer: any) => {
 
                 if (trimmed.startsWith('<')) {
                     out.push(activeRenderer.html(trimmed));
+                    continue;
+                }
+
+                // Keep it simple: one image per line for unit tests.
+                const imgMatch = trimmed.match(/^!\[([^\]]*)\]\((\S+?)(?:\s+"([^"]*)")?\)$/);
+                if (imgMatch) {
+                    const [, alt, href, title] = imgMatch;
+                    out.push(activeRenderer.image({ href, title, text: alt }));
                     continue;
                 }
 

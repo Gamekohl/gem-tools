@@ -1,24 +1,32 @@
-import {
-  Component,
-  DestroyRef,
-  ElementRef,
-  computed,
-  effect,
-  inject,
-  signal,
-  viewChild, Inject, PLATFORM_ID, OnInit, OnDestroy,
-} from '@angular/core';
 import {isPlatformBrowser, NgClass} from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+  viewChild,
+} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Title} from "@angular/platform-browser";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import {tablerArrowLeft, tablerBrandGithub} from "@ng-icons/tabler-icons";
-import {filter, distinctUntilChanged, switchMap, tap} from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {distinctUntilChanged, filter, switchMap, tap} from 'rxjs';
 import {map} from "rxjs/operators";
+import {environment} from "../../../../environments/environment";
 import {SeoService} from "../../../services/seo.service";
+import {estimateReadTimeFromMarkdown} from "../../../utils/read-time";
 import {TutorialContentService} from "../services/tutorial-content.service";
 import {
+  Difficulty,
   ManifestItem,
   TutorialManifest,
   TutorialManifestService
@@ -26,12 +34,12 @@ import {
 
 @Component({
   selector: 'gem-tutorial',
-  standalone: true,
   imports: [RouterLink, NgIconComponent, NgClass],
   templateUrl: './tutorial.component.html',
   viewProviders: [
       provideIcons({ tablerArrowLeft, tablerBrandGithub })
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TutorialComponent implements OnInit, OnDestroy {
   private readonly seo = inject(SeoService);
@@ -41,16 +49,24 @@ export class TutorialComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly titleService = inject(Title);
 
+  private readonly difficultyLabels = {
+    [Difficulty.Beginner]: 'Beginner',
+    [Difficulty.Intermediate]: 'Intermediate',
+    [Difficulty.Advanced]: 'Advanced'
+  };
+
   readonly contentHost = viewChild<ElementRef<HTMLElement>>('contentHost');
 
   private readonly isBrowser = signal<boolean>(false);
-  readonly id = signal<string | null>(null);
   readonly manifest = signal<TutorialManifest | null>(null);
   readonly markdown = signal<string>('');
   readonly activeSectionId = signal<string>('');
   readonly item = signal<ManifestItem | null>(null);
 
-  readonly rendered = computed(() => this.contentSvc.renderMarkdown(this.markdown()));
+  readonly assetDir = computed(() => `${environment.tutorialAssets}/${this.item()?.id}`);
+  readonly rendered = computed(() => this.contentSvc.renderMarkdown(this.markdown(), this.assetDir()));
+  readonly readTime = computed(() => estimateReadTimeFromMarkdown(this.markdown()))
+  readonly difficulty = computed(() => !!this.item()?.difficulty ? this.difficultyLabels[this.item()!.difficulty!] : null);
 
   readonly tutorialHtml = computed(() => this.rendered().html);
   readonly toc = computed(() => this.rendered().sections);

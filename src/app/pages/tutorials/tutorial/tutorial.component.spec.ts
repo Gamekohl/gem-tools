@@ -1,19 +1,23 @@
-import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { BehaviorSubject, of } from 'rxjs';
-import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
-import { PLATFORM_ID } from '@angular/core';
+import {PLATFORM_ID} from '@angular/core';
+import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, convertToParamMap, ParamMap} from '@angular/router';
+import {BehaviorSubject, of} from 'rxjs';
+import {tutorialManifestMock} from "../../../../testing/data/manifest";
 import {mockMarked} from "../../../../testing/libs/marked";
 import {MockIntersectionObserver} from "../../../../testing/utils/intersection-observer";
 import {SeoService} from "../../../services/seo.service";
-
-let activeRenderer: any;
-
-jest.mock('marked', () => mockMarked(activeRenderer));
-
-import { TutorialComponent } from './tutorial.component';
-import { TutorialManifestService, TutorialManifest, ManifestItem } from '../services/tutorial-manifest.service';
 import {TutorialContentService} from '../services/tutorial-content.service';
+import {
+  ManifestItem,
+  TutorialManifest,
+  TutorialManifestService
+} from '../services/tutorial-manifest.service';
+import * as ReadTime from '../../../utils/read-time';
+
+jest.mock('marked', () => mockMarked());
+
+import {TutorialComponent} from './tutorial.component';
 
 describe('TutorialComponent', () => {
   let fixture: ComponentFixture<TutorialComponent>;
@@ -45,28 +49,8 @@ describe('TutorialComponent', () => {
 
   const paramMap$ = new BehaviorSubject<ParamMap>(convertToParamMap({ id: 'intro' }));
 
-  const manifest: TutorialManifest = [
-    {
-      author: 'Alice',
-      id: 'intro',
-      title: 'Intro',
-      subtitle: 'Basics',
-      difficulty: 'Beginner',
-      etaMinutes: 5,
-      tags: ['start'],
-      file: 'intro.md',
-    },
-    {
-      author: 'Bob',
-      id: 'adv',
-      title: 'Advanced',
-      subtitle: 'Deep',
-      difficulty: 'Advanced',
-      etaMinutes: 30,
-      tags: ['deep'],
-      file: 'adv.md',
-    },
-  ];
+  const manifest = tutorialManifestMock;
+  const manifestItems = manifest.items;
 
   beforeEach(async () => {
     window.IntersectionObserver = jest.fn().mockImplementation((cb) => {
@@ -140,7 +124,7 @@ describe('TutorialComponent', () => {
   });
 
   it('should set item, title, SEO, loads markdown, sets activeSectionId and scrolls to top (browser)', fakeAsync(() => {
-    const item: ManifestItem = manifest[0]!;
+    const item: ManifestItem = manifest.getItem(0);
     const md = '# Intro\n\n## Section 1\nText';
 
     contentSvcMock.renderMarkdown.mockImplementation((_md: string) => ({
@@ -150,16 +134,16 @@ describe('TutorialComponent', () => {
     }));
 
     manifestSvcMock.getMarkdown$.mockReturnValue(of(md));
-    manifestSvcMock.manifest$.next(manifest);
+    manifestSvcMock.manifest$.next(manifestItems);
 
     component.ngOnInit();
     fixture.detectChanges();
 
     expect(component.item()).toEqual(item);
 
-    expect(titleMock.setTitle).toHaveBeenCalledWith('Tutorial: Intro');
+    expect(titleMock.setTitle).toHaveBeenCalledWith('Tutorial: Intro to GEM');
     expect(seoMock.apply).toHaveBeenCalledWith({
-      title: 'Intro',
+      title: 'Intro to GEM',
       canonicalUrl: 'https://gem-tools.vercel.app/tutorials/intro',
       description: 'Basics',
       ogType: 'article',
@@ -169,7 +153,7 @@ describe('TutorialComponent', () => {
     expect(seoMock.setJsonLd).toHaveBeenCalledWith({
       '@context': 'https://schema.org',
       '@type': 'Article',
-      headline: 'Intro - GEM-Tools',
+      headline: 'Intro to GEM - GEM-Tools',
       description: 'Basics',
       author: { '@type': 'Person', name: 'Alice' },
     });
@@ -215,7 +199,7 @@ describe('TutorialComponent', () => {
 
     component.ngOnInit();
 
-    manifestSvcMock.manifest$.next(manifest);
+    manifestSvcMock.manifest$.next(manifestItems);
 
     expect(window.scrollTo).not.toHaveBeenCalled();
   }));
@@ -302,5 +286,32 @@ describe('TutorialComponent', () => {
     ]);
 
     expect(component.activeSectionId()).toBe('initial-state');
+  });
+
+  it('should call estimateReadTimeFromMarkdown with current markdown and exposes its return value', () => {
+    const mockReadTimeResult: ReadTime.ReadTimeResult = {
+      minutes: 5,
+      words: 200,
+      images: 0,
+      codeBlocks: 0
+    }
+
+    jest.spyOn(ReadTime, 'estimateReadTimeFromMarkdown').mockReturnValue(mockReadTimeResult);
+
+    component.markdown.set('# Hello\n\nSome text');
+
+    expect(component.readTime()).toBe(mockReadTimeResult);
+  });
+
+  it('should map item.difficulty through difficultyLabels', () => {
+    component.item.set(manifest.getItem(0));
+
+    expect(component.difficulty()).toBe('Beginner');
+  });
+
+  it('should set difficulty to null', () => {
+    component.item.set(manifest.getItemWithoutDifficulty());
+
+    expect(component.difficulty()).toBe(null);
   });
 });

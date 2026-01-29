@@ -1,12 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BehaviorSubject } from 'rxjs';
-import { TutorialsComponent } from './tutorials.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {PageEvent} from "@angular/material/paginator";
+import {BehaviorSubject} from 'rxjs';
+import {tutorialManifestMock} from "../../../testing/data/manifest";
 
-import { SeoService } from '../../services/seo.service';
-import {
-  TutorialManifestService,
-  TutorialManifest,
-} from './services/tutorial-manifest.service';
+import {SeoService} from '../../services/seo.service';
+import {Difficulty, TutorialManifest, TutorialManifestService,} from './services/tutorial-manifest.service';
+import {TutorialsComponent} from './tutorials.component';
 
 describe('TutorialsComponent', () => {
   let fixture: ComponentFixture<TutorialsComponent>;
@@ -15,47 +14,8 @@ describe('TutorialsComponent', () => {
   let seoMock: { apply: jest.Mock; setJsonLd: jest.Mock };
   let manifestSvcMock: { manifest$: BehaviorSubject<TutorialManifest | null> };
 
-  const manifest: TutorialManifest = [
-    {
-      author: 'Alice',
-      id: 'intro',
-      title: 'Intro to GEM',
-      subtitle: 'Basics',
-      difficulty: 'Beginner',
-      etaMinutes: 5,
-      tags: ['start', 'overview'],
-      file: 'intro.md',
-    },
-    {
-      author: 'Bob',
-      id: 'ai',
-      title: 'AI Scripting',
-      subtitle: 'Triggers and logic',
-      difficulty: 'Intermediate',
-      etaMinutes: 20,
-      tags: ['scripting', 'logic'],
-      file: 'ai.md',
-    },
-    {
-      author: 'Cara',
-      id: 'perf',
-      title: 'Performance',
-      subtitle: 'Optimizations',
-      difficulty: 'Advanced',
-      etaMinutes: 30,
-      tags: ['performance'],
-      file: 'perf.md',
-    },
-    {
-      author: 'Dan',
-      id: 'nodiff',
-      title: 'No Difficulty',
-      subtitle: 'No diff set',
-      // difficulty omitted
-      tags: ['misc'],
-      file: 'no.md',
-    },
-  ];
+  const manifest = tutorialManifestMock;
+  const manifestItems = manifest.items;
 
   beforeEach(async () => {
     seoMock = {
@@ -115,11 +75,11 @@ describe('TutorialsComponent', () => {
   });
 
   it('filteredItems returns all items when difficulty=All and query empty', () => {
-    manifestSvcMock.manifest$.next(manifest);
+    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     component.query.set('');
-    component.difficulty.set('All');
+    component.difficulty.set(0);
 
     expect(component.filteredItems().map((i) => i.id)).toEqual([
       'intro',
@@ -130,19 +90,19 @@ describe('TutorialsComponent', () => {
   });
 
   it('filters by difficulty (Beginner)', () => {
-    manifestSvcMock.manifest$.next(manifest);
+    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
-    component.setDifficulty('Beginner');
+    component.setDifficulty(Difficulty.Beginner);
 
     expect(component.filteredItems().map((i) => i.id)).toEqual(['intro']);
   });
 
   it('filters by query across title, subtitle, and tags (case-insensitive)', () => {
-    manifestSvcMock.manifest$.next(manifest);
+    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
-    component.difficulty.set('All');
+    component.difficulty.set(0);
 
     component.query.set('triggers');
     expect(component.filteredItems().map((i) => i.id)).toEqual(['ai']);
@@ -155,10 +115,10 @@ describe('TutorialsComponent', () => {
   });
 
   it('combines difficulty + query filtering', () => {
-    manifestSvcMock.manifest$.next(manifest);
+    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
-    component.setDifficulty('Intermediate');
+    component.setDifficulty(Difficulty.Intermediate);
     component.query.set('logic');
 
     expect(component.filteredItems().map((i) => i.id)).toEqual(['ai']);
@@ -168,12 +128,12 @@ describe('TutorialsComponent', () => {
   });
 
   it('stats returns total, shown, and counts by difficulty', () => {
-    manifestSvcMock.manifest$.next(manifest);
+    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     // baseline (All)
     component.query.set('');
-    component.difficulty.set('All');
+    component.difficulty.set(0);
 
     const s1 = component.stats();
     expect(s1.total).toBe(4);
@@ -181,7 +141,7 @@ describe('TutorialsComponent', () => {
     expect(s1.counts).toEqual({ Beginner: 1, Intermediate: 1, Advanced: 1 });
 
     // after filtering (Beginner)
-    component.difficulty.set('Beginner');
+    component.difficulty.set(Difficulty.Beginner);
 
     const s2 = component.stats();
     expect(s2.total).toBe(4);
@@ -190,8 +150,35 @@ describe('TutorialsComponent', () => {
   });
 
   it('setDifficulty updates the difficulty signal', () => {
-    expect(component.difficulty()).toBe('All');
-    component.setDifficulty('Advanced');
-    expect(component.difficulty()).toBe('Advanced');
+    expect(component.difficulty()).toBe(0);
+    component.setDifficulty(Difficulty.Advanced);
+    expect(component.difficulty()).toBe(Difficulty.Advanced);
+  });
+
+  it('gets pagedItems()', () => {
+    manifestSvcMock.manifest$.next(manifestItems);
+    fixture.detectChanges();
+
+    expect(component.pagedItems()).toEqual(manifestItems);
+  });
+
+  it('gets pagedItems() with page size 2', () => {
+    manifestSvcMock.manifest$.next(manifestItems);
+    fixture.detectChanges();
+
+    component.pageSize.set(2);
+    expect(component.pagedItems()).toEqual([manifest.getItem(0), manifest.getItem(1)]);
+  });
+
+  it('sets pageIndex and pageSize based on PageEvent', () => {
+    const mockPageEvent = {
+      pageIndex: 1,
+      pageSize: 2,
+    } as PageEvent;
+
+    component.onPage(mockPageEvent);
+
+    expect(component.pageIndex()).toBe(1);
+    expect(component.pageSize()).toBe(2);
   });
 });

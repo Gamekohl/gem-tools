@@ -28,16 +28,14 @@
                         </div>
 
                         <div class="flex flex-wrap gap-2">
-                            @if (item()?.difficulty) {
-                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs text-slate-600 dark:text-white/50 shadow-sm">
-                                        {{ item()!.difficulty }}
+                            @if (difficulty()) {
+                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                                        {{ difficulty() }}
                                   </span>
                             }
-                            @if (item()?.etaMinutes) {
-                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs text-slate-600 dark:text-white/50 shadow-sm">
-                                        ~{{ item()!.etaMinutes }} min
-                                    </span>
-                            }
+                            <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                                ~{{ readTime().minutes }} min
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -45,7 +43,9 @@
                 <div class="mt-6">
                     <article
                         #contentHost
-                        class="prose prose-slate dark:prose-invert max-w-none prose-h2:scroll-mt-24 prose-img:rounded-md prose-img:max-w-full prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline hover:prose-a:underline">
+                        class="prose
+                            prose-slate dark:prose-invert max-w-none prose-h2:scroll-mt-24 prose-img:rounded-md
+                            prose-img:max-w-full prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline hover:prose-a:underline">
                         <div [innerHTML]="tutorialHtml()"></div>
                     </article>
                 </div>

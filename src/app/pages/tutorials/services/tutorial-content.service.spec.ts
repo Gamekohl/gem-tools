@@ -2,9 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {mockMarked} from "../../../../testing/libs/marked";
 
-let activeRenderer: any;
-
-jest.mock('marked', () => mockMarked(activeRenderer));
+jest.mock('marked', () => mockMarked());
 
 import {TutorialContentService} from './tutorial-content.service';
 
@@ -19,8 +17,6 @@ describe('TutorialContentService', () => {
     let sanitizer: DomSanitizerStub;
 
     beforeEach(() => {
-        activeRenderer = undefined;
-
         TestBed.configureTestingModule({
             providers: [
                 TutorialContentService,
@@ -206,21 +202,73 @@ describe('TutorialContentService', () => {
     });
 
     it('escapes href and title attributes in links', () => {
-      // Note: keep the title free of unescaped quotes so the mocked parser can parse it deterministically.
-      const res = service.renderMarkdown(
-          `[t](https://example.com?x=y&z=<a> "bad title <x> & y")`
-      );
+        // Note: keep the title free of unescaped quotes so the mocked parser can parse it deterministically.
+        const res = service.renderMarkdown(
+            `[t](https://example.com?x=y&z=<a> "bad title <x> & y")`
+        );
 
-      const html = res.html as unknown as string;
+        const html = res.html as unknown as string;
 
-      // href escaping: & < >
-      expect(html).toContain(
-          'href="https://example.com?x=y&amp;z=&lt;a&gt;"'
-      );
+        // href escaping: & < >
+        expect(html).toContain(
+            'href="https://example.com?x=y&amp;z=&lt;a&gt;"'
+        );
 
-      // title escaping: & < >
-      expect(html).toContain(
-          'title="bad title &lt;x&gt; &amp; y"'
-    );
-  });
+        // title escaping: & < >
+        expect(html).toContain(
+            'title="bad title &lt;x&gt; &amp; y"'
+        );
+    });
+
+    it('prefixes relative image urls with assetDir', () => {
+        const md = `![Alt](./images/image.png)`;
+
+        const res = service.renderMarkdown(md, 'assets/tutorials/test');
+        const html = res.html as unknown as string;
+
+        expect(html).toContain(
+            `<img src="assets/tutorials/test/images/image.png" alt="Alt" loading="lazy" decoding="async">`
+        );
+    });
+
+    it('removes leading "./" for relative image urls', () => {
+        const md = `![Alt](./image.png)`;
+
+        const res = service.renderMarkdown(md, '/assets/tutorials/intro');
+        const html = res.html as unknown as string;
+
+        expect(html).toContain(
+            `<img src="/assets/tutorials/intro/image.png" alt="Alt" loading="lazy" decoding="async">`
+        );
+    });
+
+    it('does not prefix http(s), protocol-relative, data:, or root-absolute urls', () => {
+        const md = `
+            ![A](https://example.com/a.png)
+            ![B](http://example.com/b.png)
+            ![C](//cdn.example.com/c.png)
+            ![D](data:image/png;base64,AAA)
+            ![E](/root/e.png)
+            `.trim();
+
+        const res = service.renderMarkdown(md, '/assets/tutorials/intro');
+        const html = res.html as unknown as string;
+
+        expect(html).toContain(`<img src="https://example.com/a.png" alt="A" loading="lazy" decoding="async">`);
+        expect(html).toContain(`<img src="http://example.com/b.png" alt="B" loading="lazy" decoding="async">`);
+        expect(html).toContain(`<img src="//cdn.example.com/c.png" alt="C" loading="lazy" decoding="async">`);
+        expect(html).toContain(`<img src="data:image/png;base64,AAA" alt="D" loading="lazy" decoding="async">`);
+        expect(html).toContain(`<img src="/root/e.png" alt="E" loading="lazy" decoding="async">`);
+    });
+
+    it('escapes alt text and title attribute', () => {
+        const md = `![a <b> & "c"](img.png "t <x> & y")`;
+
+        const res = service.renderMarkdown(md, '/assets/tutorials/intro');
+        const html = res.html as unknown as string;
+
+        expect(html).toContain(`src="/assets/tutorials/intro/img.png"`);
+        expect(html).toContain(`alt="a &lt;b&gt; &amp; &quot;c&quot;"`);
+        expect(html).toContain(`title="t &lt;x&gt; &amp; y"`);
+    });
 });

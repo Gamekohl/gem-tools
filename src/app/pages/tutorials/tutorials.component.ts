@@ -1,37 +1,39 @@
 import {NgClass} from "@angular/common";
-import {Component, computed, inject, signal} from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import {NgIconComponent, provideIcons} from "@ng-icons/core";
-import {tablerChevronRight} from "@ng-icons/tabler-icons";
+import {ChangeDetectionStrategy, Component, computed, inject, model, signal} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {FormsModule} from "@angular/forms";
+import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
+import {RouterModule} from '@angular/router';
 import {SeoService} from "../../services/seo.service";
-import {
-  TutorialManifest,
-  TutorialManifestService
-} from "./services/tutorial-manifest.service";
+import {Difficulty, TutorialManifest, TutorialManifestService} from "./services/tutorial-manifest.service";
+import {TutorialCardComponent} from "./tutorial-card/tutorial-card.component";
 
-type DifficultyFilter = 'All' | 'Beginner' | 'Intermediate' | 'Advanced';
+type DifficultyFilter = 0 | Difficulty;
 
 @Component({
   selector: 'gem-tutorials',
-  standalone: true,
-  imports: [RouterModule, NgIconComponent, NgClass],
+  imports: [RouterModule, NgClass, FormsModule, MatPaginatorModule, TutorialCardComponent],
   templateUrl: './tutorials.component.html',
-  viewProviders: [
-      provideIcons({ tablerChevronRight })
-  ]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TutorialsComponent {
   private readonly seo = inject(SeoService);
   private readonly manifestSvc = inject(TutorialManifestService);
+
+  readonly pageSizeOptions = [10];
+  readonly difficultyEnum = Difficulty;
 
   readonly manifest = toSignal<TutorialManifest | null>(
       this.manifestSvc.manifest$.asObservable(),
       { requireSync: true }
   );
 
-  readonly query = signal('');
-  readonly difficulty = signal<DifficultyFilter>('All');
+  readonly query = model('');
+
+  readonly difficulty = signal<DifficultyFilter>(0);
+
+  readonly pageIndex = signal<number>(0);
+  readonly pageSize = signal<number>(this.pageSizeOptions[0]);
 
   readonly filteredItems = computed(() => {
     const q = this.query().trim().toLowerCase();
@@ -42,7 +44,7 @@ export class TutorialsComponent {
 
     return this.manifest()!.filter(item => {
       const matchesDiff =
-          diff === 'All' ? true : (item.difficulty ?? '') === diff;
+          diff === 0 ? true : item.difficulty === diff;
 
       const hay =
           `${item.title} ${item.subtitle} ${(item.tags ?? []).join(' ')}`.toLowerCase();
@@ -66,13 +68,19 @@ export class TutorialsComponent {
       return { total, shown, counts };
     } else {
       for (const i of manifest) {
-        if (i.difficulty === 'Beginner') counts.Beginner++;
-        if (i.difficulty === 'Intermediate') counts.Intermediate++;
-        if (i.difficulty === 'Advanced') counts.Advanced++;
+        if (i.difficulty === Difficulty.Beginner) counts.Beginner++;
+        if (i.difficulty === Difficulty.Intermediate) counts.Intermediate++;
+        if (i.difficulty === Difficulty.Advanced) counts.Advanced++;
       }
 
       return { total, shown, counts };
     }
+  });
+
+  readonly pagedItems = computed(() => {
+    const items = this.filteredItems();
+    const start = this.pageIndex() * this.pageSize();
+    return items.slice(start, start + this.pageSize());
   });
 
   constructor() {
@@ -96,5 +104,12 @@ export class TutorialsComponent {
 
   setDifficulty(v: DifficultyFilter): void {
     this.difficulty.set(v);
+    this.pageIndex.set(0);
+    this.pageSize.set(this.pageSizeOptions[0]);
+  }
+
+  onPage(e: PageEvent): void {
+    this.pageIndex.set(e.pageIndex);
+    this.pageSize.set(e.pageSize);
   }
 }

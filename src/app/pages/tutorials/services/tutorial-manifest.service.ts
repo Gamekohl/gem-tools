@@ -5,13 +5,18 @@ import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
 
 export type TutorialManifest = ManifestItem[];
 
+export enum Difficulty {
+  Beginner = 1,
+  Intermediate = 2,
+  Advanced = 3,
+}
+
 export type ManifestItem = {
   author: string;
   id: string;
   title: string;
   subtitle: string;
-  difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
-  etaMinutes?: number;
+  difficulty?: Difficulty; // 1 = Beginner, 2 = Intermediate, 3 = Advanced
   tags?: string[];
   file: string;
 };
