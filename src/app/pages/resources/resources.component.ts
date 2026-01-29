@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
-import {MatCheckbox} from "@angular/material/checkbox";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -27,9 +26,11 @@ import {
     tablerX
 } from '@ng-icons/tabler-icons';
 import {tablerStarFill} from "@ng-icons/tabler-icons/fill";
+import {ResourceNode} from "../../../interfaces";
 import {PreviewImageComponent} from "../../preview-image/preview-image.component";
+import {SeoService} from "../../services/seo.service";
 import {FavoritesStore} from "../../store/favorites-store";
-import {ResourceNode, structureData} from "./data/structure";
+import {structureData} from "./data/structure";
 
 @Component({
     selector: 'app-resources',
@@ -40,8 +41,7 @@ import {ResourceNode, structureData} from "./data/structure";
         MatInputModule,
         MatFormFieldModule,
         PreviewImageComponent,
-        FormsModule,
-        MatCheckbox
+        FormsModule
     ],
     templateUrl: './resources.component.html',
     styleUrl: './resources.component.scss',
@@ -61,6 +61,7 @@ import {ResourceNode, structureData} from "./data/structure";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResourcesComponent implements OnInit {
+    private readonly seo = inject(SeoService);
     private readonly destroyRef = inject(DestroyRef);
     private readonly cdr = inject(ChangeDetectorRef);
     private readonly clipboard = inject(Clipboard);
@@ -105,6 +106,23 @@ export class ResourcesComponent implements OnInit {
         node.path ? `/objects${node.path}.webp` : null;
 
     constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+        this.seo.apply({
+            title: 'Editor Objects',
+            description: 'List of all objects in the GEM-Editor. Search for objects by name and quickly copy them to the clipboard.',
+            ogType: 'website',
+            canonicalUrl: 'https://gem-tools.vercel.app/resources',
+            image: '',
+            url: 'https://gem-tools.vercel.app/resources'
+        });
+
+        this.seo.setJsonLd({
+           '@context': 'https://schema.org',
+           '@type': 'CollectionPage',
+           headline: 'Objects - GEM-Tools',
+           description: 'List of all objects in the GEM-Editor. Search for objects by name and quickly copy them to the clipboard.',
+           author: { '@type': 'Organization', name: 'GEM-Tools' }
+        });
+
         toObservable(this.viewData).pipe(
             takeUntilDestroyed(this.destroyRef),
         )
@@ -114,9 +132,6 @@ export class ResourcesComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (!isPlatformBrowser(this.platformId))
-            return;
-
         this._data = structureData;
 
         this.cdr.markForCheck();

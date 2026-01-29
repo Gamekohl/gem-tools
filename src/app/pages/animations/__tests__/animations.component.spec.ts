@@ -3,8 +3,8 @@ import {provideHttpClient} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {FormsModule} from '@angular/forms';
-import {FilterPipe} from '../../pipes/filter.pipe';
-import {AnimationsComponent} from './animations.component';
+import {FilterPipe} from '../../../pipes/filter.pipe';
+import {AnimationsComponent} from '../animations.component';
 
 const spyOn = jest.spyOn;
 

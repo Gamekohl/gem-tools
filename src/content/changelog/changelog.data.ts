@@ -12,7 +12,7 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
-    { version: '0.0.4', date: '2026-01-27', title: 'Package Update', markdown: v004 },
+    { version: '1.0.0', date: '2026-01-29', title: 'Maps and Tutorials', markdown: v004 },
     { version: '0.0.3', date: '2026-01-27', title: 'Data Update', markdown: v003 },
     { version: '0.0.2', date: '2026-01-26', title: 'Preview Pictures', markdown: v002 },
     { version: '0.0.1', date: '2026-01-25', title: 'Package Updates', markdown: v001 },

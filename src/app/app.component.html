@@ -8,7 +8,7 @@
                         height="105"
                         width="350"
                         priority
-                        class="h-auto w-56"
+                        class="h-auto w-56 dark:invert"
                 />
             </a>
 
@@ -31,6 +31,11 @@
                     <span>Animations</span>
                 </a>
 
+                <a routerLink="/tutorials" class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5">
+                    <ng-icon name="tablerPhotoEdit"></ng-icon>
+                    <span>Tutorials</span>
+                </a>
+
                 <a
                         routerLink="/maps"
                         routerLinkActive="active"
@@ -38,14 +43,6 @@
                 >
                     <ng-icon name="tablerMap"></ng-icon>
                     <span>Maps</span>
-                </a>
-
-                <a
-                        class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2"
-                        matTooltip="Not available yet."
-                >
-                    <ng-icon class="text-black/25! dark:text-white/25!" name="tablerPhotoEdit"></ng-icon>
-                    <span class="text-black/25! dark:text-white/25!">Editor</span>
                 </a>
             </nav>
 

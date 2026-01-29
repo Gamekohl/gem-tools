@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChangelogComponent } from './changelog.component';
+import { ChangelogComponent } from '../changelog.component';
 
-jest.mock('../../content/changelog/changelog.data', () => {
+jest.mock('../../../../content/changelog/changelog.data', () => {
   const CHANGELOG = [
     {
       version: '1.0.0',

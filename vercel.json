@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+  ],
+  "functions": {
+    "api/sitemap.ts": {
+      "includeFiles": "src/assets/tutorials/index.json"
+    }
+  }
+}
