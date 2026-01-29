@@ -1,0 +1,5 @@
+{
+  "release-type": "node",
+  "package-name": "gem-tools",
+  "include-v-in-tag": true
+}
