@@ -1,11 +1,11 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {PageEvent} from "@angular/material/paginator";
 import {BehaviorSubject} from 'rxjs';
-import {tutorialManifestMock} from "../../../testing/data/manifest";
+import {tutorialManifestMock} from "../../../../testing/data/manifest";
 
-import {SeoService} from '../../services/seo.service';
-import {Difficulty, TutorialManifest, TutorialManifestService,} from './services/tutorial-manifest.service';
-import {TutorialsComponent} from './tutorials.component';
+import {SeoService} from '../../../services/seo.service';
+import {Difficulty, TutorialManifest, TutorialManifestService,} from '../services/tutorial-manifest.service';
+import {TutorialsComponent} from '../tutorials.component';
 
 describe('TutorialsComponent', () => {
   let fixture: ComponentFixture<TutorialsComponent>;

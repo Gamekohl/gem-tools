@@ -17,7 +17,7 @@ import * as ReadTime from '../../../utils/read-time';
 
 jest.mock('marked', () => mockMarked());
 
-import {TutorialComponent} from './tutorial.component';
+import {TutorialComponent} from '../tutorial/tutorial.component';
 
 describe('TutorialComponent', () => {
   let fixture: ComponentFixture<TutorialComponent>;

@@ -4,7 +4,7 @@ import {mockMarked} from "../../../../testing/libs/marked";
 
 jest.mock('marked', () => mockMarked());
 
-import {TutorialContentService} from './tutorial-content.service';
+import {TutorialContentService} from '../services/tutorial-content.service';
 
 class DomSanitizerStub {
     bypassSecurityTrustHtml(value: string): SafeHtml {

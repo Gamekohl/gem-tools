@@ -1,6 +1,6 @@
 import {fakeAsync, flush, TestBed} from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
-import {FavoritesStore} from "./favorites-store";
+import {FavoritesStore} from "../favorites-store";
 
 describe('FavoritesStore', () => {
     const storageKey = 'gemtools:favorites:v1';

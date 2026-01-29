@@ -1,4 +1,4 @@
-import {estimateReadTimeFromMarkdown} from "./read-time";
+import {estimateReadTimeFromMarkdown} from "../read-time";
 
 describe('estimateReadTimeFromMarkdown', () => {
     it('returns minMinutes=1 for empty markdown', () => {

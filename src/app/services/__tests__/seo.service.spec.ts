@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DOCUMENT } from '@angular/common';
-import { SeoService } from './seo.service';
+import { SeoService } from '../seo.service';
 
 type Tag = HTMLMetaElement;
 

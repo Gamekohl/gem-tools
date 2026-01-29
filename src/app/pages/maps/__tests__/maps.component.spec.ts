@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {MapItem} from "./data/maps";
+import {MapItem} from "../data/maps";
 
-jest.mock('./data/maps', () => {
+jest.mock('../data/maps', () => {
     const mapData = [
         {name: 'dcg_deulin_chateau'},
         {name: 'urban ruins'},
@@ -13,7 +13,7 @@ jest.mock('./data/maps', () => {
     };
 });
 
-import {MapsComponent} from './maps.component';
+import {MapsComponent} from '../maps.component';
 
 describe('MapsComponent', () => {
     let component: MapsComponent;

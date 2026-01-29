@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
-import { TutorialManifestService, TutorialManifest } from './tutorial-manifest.service';
+import { TutorialManifestService, TutorialManifest } from '../services/tutorial-manifest.service';
 
 describe('TutorialManifestService', () => {
   let service: TutorialManifestService;

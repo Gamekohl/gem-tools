@@ -5,14 +5,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { MatTreeModule } from '@angular/material/tree';
-import {testStructureData} from "../../../testing/data/structure";
-import { ResourcesComponent } from './resources.component';
+import {testStructureData} from "../../../../testing/data/structure";
+import { ResourcesComponent } from '../resources.component';
 const spyOn = jest.spyOn;
 
 const mockData = testStructureData;
 
 // We mock the data here to prevent loading the whole JSON file
-jest.mock('./data/structure', () => {
+jest.mock('../data/structure', () => {
   const structureData = testStructureData;
 
   return { structureData }

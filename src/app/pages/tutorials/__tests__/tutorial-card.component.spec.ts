@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {ActivatedRoute} from "@angular/router";
 import {ManifestItem} from "../services/tutorial-manifest.service";
 
-import { TutorialCardComponent } from './tutorial-card.component';
+import { TutorialCardComponent } from '../tutorial-card/tutorial-card.component';
 
 describe('TutorialCardComponent', () => {
   let component: TutorialCardComponent;
