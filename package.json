@@ -7,6 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest",
+    "update-version": "node scripts/update-version.mjs",
+    "prebuild": "npm run update-version",
     "check:specs": "node scripts/check-component-tests.mjs",
     "serve:ssr": "node dist/gem-tools/server/server.mjs"
   },
