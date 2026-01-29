@@ -46,6 +46,9 @@ Everything in this repository should be:
 
 ## Contribution
 
+If you would like to contribute in form of tutorials for the GEM Editor, be sure to check out our [Contribution Guide](https://github.com/Gamekohl/gem-tools/edit/main/CONTRIBUTION-GUIDE.md).
+
+
 Contributions are welcome, especially in the form of:
 - Tutorials (Markdown)
 - Tooling scripts
