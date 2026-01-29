@@ -4,6 +4,8 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {FormsModule} from "@angular/forms";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {RouterModule} from '@angular/router';
+import {NgIcon, provideIcons} from "@ng-icons/core";
+import {tablerBrandGithub} from "@ng-icons/tabler-icons";
 import {SeoService} from "../../services/seo.service";
 import {Difficulty, TutorialManifest, TutorialManifestService} from "./services/tutorial-manifest.service";
 import {TutorialCardComponent} from "./tutorial-card/tutorial-card.component";
@@ -12,9 +14,12 @@ type DifficultyFilter = 0 | Difficulty;
 
 @Component({
   selector: 'gem-tutorials',
-  imports: [RouterModule, NgClass, FormsModule, MatPaginatorModule, TutorialCardComponent],
+  imports: [RouterModule, NgClass, FormsModule, MatPaginatorModule, TutorialCardComponent, NgIcon],
   templateUrl: './tutorials.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({ tablerBrandGithub })
+  ],
 })
 export class TutorialsComponent {
   private readonly seo = inject(SeoService);

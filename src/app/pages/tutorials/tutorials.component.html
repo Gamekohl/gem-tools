@@ -78,16 +78,22 @@
     <!-- Content -->
     <div class="mt-8 min-h-[70vh] flex flex-col gap-6">
         @if (manifest()?.length === 0) {
-            <div class="rounded-2xl bg-slate-50 p-6 text-sm text-slate-600">
-                Loading tutorials…
+            <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-6 text-sm text-slate-600 dark:text-white/50 flex items-center gap-1">
+                No tutorials have been published yet.
+                <a href="https://github.com/Gamekohl/gem-tools" target="_blank" class="flex items-center hover:underline text-white">
+                    Click here to start contributing on
+                    <ng-icon name="tablerBrandGithub" class="ml-1"></ng-icon>
+                    &nbsp;GitHub!
+                </a>
             </div>
         } @else {
             @if (filteredItems().length === 0) {
                 <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-6">
                     <div class="text-sm font-medium text-slate-900 dark:text-white">No matches</div>
-                    <div class="mt-1 text-sm text-slate-600 dark:text-white/50">
+                    <div class="mt-1 mb-6 text-sm text-slate-600 dark:text-white/50">
                         Try a different search term or clear the difficulty filter.
                     </div>
+                    <a href="https://github.com/Gamekohl/gem-tools" target="_blank" class="text-sm flex items-center dark:text-white hover:underline cursor-pointer">Or click here to start contributing on <ng-icon name="tablerBrandGithub" class="ml-1"></ng-icon>&nbsp;GitHub!</a>
                 </div>
             } @else {
                 <div class="grid grid-cols-1 gap-4 lg:grid-cols-1">
@@ -108,6 +114,9 @@
                         (page)="onPage($event)"
                         hidePageSize>
                 </mat-paginator>
+            </div>
+            <div class="w-full flex justify-center items-center">
+                <a href="https://github.com/Gamekohl/gem-tools" target="_blank" class="text-xs flex items-center dark:text-white hover:underline cursor-pointer">Start contributing on <ng-icon name="tablerBrandGithub" class="ml-1"></ng-icon>&nbsp;GitHub!</a>
             </div>
         }
     </div>
