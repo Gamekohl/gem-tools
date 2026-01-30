@@ -40,7 +40,7 @@ src/assets/tutorials/
 3. Clone your fork locally:
 
 ```
-git clone https://github.com/<your-username>/gem-tools.git
+git clone https://github.com/Gamekohl/gem-tools.git
 cd gem-tools
 ```
 
