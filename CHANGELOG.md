@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/Gamekohl/gem-tools/compare/v1.1.1...v1.1.2) (2026-01-30)
+
+
+### Bug Fixes
+
+* trigger ([79421a9](https://github.com/Gamekohl/gem-tools/commit/79421a9a486b5895788d21429336b9d032e68a0d))
+
 ## [1.1.1](https://github.com/Gamekohl/gem-tools/compare/v1.1.0...v1.1.1) (2026-01-30)
 
 
