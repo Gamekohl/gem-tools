@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/Gamekohl/gem-tools/compare/v1.1.0...v1.1.1) (2026-01-30)
+
+
+### Bug Fixes
+
+* added google-site-verification tag ([e4b7998](https://github.com/Gamekohl/gem-tools/commit/e4b799845c6462c82cb5b500001b54903c0b4288))
+* Merge pull request [#70](https://github.com/Gamekohl/gem-tools/issues/70) from Gamekohl/develop ([e4b7998](https://github.com/Gamekohl/gem-tools/commit/e4b799845c6462c82cb5b500001b54903c0b4288))
+
 ## [1.1.0](https://github.com/Gamekohl/gem-tools/compare/v1.0.1...v1.1.0) (2026-01-29)
 
 
