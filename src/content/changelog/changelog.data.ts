@@ -6,6 +6,7 @@ import v100 from './1.0.0.md';
 import v110 from './1.1.0.md';
 import v111 from './1.1.1.md';
 import v112 from './1.1.2.md';
+import v113 from './1.1.3.md';
 
 export interface ChangelogEntry {
     version: string;
@@ -15,6 +16,7 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+    { version: '1.1.3', date: '2026-01-31', title: 'Package Updates', markdown: v113 },
     { version: '1.1.2', date: '2026-01-30', title: 'Build', markdown: v112 },
     { version: '1.1.1', date: '2026-01-30', title: 'Added GSF', markdown: v111 },
     { version: '1.0.1', date: '2026-01-30', title: 'Fixes and Package Updates', markdown: v110 },
