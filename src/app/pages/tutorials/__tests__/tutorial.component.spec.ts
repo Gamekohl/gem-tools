@@ -1,16 +1,18 @@
-import {PLATFORM_ID} from '@angular/core';
-import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
-import {Title} from '@angular/platform-browser';
-import {ActivatedRoute, convertToParamMap, ParamMap} from '@angular/router';
-import {BehaviorSubject, of} from 'rxjs';
-import {tutorialManifestMock} from "../../../../testing/data/manifest";
-import {mockMarked} from "../../../../testing/libs/marked";
-import {MockIntersectionObserver} from "../../../../testing/utils/intersection-observer";
-import {SeoService} from "../../../services/seo.service";
-import {TutorialContentService} from '../services/tutorial-content.service';
+import { PLATFORM_ID } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
+import { createSeoServiceMock } from '@testing/mocks/seo-service';
+import { createTutorialManifestServiceMock } from '@testing/mocks/tutorial-manifest-service';
+import { MockTutorialManifest } from '@testing/mocks/tutorial-manifest';
+import { BehaviorSubject, of } from 'rxjs';
+import { mockMarked } from '@testing/libs/marked';
+import { MockIntersectionObserver } from '@testing/utils/intersection-observer';
+import { createComponent } from '@testing/utils/testbed';
+import { SeoService } from '../../../services/seo.service';
+import { TutorialContentService } from '../services/tutorial-content.service';
 import {
   ManifestItem,
-  TutorialManifest,
   TutorialManifestService
 } from '../services/tutorial-manifest.service';
 import * as ReadTime from '../../../utils/read-time';
@@ -39,18 +41,29 @@ describe('TutorialComponent', () => {
     });
   };
 
-  let seoMock: { apply: jest.Mock; setJsonLd: jest.Mock; removeJsonLd: jest.Mock };
+  let seoMock: ReturnType<typeof createSeoServiceMock>;
   let titleMock: { setTitle: jest.Mock };
-  let manifestSvcMock: {
-    manifest$: BehaviorSubject<TutorialManifest | null>;
-    getMarkdown$: jest.Mock;
-  };
+  let manifestSvcMock: ReturnType<typeof createTutorialManifestServiceMock>;
   let contentSvcMock: { renderMarkdown: jest.Mock };
 
   const paramMap$ = new BehaviorSubject<ParamMap>(convertToParamMap({ id: 'intro' }));
 
-  const manifest = tutorialManifestMock;
+  const manifest = new MockTutorialManifest();
   const manifestItems = manifest.items;
+
+  const baseProviders = (platformId: 'browser' | 'server') => ([
+    { provide: PLATFORM_ID, useValue: platformId },
+    { provide: SeoService, useValue: seoMock },
+    { provide: Title, useValue: titleMock },
+    { provide: TutorialManifestService, useValue: manifestSvcMock },
+    { provide: TutorialContentService, useValue: contentSvcMock },
+    {
+      provide: ActivatedRoute,
+      useValue: {
+        paramMap: paramMap$.asObservable(),
+      } satisfies Partial<ActivatedRoute>,
+    },
+  ]);
 
   beforeEach(async () => {
     window.IntersectionObserver = jest.fn().mockImplementation((cb) => {
@@ -58,20 +71,13 @@ describe('TutorialComponent', () => {
       return observerMock;
     }) as any;
 
-    seoMock = {
-      apply: jest.fn(),
-      setJsonLd: jest.fn(),
-      removeJsonLd: jest.fn(),
-    };
+    seoMock = createSeoServiceMock();
 
     titleMock = {
       setTitle: jest.fn(),
     };
 
-    manifestSvcMock = {
-      manifest$: new BehaviorSubject<TutorialManifest | null>(null),
-      getMarkdown$: jest.fn(),
-    };
+    manifestSvcMock = createTutorialManifestServiceMock();
 
     contentSvcMock = {
       renderMarkdown: jest.fn().mockReturnValue({
@@ -81,41 +87,13 @@ describe('TutorialComponent', () => {
       }),
     };
 
-    await TestBed.configureTestingModule({
+    const result = await createComponent(TutorialComponent, {
       imports: [TutorialComponent],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: SeoService, useValue: seoMock },
-        { provide: Title, useValue: titleMock },
-        { provide: TutorialManifestService, useValue: manifestSvcMock },
-        { provide: TutorialContentService, useValue: contentSvcMock },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            paramMap: paramMap$.asObservable(),
-          } satisfies Partial<ActivatedRoute>,
-        },
-      ],
-    })
-        // Provide a minimal template so viewChild('contentHost') resolves
-        .overrideComponent(TutorialComponent, {
-          set: {
-            template: `
-            <a [routerLink]="['/tutorials']">Back</a>
-            <div #contentHost>
-                <h1 id="sec-1">Section 1</h1>
-            </div>
-          `,
-          },
-        })
-        .compileComponents();
+      providers: baseProviders('browser'),
+    });
 
-    // Basic browser APIs used by the component
-    (window as any).scrollTo = jest.fn();
-
-    fixture = TestBed.createComponent(TutorialComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture = result.fixture;
+    component = result.component;
   });
 
   afterEach(() => {
@@ -168,27 +146,12 @@ describe('TutorialComponent', () => {
   it('should does not scrollTo in server mode', fakeAsync(async () => {
     TestBed.resetTestingModule();
 
-    await TestBed.configureTestingModule({
+    const result = await createComponent(TutorialComponent, {
       imports: [TutorialComponent],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'server' },
-        { provide: SeoService, useValue: seoMock },
-        { provide: Title, useValue: titleMock },
-        { provide: TutorialManifestService, useValue: manifestSvcMock },
-        { provide: TutorialContentService, useValue: contentSvcMock },
-        { provide: ActivatedRoute, useValue: { paramMap: paramMap$.asObservable() } },
-      ],
-    })
-        .overrideComponent(TutorialComponent, {
-          set: { template: `<div #contentHost></div>` },
-        })
-        .compileComponents();
-
-    (window as any).scrollTo = jest.fn();
-
-    fixture = TestBed.createComponent(TutorialComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      providers: baseProviders('server'),
+    });
+    fixture = result.fixture;
+    component = result.component;
 
     contentSvcMock.renderMarkdown.mockReturnValue({
       html: '<h2 id="sec-1">Section</h2>',
@@ -310,7 +273,7 @@ describe('TutorialComponent', () => {
   });
 
   it('should set difficulty to null', () => {
-    component.item.set(manifest.getItemWithoutDifficulty());
+    component.item.set(manifest.itemWithoutDifficulty);
 
     expect(component.difficulty()).toBe(null);
   });

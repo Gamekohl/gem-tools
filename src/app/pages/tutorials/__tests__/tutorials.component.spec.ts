@@ -1,31 +1,26 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {PageEvent} from "@angular/material/paginator";
-import {BehaviorSubject} from 'rxjs';
-import {tutorialManifestMock} from "../../../../testing/data/manifest";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PageEvent } from '@angular/material/paginator';
+import { createSeoServiceMock } from '@testing/mocks/seo-service';
+import { createTutorialManifestServiceMock } from '@testing/mocks/tutorial-manifest-service';
+import { MockTutorialManifest } from '@testing/mocks/tutorial-manifest';
 
-import {SeoService} from '../../../services/seo.service';
-import {Difficulty, TutorialManifest, TutorialManifestService,} from '../services/tutorial-manifest.service';
-import {TutorialsComponent} from '../tutorials.component';
+import { SeoService } from '../../../services/seo.service';
+import { Difficulty, TutorialManifestService } from '../services/tutorial-manifest.service';
+import { TutorialsComponent } from '../tutorials.component';
 
 describe('TutorialsComponent', () => {
   let fixture: ComponentFixture<TutorialsComponent>;
   let component: TutorialsComponent;
 
-  let seoMock: { apply: jest.Mock; setJsonLd: jest.Mock };
-  let manifestSvcMock: { manifest$: BehaviorSubject<TutorialManifest | null> };
+  let seoMock: ReturnType<typeof createSeoServiceMock>;
+  let manifestSvcMock: ReturnType<typeof createTutorialManifestServiceMock>;
 
-  const manifest = tutorialManifestMock;
+  const manifest = new MockTutorialManifest();
   const manifestItems = manifest.items;
 
   beforeEach(async () => {
-    seoMock = {
-      apply: jest.fn(),
-      setJsonLd: jest.fn(),
-    };
-
-    manifestSvcMock = {
-      manifest$: new BehaviorSubject<TutorialManifest | null>(null),
-    };
+    seoMock = createSeoServiceMock();
+    manifestSvcMock = createTutorialManifestServiceMock();
 
     await TestBed.configureTestingModule({
       imports: [TutorialsComponent],
@@ -41,7 +36,6 @@ describe('TutorialsComponent', () => {
 
     fixture = TestBed.createComponent(TutorialsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   afterEach(() => jest.clearAllMocks());

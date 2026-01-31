@@ -30,6 +30,9 @@
         "lines": 90,
         "statements": 90
       }
+    },
+    "moduleNameMapper": {
+      "^@testing/(.*)$": "<rootDir>/src/testing/$1"
     }
   },
   "private": true,

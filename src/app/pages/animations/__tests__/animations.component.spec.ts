@@ -1,32 +1,22 @@
-import {Clipboard} from "@angular/cdk/clipboard";
-import {provideHttpClient} from '@angular/common/http';
-import {provideHttpClientTesting} from '@angular/common/http/testing';
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {FormsModule} from '@angular/forms';
-import {FilterPipe} from '../../../pipes/filter.pipe';
-import {AnimationsComponent} from '../animations.component';
-
-const spyOn = jest.spyOn;
+import { Clipboard } from '@angular/cdk/clipboard';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { createComponent } from '@testing/utils/testbed';
+import { FilterPipe } from '../../../pipes/filter.pipe';
+import { AnimationsComponent } from '../animations.component';
 
 describe('AnimationsComponent', () => {
   let component: AnimationsComponent;
-  let fixture: ComponentFixture<AnimationsComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-        imports: [
-          AnimationsComponent,
-          FormsModule,
-          FilterPipe
-        ],
-        providers: [
-          provideHttpClient(),
-          provideHttpClientTesting(),
-        ],
-    }).compileComponents();
+    const result = await createComponent(AnimationsComponent, {
+      imports: [AnimationsComponent, FormsModule, FilterPipe],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
 
-    fixture = TestBed.createComponent(AnimationsComponent);
-    component = fixture.componentInstance;
+    component = result.component;
   });
 
   it('should create the component', () => {
@@ -38,9 +28,9 @@ describe('AnimationsComponent', () => {
     expect(component.query()).toBe('fade');
   });
 
-  it('should copy animation name to clipboard', async () => {
+  it('should copy animation name to clipboard', () => {
     const clipboard = TestBed.inject(Clipboard);
-    const spy = spyOn(clipboard, 'copy');
+    const spy = jest.spyOn(clipboard, 'copy');
     const animationName = 'fadeIn';
 
     component.copyAnimationName(animationName);

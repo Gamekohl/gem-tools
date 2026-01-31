@@ -1,26 +1,21 @@
 import {TestBed} from '@angular/core/testing';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {mockMarked} from "../../../../testing/libs/marked";
+import {DomSanitizer} from '@angular/platform-browser';
+import {mockMarked} from "@testing/libs/marked";
+import {MockDomSanitizer} from "@testing/utils/dom-sanitizer";
 
 jest.mock('marked', () => mockMarked());
 
 import {TutorialContentService} from '../services/tutorial-content.service';
 
-class DomSanitizerStub {
-    bypassSecurityTrustHtml(value: string): SafeHtml {
-        return value as unknown as SafeHtml;
-    }
-}
-
 describe('TutorialContentService', () => {
     let service: TutorialContentService;
-    let sanitizer: DomSanitizerStub;
+    let sanitizer: MockDomSanitizer;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
                 TutorialContentService,
-                {provide: DomSanitizer, useClass: DomSanitizerStub},
+                {provide: DomSanitizer, useClass: MockDomSanitizer},
             ],
         });
 
