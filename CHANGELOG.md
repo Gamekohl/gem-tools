@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/Gamekohl/gem-tools/compare/v1.1.2...v1.1.3) (2026-01-31)
+
+
+### Miscellaneous Chores
+
+* release 1.1.3 ([272ff18](https://github.com/Gamekohl/gem-tools/commit/272ff188c81703143e590127b95b6851196b751c))
+
 ## [1.1.2](https://github.com/Gamekohl/gem-tools/compare/v1.1.1...v1.1.2) (2026-01-30)
 
 
