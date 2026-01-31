@@ -1,7 +1,7 @@
-<div class="mx-auto max-w-6xl p-6 lg:p-10">
+<div class="mx-auto max-w-6xl p-6 lg:p-10" data-testid="container">
     <div class="flex items-start justify-between gap-6">
         <div>
-            <h1 class="text-2xl font-semibold tracking-tight">Changelog</h1>
+            <h1 class="text-2xl font-semibold tracking-tight" data-testid="title">Changelog</h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
                 Latest updates, fixes, and improvements.
             </p>
@@ -15,9 +15,10 @@
                 <div class="text-xs text-slate-500 dark:text-white/50 mt-0.5">Select a version to view details</div>
             </div>
 
-            <div class="max-h-[70vh] overflow-auto">
+            <div class="max-h-[70vh] overflow-auto" data-testid="list">
                 @for (change of changelog; track change.version) {
                     <button
+                            data-testid="entry"
                             type="button"
                             class="w-full text-left px-4 py-3 border-b cursor-pointer border-l-4 border-slate-100 hover:bg-slate-50 dark:border-white/25 dark:hover:bg-white/5 border-l-transparent!"
                             (click)="selectEntry(change)"
@@ -25,12 +26,12 @@
                                 'border-l-slate-200! dark:border-l-white!': selectedEntry().version === change.version,
                                 'bg-slate-50 dark:bg-white/5': selectedEntry().version === change.version
                             }"
-                            [attr.aria-current]="selectedEntry().version === change.version ? 'true' : null"
+                            [attr.aria-selected]="selectedEntry().version === change.version ? 'true' : null"
                     >
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ change.version }}</span>
+                                    <span class="text-sm font-semibold text-slate-900 dark:text-white" data-testid="entry-version">{{ change.version }}</span>
                                 </div>
                                 <div class="mt-1 text-sm text-slate-700 dark:text-white/50 line-clamp-2">
                                     {{ change.title }}
@@ -51,7 +52,7 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="min-w-0">
                         <div class="flex items-center gap-3">
-                            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+                            <h2 class="text-lg font-semibold text-slate-900 dark:text-white" data-testid="selected-version-title">
                                 {{ selectedEntry().version }}
                             </h2>
                             <span class="text-sm text-slate-500! dark:text-white/50!">{{ selectedEntry().date | date:'mediumDate' }}</span>

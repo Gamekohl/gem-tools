@@ -95,6 +95,17 @@
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "gem-tools:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "gem-tools:serve:production"
+            }
+          }
         }
       }
     }

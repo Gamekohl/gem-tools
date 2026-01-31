@@ -1,4 +1,4 @@
-<header class="border-b border-slate-200 dark:border-white/5">
+<header data-testid="header" class="border-b border-slate-200 dark:border-white/5">
     <div class="mx-auto max-w-6xl px-6 py-4 lg:px-10">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <a routerLink="/" class="inline-flex items-center">
@@ -12,8 +12,9 @@
                 />
             </a>
 
-            <nav class="flex flex-wrap items-center gap-2">
+            <nav data-testid="nav" class="flex flex-wrap items-center gap-2">
                 <a
+                        data-testid="resources-link"
                         routerLink="/resources"
                         routerLinkActive="active"
                         class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
@@ -23,6 +24,7 @@
                 </a>
 
                 <a
+                        data-testid="animations-link"
                         routerLink="/animations"
                         routerLinkActive="active"
                         class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
@@ -31,12 +33,13 @@
                     <span>Animations</span>
                 </a>
 
-                <a routerLink="/tutorials" class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5">
+                <a data-testid="tutorials-link" routerLink="/tutorials" class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5">
                     <ng-icon name="tablerPhotoEdit"></ng-icon>
                     <span>Tutorials</span>
                 </a>
 
                 <a
+                        data-testid="maps-link"
                         routerLink="/maps"
                         routerLinkActive="active"
                         class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
@@ -50,6 +53,7 @@
                 <span class="text-sm text-slate-600">created by Gamekohl</span>
 
                 <a
+                        data-testid="github-link"
                         title="GitHub"
                         href="https://github.com/Gamekohl"
                         target="_blank"
@@ -59,6 +63,7 @@
                 </a>
 
                 <a
+                        data-testid="bmac-link"
                         title="BuyMeACoffee"
                         href="https://buymeacoffee.com/gamekohl"
                         target="_blank"
@@ -68,6 +73,7 @@
                 </a>
 
                 <button
+                        data-testid="theme-toggle"
                         title="Theme Toggle"
                         class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-[#181818] hover:bg-[#202020] cursor-pointer"
                         (click)="toggleTheme()"
@@ -75,8 +81,8 @@
                     <ng-icon [name]="theme() !== 'light' ? 'tablerSun' : 'tablerMoon'"></ng-icon>
                 </button>
 
-                <a title="Changelog" routerLink="/changelog" class="cursor-pointer text-sm px-2">
-                    <small>v{{ version }}</small>
+                <a data-testid="changelog-link" title="Changelog" routerLink="/changelog" class="cursor-pointer text-sm px-2">
+                    <small data-testid="version">v{{ version }}</small>
                 </a>
             </div>
         </div>

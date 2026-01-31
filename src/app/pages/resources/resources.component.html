@@ -1,7 +1,7 @@
-<div class="mx-auto max-w-6xl p-6 lg:p-10">
+<div class="mx-auto max-w-6xl p-6 lg:p-10" data-testid="container">
     <div class="flex items-start justify-between gap-6">
         <div>
-            <h1 class="text-2xl font-semibold tracking-tight">Resources</h1>
+            <h1 class="text-2xl font-semibold tracking-tight" data-testid="title">Resources</h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
                 Browse through resources provided by Call to Arms - Gates Of Hell.
             </p>
@@ -10,6 +10,7 @@
 
     <div class="mt-8">
         <input
+                data-testid="search"
                 class="w-full p-4 my-2 dark:text-white outline-none rounded-2xl border border-slate-200 dark:border-white/25 placeholder:black/25"
                 placeholder="Search object..."
                 id="search"
@@ -17,7 +18,7 @@
         />
 
         <div class="mb-4 flex items-center justify-end gap-4">
-            <div class="text-xs text-slate-500 dark:text-white/50">
+            <div class="text-xs text-slate-500 dark:text-white/50" data-testid="filter-info">
                 @if (search().length) {
                     Filtered by: <span class="font-medium text-slate-700 dark:text-white/50">{{ search() }}</span>
                 } @else {
@@ -30,51 +31,52 @@
             </div>-->
         </div>
     </div>
-    <section class="rounded-2xl border border-slate-200 dark:border-white/5  overflow-hidden">
-        <div class="max-h-[70vh] overflow-auto">
-            <app-preview-image [resolveUrl]="resolvePreviewUrl"></app-preview-image>
+    @if (viewData().length > 0) {
+        <section data-testid="tree" class="rounded-2xl border border-slate-200 dark:border-white/5  overflow-hidden">
+            <div class="max-h-[70vh] overflow-auto">
+                <app-preview-image [resolveUrl]="resolvePreviewUrl"></app-preview-image>
 
-            <mat-tree #tree [dataSource]="viewData()" [childrenAccessor]="childrenAccessor">
-                <mat-tree-node
-                        (mouseenter)="openPreview(nodeElement, node)"
-                        (mouseleave)="closePreview()"
-                        (click)="copyName(node.name)"
-                        class="group w-full hover:font-semibold! flex gap-2 items-center cursor-pointer p-4 border-b border-b-gray-200 dark:border-b-white/5 hover:bg-gray-100 dark:hover:bg-white/5 last:border-b-0"
-                        *matTreeNodeDef="let node"
-                        matTreeNodePadding
-                        matTreeNodeToggle
-                        #nodeElement>
-                    <button
-                            type="button"
-                            class="px-2 opacity-70 hover:opacity-100 flex items-center"
-                            (click)="toggleFavorite(node); $event.stopPropagation()"
-                            [attr.aria-pressed]="isFavorite(node) ? 'true' : 'false'"
-                            title="Toggle favorite"
-                    >
-                        <ng-icon [name]="isFavorite(node) ? 'tablerStarFill' : 'tablerStar'"></ng-icon>
-                    </button>
+                <mat-tree #tree [dataSource]="viewData()" [childrenAccessor]="childrenAccessor">
+                    <mat-tree-node
+                            data-testid="leaf"
+                            (mouseenter)="openPreview(nodeElement, node)"
+                            (mouseleave)="closePreview()"
+                            (click)="copyName(node.name)"
+                            class="group w-full hover:font-semibold! flex gap-2 items-center cursor-pointer p-4 border-b border-b-gray-200 dark:border-b-white/5 hover:bg-gray-100 dark:hover:bg-white/5 last:border-b-0"
+                            *matTreeNodeDef="let node"
+                            matTreeNodePadding
+                            matTreeNodeToggle
+                            #nodeElement>
+                        <button
+                                type="button"
+                                class="px-2 opacity-70 hover:opacity-100 flex items-center"
+                                (click)="toggleFavorite(node); $event.stopPropagation()"
+                                [attr.aria-pressed]="isFavorite(node) ? 'true' : 'false'"
+                                title="Toggle favorite"
+                        >
+                            <ng-icon [name]="isFavorite(node) ? 'tablerStarFill' : 'tablerStar'"></ng-icon>
+                        </button>
 
-                    <ng-icon name="tablerBox"></ng-icon>
-                    <span [innerHTML]="getText(node.name)" class="flex-1"></span>
-                    <ng-icon name="tablerCopy" class="hidden! group-hover:inline-block! transition-all"></ng-icon>
-                </mat-tree-node>
+                        <ng-icon name="tablerBox"></ng-icon>
+                        <span [innerHTML]="getText(node.name)" data-testid="leaf-name" class="flex-1"></span>
+                        <ng-icon name="tablerCopy" class="hidden! group-hover:inline-block! transition-all"></ng-icon>
+                    </mat-tree-node>
 
-                <mat-tree-node [attr.data-node]="tree.isExpanded(node) ? node.name : ''"
-                               class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-gray-200 dark:border-b-white/5 last:border-b-0 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-                               *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
-                    <button class="p-2 flex items-center" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
-                        <ng-icon [name]="tree.isExpanded(node) ? 'tablerFolderOpen' : 'tablerFolder'"></ng-icon>
-                    </button>
-                    <span [class.font-bold]="tree.isExpanded(node)" [innerHTML]="getText(node.name)"
-                          class="cursor-pointer">{{ node.name }}</span>
-                </mat-tree-node>
-            </mat-tree>
-
-            @if (viewData().length === 0) {
-                <div class="w-full flex justify-center mt-4">
-                    <span class="text-center text-black/50!">No resources found.</span>
-                </div>
-            }
+                    <mat-tree-node data-testid="folder" [attr.data-node]="tree.isExpanded(node) ? node.name : ''"
+                                   class="tree-node w-full items-center cursor-pointer p-4 border-b border-b-gray-200 dark:border-b-white/5 last:border-b-0 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                                   *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle>
+                        <button data-testid="folder-toggle" class="p-2 flex items-center" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+                            <ng-icon [name]="tree.isExpanded(node) ? 'tablerFolderOpen' : 'tablerFolder'"></ng-icon>
+                        </button>
+                        <span [class.font-bold]="tree.isExpanded(node)" [innerHTML]="getText(node.name)"
+                              class="cursor-pointer">{{ node.name }}</span>
+                    </mat-tree-node>
+                </mat-tree>
+            </div>
+        </section>
+    } @else {
+        <div class="mt-8 rounded-2xl border border-slate-200 dark:border-white/50 p-6 text-sm text-slate-600 dark:text-white/50" data-testid="no-results">
+            No resources match your search.
         </div>
-    </section>
+    }
 </div>
