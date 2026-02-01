@@ -1,71 +1,69 @@
-<div class="mx-auto max-w-6xl p-6 lg:p-10">
-    <div class="flex items-start justify-between gap-6">
-        <div>
-            <h1 class="text-2xl font-semibold tracking-tight">Changelog</h1>
-            <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
-                Latest updates, fixes, and improvements.
-            </p>
-        </div>
+<div class="flex items-start justify-between gap-6">
+    <div>
+        <h1 class="text-2xl font-semibold tracking-tight">Changelog</h1>
+        <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
+            Latest updates, fixes, and improvements.
+        </p>
     </div>
+</div>
 
-    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[360px_1fr]">
-        <aside class="rounded-2xl border border-slate-200 dark:border-white/25 overflow-hidden h-fit">
-            <div class="px-4 py-3 border-b border-slate-200 dark:border-white/25">
-                <div class="text-sm font-medium text-slate-900 dark:text-white">Releases</div>
-                <div class="text-xs text-slate-500 dark:text-white/50 mt-0.5">Select a version to view details</div>
-            </div>
+<div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[360px_1fr]">
+    <aside class="rounded-2xl border border-slate-200 dark:border-white/25 overflow-hidden h-fit">
+        <div class="px-4 py-3 border-b border-slate-200 dark:border-white/25">
+            <div class="text-sm font-medium text-slate-900 dark:text-white">Releases</div>
+            <div class="text-xs text-slate-500 dark:text-white/50 mt-0.5">Select a version to view details</div>
+        </div>
 
-            <div class="max-h-[70vh] overflow-auto">
-                @for (change of changelog; track change.version) {
-                    <button
-                            type="button"
-                            class="w-full text-left px-4 py-3 border-b cursor-pointer border-l-4 border-slate-100 hover:bg-slate-50 dark:border-white/25 dark:hover:bg-white/5 border-l-transparent!"
-                            (click)="selectEntry(change)"
-                            [ngClass]="{
+        <div class="max-h-[70vh] overflow-auto">
+            @for (change of changelog; track change.version) {
+                <button
+                        (click)="selectEntry(change)"
+                        [attr.aria-current]="selectedEntry().version === change.version ? 'true' : null"
+                        [ngClass]="{
                                 'border-l-slate-200! dark:border-l-white!': selectedEntry().version === change.version,
                                 'bg-slate-50 dark:bg-white/5': selectedEntry().version === change.version
                             }"
-                            [attr.aria-current]="selectedEntry().version === change.version ? 'true' : null"
-                    >
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="min-w-0">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ change.version }}</span>
-                                </div>
-                                <div class="mt-1 text-sm text-slate-700 dark:text-white/50 line-clamp-2">
-                                    {{ change.title }}
-                                </div>
+                        class="w-full text-left px-4 py-3 border-b cursor-pointer border-l-4 border-slate-100 hover:bg-slate-50 dark:border-white/25 dark:hover:bg-white/5 border-l-transparent!"
+                        type="button"
+                >
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ change.version }}</span>
                             </div>
-
-                            <div class="shrink-0 text-xs text-slate-500 dark:text-white/50">
-                                {{ change.date | date:'mediumDate' }}
+                            <div class="mt-1 text-sm text-slate-700 dark:text-white/50 line-clamp-2">
+                                {{ change.title }}
                             </div>
                         </div>
-                    </button>
-                }
-            </div>
-        </aside>
 
-        <section class="rounded-2xl border border-slate-200 dark:border-white/25 overflow-hidden">
-            <div class="px-6 py-5 border-b border-slate-200 dark:border-white/25">
-                <div class="flex items-start justify-between gap-4">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-3">
-                            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
-                                {{ selectedEntry().version }}
-                            </h2>
-                            <span class="text-sm text-slate-500! dark:text-white/50!">{{ selectedEntry().date | date:'mediumDate' }}</span>
+                        <div class="shrink-0 text-xs text-slate-500 dark:text-white/50">
+                            {{ change.date | date:'mediumDate' }}
                         </div>
-                        <div class="mt-1 text-slate-800 dark:text-white font-medium">
-                            {{ selectedEntry().title }}
-                        </div>
+                    </div>
+                </button>
+            }
+        </div>
+    </aside>
+
+    <section class="rounded-2xl border border-slate-200 dark:border-white/25 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-200 dark:border-white/25">
+            <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+                            {{ selectedEntry().version }}
+                        </h2>
+                        <span class="text-sm text-slate-500! dark:text-white/50!">{{ selectedEntry().date | date:'mediumDate' }}</span>
+                    </div>
+                    <div class="mt-1 text-slate-800 dark:text-white font-medium">
+                        {{ selectedEntry().title }}
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="px-6 py-6">
-                <pre class="whitespace-pre-wrap text-sm text-slate-800 dark:text-white">{{ selectedEntry().markdown }}</pre>
-            </div>
-        </section>
-    </div>
+        <div class="px-6 py-6">
+            <pre class="whitespace-pre-wrap text-sm text-slate-800 dark:text-white">{{ selectedEntry().markdown }}</pre>
+        </div>
+    </section>
 </div>

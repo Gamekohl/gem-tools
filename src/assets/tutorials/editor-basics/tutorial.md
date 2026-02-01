@@ -77,11 +77,11 @@ The **Clip** tab allows you to set the following options:
 Below that, you have the **Presets** section. Here you can define different clip presets, or adjust the auto-generated ones. This works best
 with **Show map borders** enabled.
 
-| Border Color | Description |
-|--------------|-------------|
+| Border Color | Description                                                                                                                                                                                                                                                    |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Yellow/Green | Connected with each other; **Yellow** represents the limit of unit movement. Units can't enter the area behind the yellow line. **Green** should remain on the map and as close as possible to the **Purple** line to keep as much playable space as possible. |
-| Purple       | Marks the map's outermost border. |
-| Blue         | Represents the limit of the camera center. You can't scroll out of the map further than the point where your camera center reaches this line. |
+| Purple       | Marks the map's outermost border.                                                                                                                                                                                                                              |
+| Blue         | Represents the limit of the camera center. You can't scroll out of the map further than the point where your camera center reaches this line.                                                                                                                  |
 
 At the bottom, you have different options for the selected preset. (TBE)
 
