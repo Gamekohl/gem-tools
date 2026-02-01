@@ -52,6 +52,7 @@ export class TutorialContentService {
         const src = toAbs(href ?? '');
         const safeTitle = title ? ` title="${this.escapeHtmlAttr(title)}"` : '';
         const alt = this.escapeHtmlAttr(text ?? '');
+
         return `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"${safeTitle}>`;
       };
     }

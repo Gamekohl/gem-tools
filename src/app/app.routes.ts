@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { tutorialResolver } from './pages/tutorials/tutorial/tutorial.resolver';
 
 export const routes: Routes = [
     {
@@ -28,7 +29,10 @@ export const routes: Routes = [
     },
     {
         path: 'tutorials/:id',
-        loadComponent: () => import('./pages/tutorials/tutorial/tutorial.component').then(m => m.default),
+        loadComponent: () => import('./pages/tutorials/tutorial/tutorial.component').then(m => m.TutorialComponent),
+        resolve: {
+            tutorial: tutorialResolver
+        },
     },
     {
         path: '**',

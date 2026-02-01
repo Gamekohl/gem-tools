@@ -1,13 +1,16 @@
 <div class="h-full w-full">
     <div class="mx-auto max-w-6xl p-6">
-        <div class="grid grid-cols-4 lg:grid-cols-[280px_1fr_260px] gap-6">
-            <main class="min-w-0 col-span-2">
+        <div class="grid grid-cols-4 gap-6">
+            <main class="min-w-0 col-span-3">
                 <div class="flex items-center justify-between">
-                    <button routerLink="/tutorials" class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2">
+                    <button routerLink="/tutorials"
+                            class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2">
                         <ng-icon name="tablerArrowLeft"></ng-icon>
                         <span class="group-hover:underline">Back to Tutorials</span>
                     </button>
-                    <a [href]="'https://github.com/Gamekohl/gem-tools/tree/ft-tutorials/src/assets/tutorials/' + item()?.file" target="_blank" class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2">
+                    <a [href]="'https://github.com/Gamekohl/gem-tools/tree/ft-tutorials/src/assets/tutorials/' + item()?.file"
+                       target="_blank"
+                       class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2">
                         <ng-icon name="tablerBrandGithub"></ng-icon>
                         <span class="group-hover:underline text-sm">Edit on GitHub</span>
                     </a>
@@ -36,7 +39,7 @@
                                 }
                                 <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
                                 ~{{ readTime().minutes }} min
-                            </span>
+                                </span>
                             </div>
 
                             <!-- add click to filter by author on /tutorials?author=... -->
@@ -52,7 +55,15 @@
                 <div class="mt-6">
                     <article
                         #contentHost
-                        class="prose prose-p:leading-8 prose-slate dark:prose-invert max-w-none prose-h2:scroll-mt-24 prose-img:rounded-md prose-img:max-w-full prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline prose-a:hover:underline">
+                        class="prose prose-slate dark:prose-invert max-w-none"
+                        [ngClass]="[
+                            'prose-h2:border-b prose-h2:border-b-black/10 dark:prose-h2:border-b-white/10 prose-h2:scroll-mt-24 prose-h2:pb-2',
+                            'prose-h3:border-b prose-h3:border-b-black/10 dark:prose-h3:border-b-white/10 prose-h3:pb-2',
+                            'prose-p:leading-8',
+                            'prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline prose-a:hover:underline',
+                            'prose-img:rounded-md prose-img:max-w-full'
+                        ]"
+                    >
                         <div [innerHTML]="tutorialHtml()"></div>
                     </article>
                 </div>
@@ -67,7 +78,7 @@
                     <div class="mt-4 space-y-1">
                         @if (toc().length) {
                             @for (sec of toc(); track sec.id) {
-                                <ng-container *ngTemplateOutlet="sectionButton; context: { section: sec }"></ng-container>
+                                <ng-container *ngTemplateOutlet="sectionButton; context: { section: sec, isChild: false }"></ng-container>
 
                                 @if (sec.children.length) {
                                     @for (child of sec.children; track child.id) {
@@ -83,26 +94,29 @@
             </aside>
 
             <ng-template #sectionButton let-section="section" let-isChild="isChild">
-                <button
-                        type="button"
-                        (click)="scrollToSection(section.id)"
-                        class="group w-[calc(100%-16px)] text-left rounded-xl px-3 py-2 text-sm transition hover:bg-white dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                <a
+                        [routerLink]="[]"
+                        [fragment]="section.id"
+                        class="block group text-left rounded-xl px-3 py-2 text-sm transition hover:bg-white dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200"
                         [ngClass]="{
                             'bg-white dark:bg-white/5 font-medium': activeSectionId() === section.id,
-                            'ml-4': isChild
+                            'ml-4 w-[calc(100%-16px)]': isChild
                         }">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-1">
                             <span class="truncate text-slate-800">{{ section.title }}</span>
-                            <button (click)="$event.stopImmediatePropagation(); copySectionLink(section.id)" type="button" class="flex items-center opacity-0! group-hover:opacity-100! cursor-pointer transition-opacity">
+                            <span (click)="$event.preventDefault(); $event.stopImmediatePropagation(); copySectionLink(section.id)"
+                                  role="button"
+                                  tabindex="0"
+                                  class="flex items-center opacity-0! group-hover:opacity-100! cursor-pointer transition-opacity">
                                 <ng-icon name="tablerLink"></ng-icon>
-                            </button>
+                            </span>
                         </div>
                         @if (activeSectionId() === section.id) {
                             <span class="text-xs text-slate-500 -mt-0.5">•</span>
                         }
                     </div>
-                </button>
+                </a>
             </ng-template>
         </div>
     </div>

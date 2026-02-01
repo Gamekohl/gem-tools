@@ -25,7 +25,7 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
     @if (preview) {
       <div class="w-full h-full absolute inset-0 rounded-2xl overflow-hidden">
         <div class="absolute inset-0 z-1 from-white/50 group-hover:from-white/65 dark:from-black/50 dark:group-hover:from-black/65 bg-linear-to-r transition-colors"></div>
-        <img [ngSrc]="'assets/tutorials/' + preview" fill alt="Preview" class="object-cover z-0 opacity-25"/>
+        <img [ngSrc]="'assets/tutorials/' + preview" fill alt="Preview" class="object-cover z-0 opacity-50 dark:opacity-25"/>
       </div>
     }
     <a [routerLink]="['/tutorials', item().id]" class="z-10 relative">
@@ -41,7 +41,7 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
 
         <div class="flex flex-col items-end gap-2">
           @if (item().difficulty) {
-            <span class="shrink-0 rounded-full bg-slate-50 px-3 py-1 text-xs text-slate-600 dark:bg-white/25 dark:text-white">
+            <span class="shrink-0 rounded-full bg-slate-50 px-3 py-1 text-xs text-black!">
               {{ difficultyLabels[item().difficulty!] }}
             </span>
           }

@@ -29,8 +29,8 @@ export class TutorialsComponent {
   readonly difficultyEnum = Difficulty;
 
   readonly manifest = toSignal<TutorialManifest | null>(
-      this.manifestSvc.manifest$.asObservable(),
-      { requireSync: true }
+      this.manifestSvc.manifest$,
+      { initialValue: null }
   );
 
   readonly query = model('');
