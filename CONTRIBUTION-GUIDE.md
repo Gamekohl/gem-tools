@@ -69,6 +69,15 @@ Inside your tutorial folder, create a file named: **tutorial.md**
 
 This file contains the **full tutorial content** written in Markdown. If you are not familiar with Markdown, be sure to check it out here: [Markdown Cheat-Sheet](https://www.markdownguide.org/cheat-sheet/)
 
+To create a Table of contents be sure to use **##** for **headings** and **###** for **subheadings**. For example:
+
+```
+## Heading 1
+### Subheading 1
+
+## Heading 2
+```
+
 ## Step 4: Add Images (Optional)
 
 If your tutorial uses images:
