@@ -27,15 +27,24 @@
                             }
                         </div>
 
-                        <div class="flex flex-wrap gap-2">
-                            @if (difficulty()) {
-                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                        <div class="flex flex-col justify-between">
+                            <div class="flex flex-wrap gap-2">
+                                @if (difficulty()) {
+                                    <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
                                         {{ difficulty() }}
                                   </span>
-                            }
-                            <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                                }
+                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
                                 ~{{ readTime().minutes }} min
                             </span>
+                            </div>
+
+                            <!-- add click to filter by author on /tutorials?author=... -->
+                            @if (item()?.author) {
+                                <div class="flex justify-end mt-6">
+                                    <p class="text-sm text-slate-600 dark:text-white/50">by {{ item()!.author }}</p>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -43,9 +52,7 @@
                 <div class="mt-6">
                     <article
                         #contentHost
-                        class="prose
-                            prose-slate dark:prose-invert max-w-none prose-h2:scroll-mt-24 prose-img:rounded-md
-                            prose-img:max-w-full prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline hover:prose-a:underline">
+                        class="prose prose-p:leading-8 prose-slate dark:prose-invert max-w-none prose-h2:scroll-mt-24 prose-img:rounded-md prose-img:max-w-full prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline prose-a:hover:underline">
                         <div [innerHTML]="tutorialHtml()"></div>
                     </article>
                 </div>
@@ -60,22 +67,13 @@
                     <div class="mt-4 space-y-1">
                         @if (toc().length) {
                             @for (sec of toc(); track sec.id) {
-                                <button
-                                        type="button"
-                                        (click)="scrollToSection(sec.id)"
-                                        class="w-full text-left rounded-xl px-3 py-2 text-sm transition
-                         hover:bg-white dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200"
-                                        [ngClass]="{
-                                            'bg-white dark:bg-white/5': activeSectionId() === sec.id
-                                        }"
-                                        [class.font-medium]="activeSectionId() === sec.id">
-                                    <div class="flex items-center justify-between gap-2">
-                                        <span class="truncate text-slate-800">{{ sec.title }}</span>
-                                        @if (activeSectionId() === sec.id) {
-                                            <span class="text-xs text-slate-500">•</span>
-                                        }
-                                    </div>
-                                </button>
+                                <ng-container *ngTemplateOutlet="sectionButton; context: { section: sec }"></ng-container>
+
+                                @if (sec.children.length) {
+                                    @for (child of sec.children; track child.id) {
+                                        <ng-container *ngTemplateOutlet="sectionButton; context: { section: child, isChild: true }"></ng-container>
+                                    }
+                                }
                             }
                         } @else {
                             <div class="text-sm text-slate-500">No sections found (add ## headings)</div>
@@ -84,6 +82,28 @@
                 </div>
             </aside>
 
+            <ng-template #sectionButton let-section="section" let-isChild="isChild">
+                <button
+                        type="button"
+                        (click)="scrollToSection(section.id)"
+                        class="group w-[calc(100%-16px)] text-left rounded-xl px-3 py-2 text-sm transition hover:bg-white dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                        [ngClass]="{
+                            'bg-white dark:bg-white/5 font-medium': activeSectionId() === section.id,
+                            'ml-4': isChild
+                        }">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1">
+                            <span class="truncate text-slate-800">{{ section.title }}</span>
+                            <button (click)="$event.stopImmediatePropagation(); copySectionLink(section.id)" type="button" class="flex items-center opacity-0! group-hover:opacity-100! cursor-pointer transition-opacity">
+                                <ng-icon name="tablerLink"></ng-icon>
+                            </button>
+                        </div>
+                        @if (activeSectionId() === section.id) {
+                            <span class="text-xs text-slate-500 -mt-0.5">•</span>
+                        }
+                    </div>
+                </button>
+            </ng-template>
         </div>
     </div>
 </div>

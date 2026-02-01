@@ -2,11 +2,19 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { marked } from 'marked';
 
-export type TutorialSection = { id: string; title: string; level: 2 };
+export type TutorialSubSection = { id: string; title: string; level: 3 };
+
+export type TutorialSection = {
+  id: string;
+  title: string;
+  level: 2;
+  children: TutorialSubSection[];
+};
 
 export type RenderedTutorial = {
   html: SafeHtml;
-  sections: TutorialSection[];
+  outline: TutorialSection[];
+  sections: Array<{ id: string; title: string; level: 2 | 3 }>;
   title?: string;
 };
 
@@ -15,7 +23,10 @@ export class TutorialContentService {
   constructor(private sanitizer: DomSanitizer) {}
 
   renderMarkdown(md: string, assetDir?: string): RenderedTutorial {
-    const sections: TutorialSection[] = [];
+    const outline: TutorialSection[] = [];
+    const flat: Array<{ id: string; title: string; level: 2 | 3 }> = [];
+    let currentH2: TutorialSection | null = null;
+
     let pageTitle: string | undefined;
 
     const usedIds = new Map<string, number>();
@@ -28,7 +39,6 @@ export class TutorialContentService {
     const stripHtml = (input: string) => input.replace(/<[^>]*>/g, '').trim();
 
     const renderer = new marked.Renderer();
-
     renderer.html = () => '';
 
     if (assetDir) {
@@ -76,24 +86,43 @@ export class TutorialContentService {
       if (depth === 2) {
         const base = this.slugify(cleanText) || 'section';
         const id = uniqueId(base);
-        sections.push({ id, title: cleanText, level: 2 });
+
+        currentH2 = { id, title: cleanText, level: 2, children: [] };
+        outline.push(currentH2);
+
+        flat.push({ id, title: cleanText, level: 2 });
+
         return `<h2 id="${id}">${text}</h2>`;
+      }
+
+      if (depth === 3) {
+        const base = this.slugify(cleanText) || 'sub-section';
+        const id = uniqueId(base);
+
+        if (currentH2) {
+          currentH2.children.push({ id, title: cleanText, level: 3 });
+          flat.push({ id, title: cleanText, level: 3 });
+        } else {
+          flat.push({ id, title: cleanText, level: 3 });
+        }
+
+        return `<h3 id="${id}">${text}</h3>`;
       }
 
       return `<h${depth}>${text}</h${depth}>`;
     };
 
-    marked.setOptions({
-      gfm: true,
-      breaks: false,
-      renderer,
-    });
+    marked.setOptions({ gfm: true, breaks: false, renderer });
 
     const rawHtml = marked.parse(md) as string;
-
     const trusted = this.sanitizer.bypassSecurityTrustHtml(rawHtml);
 
-    return { html: trusted, sections, title: pageTitle };
+    return {
+      html: trusted,
+      outline,
+      sections: flat,
+      title: pageTitle,
+    };
   }
 
   private slugify = (s: string) =>

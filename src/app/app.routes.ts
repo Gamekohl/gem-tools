@@ -28,7 +28,7 @@ export const routes: Routes = [
     },
     {
         path: 'tutorials/:id',
-        loadComponent: () => import('./pages/tutorials/tutorial/tutorial.component').then(m => m.TutorialComponent),
+        loadComponent: () => import('./pages/tutorials/tutorial/tutorial.component').then(m => m.default),
     },
     {
         path: '**',

@@ -19,6 +19,7 @@ export type ManifestItem = {
   difficulty?: Difficulty; // 1 = Beginner, 2 = Intermediate, 3 = Advanced
   tags?: string[];
   file: string;
+  preview?: string;
 };
 
 @Injectable({ providedIn: 'root' })

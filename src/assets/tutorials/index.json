@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "author": "Gamekohl",
+    "id": "editor-basics",
+    "title": "Editor Basics",
+    "subtitle": "An overview of the GEM Editor",
+    "difficulty": 1,
+    "file": "editor-basics/tutorial.md",
+    "preview": "editor-basics/preview.webp"
+  }
+]
