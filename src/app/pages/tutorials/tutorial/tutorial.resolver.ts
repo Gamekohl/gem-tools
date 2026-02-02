@@ -1,9 +1,9 @@
-import { inject } from '@angular/core';
-import { ResolveFn } from '@angular/router';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { TutorialManifestService } from '../services/tutorial-manifest.service';
-import type { ManifestItem } from '../services/tutorial-manifest.service';
+import {inject} from '@angular/core';
+import {ResolveFn} from '@angular/router';
+import {of} from 'rxjs';
+import {catchError, map, switchMap} from 'rxjs/operators';
+import type {ManifestItem} from '../services/tutorial-manifest.service';
+import {TutorialManifestService} from '../services/tutorial-manifest.service';
 
 export type TutorialResolved = {
   item: ManifestItem;
@@ -13,8 +13,6 @@ export type TutorialResolved = {
 export const tutorialResolver: ResolveFn<TutorialResolved | null> = (route) => {
   const manifestSvc = inject(TutorialManifestService);
   const id = route.paramMap.get('id');
-
-  console.log(id);
 
   if (!id) {
     return of(null);

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { marked } from 'marked';
+import {Injectable} from '@angular/core';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {marked} from 'marked';
 
 export type TutorialSubSection = { id: string; title: string; level: 3 };
 
@@ -74,9 +74,9 @@ export class TutorialContentService {
       const t = title ? ` title="${this.escapeHtmlAttr(title)}"` : '';
       const isExternal = finalHref.startsWith('http://') || finalHref.startsWith('https://');
       const rel = isExternal ? ' rel="noopener noreferrer"' : '';
-      const target = isExternal ? ' target="_blank"' : '';
+      //const target = isExternal ? ' target="_blank"' : '';
 
-      return `<a href="${this.escapeHtmlAttr(finalHref)}"${t}${rel}${target}>${text}</a>`;
+      return `<a href="${this.escapeHtmlAttr(finalHref)}"${t}${rel}>${text}</a>`;
     };
 
     renderer.heading = ({ text, depth }) => {

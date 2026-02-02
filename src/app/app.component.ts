@@ -56,7 +56,6 @@ import {SeoService} from "./services/seo.service";
         tablerMenu2
     })],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {

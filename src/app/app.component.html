@@ -67,38 +67,40 @@
 
     <ng-template #links>
         <a
-                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
+                [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/resources"
-                routerLinkActive="active"
+                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerBox"></ng-icon>
             <span>Editor Objects</span>
         </a>
 
         <a
-                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
+                [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/animations"
-                routerLinkActive="active"
+                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerArrowsRandom"></ng-icon>
             <span>Animations</span>
         </a>
 
-        <a class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
-           routerLink="/tutorials">
+        <a [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
+           class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors" routerLink="/tutorials"
+        >
             <ng-icon name="tablerPhotoEdit"></ng-icon>
             <span>Tutorials</span>
         </a>
 
         <a
-                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
+                [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/maps"
-                routerLinkActive="active"
+                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerMap"></ng-icon>
             <span>Maps</span>
         </a>
     </ng-template>
+
     <ng-template #external>
         <a
                 class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020]"

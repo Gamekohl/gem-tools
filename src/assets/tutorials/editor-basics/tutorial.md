@@ -1,6 +1,9 @@
 This tutorial introduces the fundamentals of the **GEM Editor**. It will cover the basic layout of the editor and
 provide an overview of the most important menus and features.
 
+Be sure to check out the [Keybindings Tutorial](https://gem-tools.vercel.app/tutorials/keybindings) for a complete list
+of all keybindings.
+
 ## Map Menu
 ![Map Menu](./images/f2.webp)
 
@@ -234,3 +237,8 @@ You can find the following parameters:
 
 You can access the Editor Globals by pressing **F7**. Here you can set various global parameters for the editor, such as
 the current difficulty.
+
+---
+
+There are a lot more things to cover. Be sure to check out the other tutorials on the website for more information.
+Thank you for reading!

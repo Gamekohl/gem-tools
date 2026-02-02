@@ -1,5 +1,7 @@
 <div class="grid grid-cols-4 gap-6">
-    <main class="min-w-0 col-span-4 lg:col-span-3">
+    @let hasToc = toc().length;
+
+    <main [class.col-span-4!]="!hasToc" class="min-w-0 col-span-4 lg:col-span-3">
         <div class="flex items-center justify-between">
             <button class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2"
                     routerLink="/tutorials">
@@ -14,7 +16,7 @@
             </a>
         </div>
 
-        <div class="rounded-3xl bg-slate-50 dark:bg-white/5 p-6 mt-4">
+        <div class="rounded-3xl bg-white dark:bg-white/5 p-6 mt-4">
             <div class="flex flex-wrap items-start justify-between gap-6 lg:gap-4">
                 <div class="min-w-0">
                     <h1 class="text-2xl font-semibold text-slate-900 truncate">
@@ -69,12 +71,12 @@
         <div class="h-12"></div>
     </main>
 
-    <aside class="hidden lg:block lg:sticky lg:top-6 self-start">
-        <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-4">
-            <div class="text-sm font-semibold text-slate-900 dark:text-white">On this page</div>
+    @if (hasToc) {
+        <aside class="hidden lg:block lg:sticky top-6 self-start">
+            <div class="rounded-2xl bg-white dark:bg-white/5 p-4">
+                <div class="text-sm font-semibold text-slate-900 dark:text-white">On this Page</div>
 
-            <div class="mt-4 space-y-1">
-                @if (toc().length) {
+                <div class="mt-4 space-y-1">
                     @for (sec of toc(); track sec.id) {
                         <ng-container
                                 *ngTemplateOutlet="sectionButton; context: { section: sec, isChild: false }"></ng-container>
@@ -86,22 +88,20 @@
                             }
                         }
                     }
-                } @else {
-                    <div class="text-sm text-slate-500">No sections found (add ## headings)</div>
-                }
+                </div>
             </div>
-        </div>
-    </aside>
+        </aside>
+    }
 
     <ng-template #sectionButton let-isChild="isChild" let-section="section">
         <a
                 [fragment]="section.id"
                 [ngClass]="{
-                            'bg-white dark:bg-white/5 font-medium': activeSectionId() === section.id,
+                            'bg-slate-50 dark:bg-white/5 font-medium': activeSectionId() === section.id,
                             'ml-4 w-[calc(100%-16px)]': isChild
                         }"
                 [routerLink]="[]"
-                class="block group text-left rounded-xl px-3 py-2 text-sm transition hover:bg-white dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                class="block group text-left rounded-xl px-3 py-2 text-sm transition hover:bg-slate-50 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200">
             <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-1">
                     <span class="truncate text-slate-800">{{ section.title }}</span>

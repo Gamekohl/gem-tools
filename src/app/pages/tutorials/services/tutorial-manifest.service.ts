@@ -1,8 +1,8 @@
-import {Injectable, Inject, PLATFORM_ID, makeStateKey, TransferState, inject} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { isPlatformServer } from '@angular/common';
-import { map } from 'rxjs/operators';
-import { defer, firstValueFrom, Observable, of, shareReplay, tap } from 'rxjs';
+import {isPlatformServer} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {Inject, inject, Injectable, makeStateKey, PLATFORM_ID, TransferState} from '@angular/core';
+import {defer, firstValueFrom, Observable, shareReplay, tap} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 export type TutorialManifest = ManifestItem[];
 
@@ -21,6 +21,7 @@ export type ManifestItem = {
   tags?: string[];
   file: string;
   preview?: string;
+  featured?: boolean
 };
 
 @Injectable({ providedIn: 'root' })

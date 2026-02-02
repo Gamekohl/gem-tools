@@ -98,8 +98,22 @@
                     <ng-icon class="ml-1" name="tablerBrandGithub"></ng-icon>&nbsp;GitHub!</a>
             </div>
         } @else {
-            <div class="grid grid-cols-1 gap-4 lg:grid-cols-1">
-                @for (item of pagedItems(); track item.id) {
+            @if (featuredItems().length > 0) {
+                <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Featured</h1>
+                <div class="grid grid-cols-2 gap-4">
+                    @for (item of featuredItems(); track item.id) {
+                        <app-tutorial-card [item]="item"></app-tutorial-card>
+                    }
+                </div>
+                @if (nonFeaturedItems().length > 0) {
+                    <div class="w-full my-2">
+                        <div class="grow border-t border-t-black/25 dark:border-t-white/25"></div>
+                    </div>
+                }
+            }
+
+            <div class="grid grid-cols-1 gap-4">
+                @for (item of nonFeaturedItems(); track item.id) {
                     <app-tutorial-card [item]="item"></app-tutorial-card>
                 }
             </div>

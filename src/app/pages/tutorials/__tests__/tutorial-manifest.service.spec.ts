@@ -1,8 +1,7 @@
-import { TestBed } from '@angular/core/testing';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
-import {PLATFORM_ID} from '@angular/core';
-import {TransferState} from '@angular/platform-browser';
-import { TutorialManifestService, TutorialManifest } from '../services/tutorial-manifest.service';
+import {PLATFORM_ID, TransferState} from '@angular/core';
+import {TestBed} from '@angular/core/testing';
+import {TutorialManifest, TutorialManifestService} from '../services/tutorial-manifest.service';
 
 describe('TutorialManifestService', () => {
   let service: TutorialManifestService;

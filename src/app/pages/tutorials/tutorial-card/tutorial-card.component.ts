@@ -3,6 +3,7 @@ import {ChangeDetectionStrategy, Component, input} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {NgIcon, NgIconComponent, provideIcons} from "@ng-icons/core";
 import {tablerChevronRight} from "@ng-icons/tabler-icons";
+import {tablerStarFill} from "@ng-icons/tabler-icons/fill";
 import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
 
 @Component({
@@ -14,7 +15,7 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
     NgOptimizedImage
   ],
   viewProviders: [
-    provideIcons({ tablerChevronRight })
+    provideIcons({tablerChevronRight, tablerStarFill})
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -24,15 +25,20 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
     @let preview = item().preview;
     @if (preview) {
       <div class="w-full h-full absolute inset-0 rounded-2xl overflow-hidden">
-        <div class="absolute inset-0 z-1 from-white/50 group-hover:from-white/65 dark:from-black/50 dark:group-hover:from-black/65 bg-linear-to-r transition-colors"></div>
-        <img [ngSrc]="'assets/tutorials/' + preview" fill alt="Preview" class="object-cover z-0 opacity-50 dark:opacity-25"/>
+        <div
+            class="absolute inset-0 z-1 from-white via-white/90 dark:from-black dark:via-black/90 bg-linear-to-r transition-colors"></div>
+        <img [ngSrc]="'assets/tutorials/' + preview" fill alt="Preview"
+             class="group-hover:scale-[102%] object-cover z-0 opacity-50 dark:opacity-25 transition-transform"/>
       </div>
     }
     <a [routerLink]="['/tutorials', item().id]" class="z-10 relative">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
-          <div class="text-base font-semibold text-slate-900 dark:text-white truncate">
-            {{ item().title }}
+          <div class="text-base flex items-center gap-2 font-semibold text-slate-900 dark:text-white truncate">
+            @if (item().featured) {
+              <ng-icon name="tablerStarFill" style="--ng-icon__color: oklch(85.2% 0.199 91.936)"></ng-icon>
+            }
+            <span>{{ item().title }}</span>
           </div>
           <div class="mt-1 text-sm text-slate-600 dark:text-white/50 line-clamp-2">
             {{ item().subtitle }}

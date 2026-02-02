@@ -88,6 +88,9 @@ export class TutorialsComponent {
     return items.slice(start, start + this.pageSize());
   });
 
+    readonly featuredItems = computed(() => this.pagedItems().filter(i => i.featured));
+    readonly nonFeaturedItems = computed(() => this.pagedItems().filter(i => !i.featured));
+
   constructor() {
     this.seo.apply({
       title: 'Tutorials',

@@ -6,6 +6,17 @@
     "subtitle": "An overview of the GEM Editor",
     "difficulty": 1,
     "file": "editor-basics/tutorial.md",
-    "preview": "editor-basics/preview.webp"
+    "preview": "editor-basics/preview.webp",
+    "featured": true
+  },
+  {
+    "author": "Gamekohl",
+    "id": "keybindings",
+    "title": "Keybindings",
+    "subtitle": "Keybindings for the GEM Editor",
+    "difficulty": 1,
+    "file": "keybindings/tutorial.md",
+    "preview": "keybindings/preview.webp",
+    "featured": true
   }
 ]
