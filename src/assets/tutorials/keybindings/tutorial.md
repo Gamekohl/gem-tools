@@ -7,7 +7,9 @@ Here you can find all important keybindings for the GEM-Editor.
 | F1              | Game Interface     |
 | F2              | Map Menu           |
 | F3              | Mission Menu       |
+| F4              | FX Editor          |
 | F6              | Environment        |
+| F7              | Editor Globals     |
 | F9 (in F3 mode) | Mission Properties |
 
 ## F2 - Map Menu
@@ -50,7 +52,6 @@ Here you can find all important keybindings for the GEM-Editor.
 | Keybinding | Description                           |
 |------------|---------------------------------------|
 | W          | Polygon view of terrain and objects   |
-| R          | Call Functions                        |
 | T          | Show Tags                             |
 | I          | Show MIDS                             |
 | S          | Show XYZ Coordinates of Entities      |

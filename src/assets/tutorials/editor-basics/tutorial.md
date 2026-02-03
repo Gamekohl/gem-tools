@@ -75,7 +75,8 @@ If you want to learn more about the heightmap options, check out the **Land Edit
 The **Clip** tab allows you to set the following options:
 - **Show map borders**: If checked, it will show the different borders of the map, each with a different color.
 - **Boundary haze**: If checked, the map will have a haze effect around the edges.
-- **Altitude haze**: If checked, and based on **Start** and **End**, the map will have a haze effect around this altitude range.
+- **Altitude haze**: If checked and based on **Start** and **End**, the map will have a haze effect around this altitude
+  range.
 
 Below that, you have the **Presets** section. Here you can define different clip presets, or adjust the auto-generated ones. This works best
 with **Show map borders** enabled.
@@ -86,14 +87,14 @@ with **Show map borders** enabled.
 | Purple       | Marks the map's outermost border.                                                                                                                                                                                                                              |
 | Blue         | Represents the limit of the camera center. You can't scroll out of the map further than the point where your camera center reaches this line.                                                                                                                  |
 
-At the bottom, you have different options for the selected preset. (TBE)
-
 The option **Render Minimap** will render a top-down view of the map at the resolution entered in the input (in this example **4096**). The preview will be placed
 in the root folder of your saved map. For example:
 
 ```
 Call to Arms - Gates of Hell\resource\map\test-map\minimap.png
 ```
+
+If you want to learn more about the Map Borders, check out the [Map Borders Tutorial](/tutorials/map-borders).
 
 ### Edifice
 ![Edifice](./images/edifice.webp)
@@ -163,7 +164,7 @@ After placing the pin, you can select it. You can see the properties of the wayp
 - **position**: The position of the waypoint in the world
 - **uid**: The unique identifier of the waypoint
 - **radius**: The radius of the waypoint
-- **offset**: TBE
+- **offset**: The height offset (helps with spawning FX at the waypoint)
 - **random_position**: TBE
 
 ![Waypoint Options](./images/waypoints-2.webp)
@@ -194,7 +195,8 @@ position and orientation of the camera at a specific time.
 
 ![Camera 1](./images/camera-1.webp)
 
-You can see three green lines and one cyan-blue line connecting them in the image above. The green lines represent the keyframes and the cyan-blue line represents the path the camera will take.
+You can see three green lines and one cyan-blue line connecting them in the image above. The green lines represent the
+keyframes, and the cyan-blue line represents the path the camera will take.
 To preview the cinematic camera, press **Preview**.
 
 ### Cover
@@ -206,7 +208,7 @@ If you select a cover spot, you can see different options:
 - **type**: The type of the cover spot (whether a unit can lie down, crouch, stand, etc.)
 - **name**: A custom name for that specific spot (useful if you want to tie it to a trigger)
 - **off**: Disables the cover spot, so units can't use it
-- **priority**: TBE
+- **priority**: Units will use the cover spot with the highest priority first
 
 ![Cover 1](./images/cover-1.webp)
 

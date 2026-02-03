@@ -23,10 +23,7 @@ import {environment} from "../../../../environments/environment";
 import {SeoService} from "../../../services/seo.service";
 import {estimateReadTimeFromMarkdown} from "../../../utils/read-time";
 import {TutorialContentService, TutorialSection} from "../services/tutorial-content.service";
-import {
-    Difficulty,
-    ManifestItem
-} from "../services/tutorial-manifest.service";
+import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
 import {TutorialResolved} from "./tutorial.resolver";
 
 @Component({
@@ -36,7 +33,20 @@ import {TutorialResolved} from "./tutorial.resolver";
     viewProviders: [
         provideIcons({tablerArrowLeft, tablerBrandGithub, tablerLink})
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styles: `
+      .yt-embed {
+        margin: 1.25rem 0;
+        aspect-ratio: 16 / 9;
+      }
+
+      .yt-embed iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: 12px;
+      }
+    `
 })
 export class TutorialComponent implements OnDestroy {
     private readonly clipboard = inject(Clipboard);

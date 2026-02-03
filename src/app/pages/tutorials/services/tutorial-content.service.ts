@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {marked} from 'marked';
+import {youtubeExtension} from "../../../utils/marked-extensions";
 
 export type TutorialSubSection = { id: string; title: string; level: 3 };
 
@@ -23,6 +24,8 @@ export class TutorialContentService {
   constructor(private sanitizer: DomSanitizer) {}
 
   renderMarkdown(md: string, assetDir?: string): RenderedTutorial {
+    marked.use(youtubeExtension);
+
     const outline: TutorialSection[] = [];
     const flat: Array<{ id: string; title: string; level: 2 | 3 }> = [];
     let currentH2: TutorialSection | null = null;
@@ -76,7 +79,7 @@ export class TutorialContentService {
       const rel = isExternal ? ' rel="noopener noreferrer"' : '';
       //const target = isExternal ? ' target="_blank"' : '';
 
-      return `<a href="${this.escapeHtmlAttr(finalHref)}"${t}${rel}>${text}</a>`;
+      return `<a href="${this.escapeHtmlAttr(finalHref)}"${t}${rel}>🔗 ${text}</a>`;
     };
 
     renderer.heading = ({ text, depth }) => {
