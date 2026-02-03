@@ -1,10 +1,9 @@
 import {TestBed} from '@angular/core/testing';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {mockMarked} from "../../../../testing/libs/marked";
+import {TutorialContentService} from '../services/tutorial-content.service';
 
 jest.mock('marked', () => mockMarked());
-
-import {TutorialContentService} from '../services/tutorial-content.service';
 
 class DomSanitizerStub {
     bypassSecurityTrustHtml(value: string): SafeHtml {
@@ -172,8 +171,8 @@ describe('TutorialContentService', () => {
         expect(html).toContain('<a href="#hash"');
 
         // Blocked ones become "#"
-        expect(html).toContain('<a href="#">bad1</a>');
-        expect(html).toContain('<a href="#">bad2</a>');
+        expect(html).toContain('<a href="#">🔗 bad1</a>');
+        expect(html).toContain('<a href="#">🔗 bad2</a>');
         expect(html).not.toContain('javascript:');
         expect(html).not.toContain('data:text/html');
     });
@@ -190,12 +189,12 @@ describe('TutorialContentService', () => {
         const html = res.html as unknown as string;
 
         // external
-        expect(html).toContain('href="https://example.com" rel="noopener noreferrer" target="_blank"');
+        expect(html).toContain('href="https://example.com" rel="noopener noreferrer"');
 
         // internal/hash/mailto should not get rel/target
-        expect(html).toContain('<a href="/docs">int</a>');
-        expect(html).toContain('<a href="#section">hash</a>');
-        expect(html).toContain('<a href="mailto:test@example.com">mail</a>');
+        expect(html).toContain('<a href="/docs">🔗 int</a>');
+        expect(html).toContain('<a href="#section">🔗 hash</a>');
+        expect(html).toContain('<a href="mailto:test@example.com">🔗 mail</a>');
         expect(html).not.toContain('href="/docs" rel="noopener noreferrer"');
         expect(html).not.toContain('href="#section" rel="noopener noreferrer"');
         expect(html).not.toContain('href="mailto:test@example.com" rel="noopener noreferrer"');

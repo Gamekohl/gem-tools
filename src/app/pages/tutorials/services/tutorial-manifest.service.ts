@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {isPlatformServer} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {Inject, inject, Injectable, makeStateKey, PLATFORM_ID, TransferState} from '@angular/core';
+import {defer, firstValueFrom, Observable, shareReplay, tap} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
 
 export type TutorialManifest = ManifestItem[];
 
@@ -19,30 +20,50 @@ export type ManifestItem = {
   difficulty?: Difficulty; // 1 = Beginner, 2 = Intermediate, 3 = Advanced
   tags?: string[];
   file: string;
+  preview?: string;
+  featured?: boolean
 };
 
 @Injectable({ providedIn: 'root' })
 export class TutorialManifestService {
+  private readonly http = inject(HttpClient);
+  private readonly transferState = inject(TransferState);
+
   private readonly basePath = '/assets/tutorials';
+  private readonly manifestKey = makeStateKey<TutorialManifest>('tutorial-manifest');
 
-  manifest$ = new BehaviorSubject<TutorialManifest | null>(null);
+  readonly manifest$ = defer(() => {
+    return this.getIndex().pipe(
+        tap(manifest => {
+          if (isPlatformServer(this.platformId)) {
+            this.transferState.set(this.manifestKey, manifest);
+          }
+        })
+    );
+  }).pipe(shareReplay({ bufferSize: 1, refCount: false }));
 
-  constructor(private http: HttpClient) {
-    this.getIndex().subscribe({
-      next: manifest => this.manifest$.next(manifest)
-    });
-  }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   getIds(): Promise<string[]> {
     return firstValueFrom(
-        this.getIndex().pipe(
-            map(manifest => manifest.map(item => item.id))
-        )
+      this.manifest$.pipe(
+        map(manifest => manifest.map(item => item.id))
+      )
     );
   }
 
   getMarkdown$(file: string): Observable<string> {
-    return this.http.get(`${this.basePath}/${file}`, { responseType: 'text' });
+    const key = makeStateKey<string>(`tutorial-md:${file}`);
+
+    return defer(() => {
+      return this.http.get(`${this.basePath}/${file}`, { responseType: 'text' }).pipe(
+          tap(markdown => {
+            if (isPlatformServer(this.platformId)) {
+              this.transferState.set(key, markdown);
+            }
+          })
+      );
+    });
   }
 
   private getIndex(): Observable<TutorialManifest> {

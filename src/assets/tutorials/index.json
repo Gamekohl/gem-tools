@@ -1,1 +1,54 @@
-[]
+[
+  {
+    "author": "Gamekohl",
+    "id": "editor-basics",
+    "title": "Editor Basics",
+    "subtitle": "An overview of the GEM Editor",
+    "difficulty": 1,
+    "file": "editor-basics/tutorial.md",
+    "preview": "editor-basics/preview.webp",
+    "featured": true
+  },
+  {
+    "author": "Gamekohl",
+    "id": "keybindings",
+    "title": "Keybindings",
+    "subtitle": "Keybindings for the GEM Editor",
+    "difficulty": 1,
+    "file": "keybindings/tutorial.md",
+    "preview": "keybindings/preview.webp",
+    "featured": true
+  },
+  {
+    "author": "Gamekohl/SturmfuhrerPK",
+    "id": "map-borders",
+    "title": "Map Borders",
+    "subtitle": "Understanding the Map Borders",
+    "difficulty": 1,
+    "file": "map-borders/tutorial.md"
+  },
+  {
+    "author": "Gamekohl/SturmfuhrerPK",
+    "id": "mapmaking-fundamentals",
+    "title": "Mapmaking Fundamentals",
+    "subtitle": "Basic Mapmaking",
+    "difficulty": 1,
+    "file": "mapmaking-fundamentals/tutorial.md"
+  },
+  {
+    "author": "Gamekohl/SturmfuhrerPK",
+    "id": "applying-animations",
+    "title": "Applying Animations",
+    "subtitle": "Learn how to add animations to your units",
+    "difficulty": 1,
+    "file": "applying-animations/tutorial.md"
+  },
+  {
+    "author": "Gamekohl/SturmfuhrerPK",
+    "id": "mission-scripting-with-events",
+    "title": "Mission Scripting with Events",
+    "subtitle": "Learn how to use events to control unit behavior",
+    "difficulty": 2,
+    "file": "mission-scripting-with-events/tutorial.md"
+  }
+]

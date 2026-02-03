@@ -9,6 +9,7 @@ export const mockMarked = () => {
         setOptions: jest.fn((opts: any) => {
             activeRenderer = opts?.renderer;
         }),
+        use: jest.fn(),
         parse: jest.fn((md: string) => {
             const out: string[] = [];
             const lines = md.split(/\r?\n/);

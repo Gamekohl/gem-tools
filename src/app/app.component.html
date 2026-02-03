@@ -1,88 +1,131 @@
-<header class="border-b border-slate-200 dark:border-white/5">
-    <div class="mx-auto max-w-6xl px-6 py-4 lg:px-10">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <a routerLink="/" class="inline-flex items-center">
-                <img
-                        ngSrc="/assets/gem-tools-logo.png"
-                        alt="Logo"
-                        height="105"
-                        width="350"
-                        priority
-                        class="h-auto w-56 dark:invert"
-                />
-            </a>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav [(opened)]="opened" mode="over">
+        <nav class="flex flex-col items-start gap-2 p-6">
+            <ng-container *ngTemplateOutlet="links"></ng-container>
 
-            <nav class="flex flex-wrap items-center gap-2">
-                <a
-                        routerLink="/resources"
-                        routerLinkActive="active"
-                        class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
-                >
-                    <ng-icon name="tablerBox"></ng-icon>
-                    <span>Editor Objects</span>
-                </a>
-
-                <a
-                        routerLink="/animations"
-                        routerLinkActive="active"
-                        class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
-                >
-                    <ng-icon name="tablerArrowsRandom"></ng-icon>
-                    <span>Animations</span>
-                </a>
-
-                <a routerLink="/tutorials" class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5">
-                    <ng-icon name="tablerPhotoEdit"></ng-icon>
-                    <span>Tutorials</span>
-                </a>
-
-                <a
-                        routerLink="/maps"
-                        routerLinkActive="active"
-                        class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5"
-                >
-                    <ng-icon name="tablerMap"></ng-icon>
-                    <span>Maps</span>
-                </a>
-            </nav>
-
-            <div class="flex flex-wrap items-center gap-2 lg:justify-end">
-                <span class="text-sm text-slate-600">created by Gamekohl</span>
-
-                <a
-                        title="GitHub"
-                        href="https://github.com/Gamekohl"
-                        target="_blank"
-                        class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-[#181818] hover:bg-[#202020]"
-                >
-                    <ng-icon name="tablerBrandGithub"></ng-icon>
-                </a>
-
-                <a
-                        title="BuyMeACoffee"
-                        href="https://buymeacoffee.com/gamekohl"
-                        target="_blank"
-                        class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 bg-[#fd0] dark:bg-[#d4ba11] hover:bg-[#dbbe00]"
-                >
-                    <ng-icon name="tablerCoffee"></ng-icon>
-                </a>
-
-                <button
-                        title="Theme Toggle"
-                        class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-[#181818] hover:bg-[#202020] cursor-pointer"
-                        (click)="toggleTheme()"
-                >
-                    <ng-icon [name]="theme() !== 'light' ? 'tablerSun' : 'tablerMoon'"></ng-icon>
-                </button>
-
-                <a title="Changelog" routerLink="/changelog" class="cursor-pointer text-sm px-2">
-                    <small>v{{ version }}</small>
-                </a>
+            <div class="w-full my-4">
+                <div class="grow border-t border-t-black/25 dark:border-t-white/25"></div>
             </div>
-        </div>
-    </div>
-</header>
 
-<main class="mx-auto">
-    <router-outlet></router-outlet>
-</main>
+            <div class="flex flex-wrap items-center gap-2 w-full justify-around">
+                <ng-container *ngTemplateOutlet="external"></ng-container>
+            </div>
+        </nav>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <header class="border-b border-slate-200 dark:border-white/5">
+            <div class="mx-auto max-w-6xl px-6 py-4 lg:px-10">
+                <div class="flex gap-4 items-center justify-between">
+                    <a class="inline-flex items-center" routerLink="/">
+                        <img
+                                alt="Logo"
+                                class="dark:invert"
+                                height="64"
+                                ngSrc="/assets/logo-new.webp"
+                                priority
+                                width="64"
+                        />
+                    </a>
+
+                    @if (showMenu()) {
+                        <button (click)="sidenav.toggle()"
+                                class="flex items-center justify-center border border-slate-200 dark:border-white/25 rounded-xl p-2 text-white! bg-black hover:bg-[#202020]">
+                            <ng-icon name="tablerMenu2"></ng-icon>
+                        </button>
+                    } @else {
+                        <nav class="flex flex-wrap items-center gap-2">
+                            <ng-container *ngTemplateOutlet="links"></ng-container>
+                        </nav>
+
+                        <div class="flex flex-wrap items-center gap-2 lg:justify-end">
+                            <ng-container *ngTemplateOutlet="external"></ng-container>
+                        </div>
+                    }
+                </div>
+            </div>
+        </header>
+
+        <main class="mx-auto max-w-6xl p-6 lg:p-10">
+            <router-outlet></router-outlet>
+        </main>
+
+        <footer class="py-4 text-center text-slate-600 dark:text-white/50 flex justify-center items-center gap-2 text-xs">
+            <div class="flex justify-center items-center">
+                <a class="flex items-center dark:text-white hover:underline cursor-pointer" href="https://github.com/Gamekohl/gem-tools"
+                   target="_blank">Start contributing on
+                    <ng-icon class="ml-1" name="tablerBrandGithub"></ng-icon>&nbsp;GitHub!</a>
+            </div>
+            <span class="opacity-25">|</span>
+            <span class="text-slate-600">created by Gamekohl</span>
+            <span class="opacity-25">|</span>
+            <a class="cursor-pointer" routerLink="/changelog" title="Changelog">
+                v{{ version }}
+            </a>
+        </footer>
+    </mat-sidenav-content>
+
+    <ng-template #links>
+        <a
+                [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
+                routerLink="/resources"
+                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
+        >
+            <ng-icon name="tablerBox"></ng-icon>
+            <span>Editor Objects</span>
+        </a>
+
+        <a
+                [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
+                routerLink="/animations"
+                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
+        >
+            <ng-icon name="tablerArrowsRandom"></ng-icon>
+            <span>Animations</span>
+        </a>
+
+        <a [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
+           class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors" routerLink="/tutorials"
+        >
+            <ng-icon name="tablerPhotoEdit"></ng-icon>
+            <span>Tutorials</span>
+        </a>
+
+        <a
+                [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
+                routerLink="/maps"
+                class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
+        >
+            <ng-icon name="tablerMap"></ng-icon>
+            <span>Maps</span>
+        </a>
+    </ng-template>
+
+    <ng-template #external>
+        <a
+                class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020]"
+                href="https://github.com/Gamekohl"
+                target="_blank"
+                title="GitHub"
+        >
+            <ng-icon name="tablerBrandGithub"></ng-icon>
+        </a>
+
+        <a
+                class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 bg-[#fd0] dark:bg-[#d4ba11] hover:bg-[#dbbe00]"
+                href="https://buymeacoffee.com/gamekohl"
+                target="_blank"
+                title="BuyMeACoffee"
+        >
+            <ng-icon name="tablerCoffee"></ng-icon>
+        </a>
+
+        <button
+                (click)="toggleTheme()"
+                class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020] cursor-pointer"
+                title="Theme Toggle"
+        >
+            <ng-icon [name]="theme() !== 'light' ? 'tablerSun' : 'tablerMoon'"></ng-icon>
+        </button>
+    </ng-template>
+</mat-sidenav-container>

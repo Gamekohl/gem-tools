@@ -29,8 +29,8 @@ export class TutorialsComponent {
   readonly difficultyEnum = Difficulty;
 
   readonly manifest = toSignal<TutorialManifest | null>(
-      this.manifestSvc.manifest$.asObservable(),
-      { requireSync: true }
+      this.manifestSvc.manifest$,
+      { initialValue: null }
   );
 
   readonly query = model('');
@@ -87,6 +87,9 @@ export class TutorialsComponent {
     const start = this.pageIndex() * this.pageSize();
     return items.slice(start, start + this.pageSize());
   });
+
+    readonly featuredItems = computed(() => this.pagedItems().filter(i => i.featured));
+    readonly nonFeaturedItems = computed(() => this.pagedItems().filter(i => !i.featured));
 
   constructor() {
     this.seo.apply({
