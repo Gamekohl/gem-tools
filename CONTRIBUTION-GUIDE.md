@@ -11,10 +11,11 @@ This document explains **how tutorials are structured**, **how to add new ones**
   - [Naming rules for `<tutorial-id>`](#naming-rules-for-tutorial-id)
 - [Step 3: Add the `tutorial.md`](#step-3-add-the-tutorialmd)
 - [Step 4: Add Images (Optional)](#step-4-add-images-optional)
-- [Step 5: Register the Tutorial in `index.json`](#step-5-register-the-tutorial-in-indexjson)
+- [Step 5: Add YouTube Videos (Optional)](#step-5-add-youtube-videos-optional)
+- [Step 6: Register the Tutorial in `index.json`](#step-6-register-the-tutorial-in-indexjson)
   - [Field explanation](#field-explanation)
-- [Step 6: Commit Your Changes](#step-6-commit-your-changes)
-- [Step 7: Open a Pull Request](#step-7-open-a-pull-request)
+- [Step 7: Commit Your Changes](#step-7-commit-your-changes)
+- [Step 8: Open a Pull Request](#step-8-open-a-pull-request)
 - [Guidelines & Best Practices](#guidelines--best-practices)
 - [Need Help?](#need-help)
 
@@ -96,8 +97,18 @@ my-tutorial/
 ![Preview](./images/preview.png)
 ```
 
+## Step 5: Add YouTube Videos (Optional)
 
-## Step 5: Register the Tutorial in `index.json`
+It is also possible to embed YouTube Videos in your tutorial. You can do that by adding:
+```
+@[youtube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+```
+or just reference the Video-ID:
+```
+@[youtube](dQw4w9WgXcQ)
+```
+
+## Step 6: Register the Tutorial in `index.json`
 
 Open:
 
@@ -129,7 +140,7 @@ Add a new entry **at the end of the array**:
 | `difficulty` | `1 = Beginner`, `2 = Intermediate`, or `3 = Advanced` |
 | `file`       | Relative path to `tutorial.md`                        |
 
-## Step 6: Commit Your Changes
+## Step 7: Commit Your Changes
 
 ```bash
 git add src/assets/tutorials
@@ -137,7 +148,7 @@ git commit -m "Add tutorial: My First Tutorial"
 git push origin main
 ```
 
-## Step 7: Open a Pull Request
+## Step 8: Open a Pull Request
 
 1. Go to your fork on GitHub
 2. Click **Compare & Pull Request**
