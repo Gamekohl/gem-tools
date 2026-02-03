@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.4](https://github.com/Gamekohl/gem-tools/compare/v1.1.3...v1.1.4) (2026-02-03)
+
+
+### Bug Fixes
+
+* Merge pull request [#80](https://github.com/Gamekohl/gem-tools/issues/80) from Gamekohl/develop ([0a87bb6](https://github.com/Gamekohl/gem-tools/commit/0a87bb656687e5860cde618a0576566c0eb979bd))
+* New tutorials and packages updates ([0a87bb6](https://github.com/Gamekohl/gem-tools/commit/0a87bb656687e5860cde618a0576566c0eb979bd))
+
 ## [1.1.3](https://github.com/Gamekohl/gem-tools/compare/v1.1.2...v1.1.3) (2026-01-31)
 
 
