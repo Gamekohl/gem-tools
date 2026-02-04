@@ -128,8 +128,8 @@ export class TutorialComponent implements OnDestroy {
             const firstSec = rendered.sections[0]?.id ?? '';
             this.activeSectionId.set(firstSec);
 
-            if (this.isBrowser() && !fragment)
-                queueMicrotask(() => window.scrollTo({top: 0, behavior: 'smooth'}));
+            //if (this.isBrowser() && !fragment)
+            //queueMicrotask(() => window.scrollTo({top: 0, behavior: 'smooth'}));
         });
 
         effect(() => {
