@@ -50,5 +50,14 @@
     "subtitle": "Learn how to use events to control unit behavior",
     "difficulty": 2,
     "file": "mission-scripting-with-events/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands",
+    "title": "Editor Commands: Controlling Mission Logic",
+    "subtitle": "Reference for commands used in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands/tutorial.md",
+    "featured": true
   }
 ]
