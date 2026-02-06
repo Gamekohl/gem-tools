@@ -119,7 +119,7 @@ export class TutorialComponent implements AfterViewInit, OnDestroy {
                 auditTime(0),
                 takeUntilDestroyed(this.destroyRef),
             )
-            .subscribe(([item, _md, rendered]) => {
+            .subscribe(([item, _md, rendered, fragment]) => {
                 const it = item!;
 
                 this.titleService.setTitle(`Tutorial: ${it.title}`);
@@ -127,6 +127,9 @@ export class TutorialComponent implements AfterViewInit, OnDestroy {
 
                 const firstSec = rendered.sections[0]?.id ?? '';
                 this.activeSectionId.set(firstSec);
+
+                if (this.isBrowser() && !fragment)
+                    queueMicrotask(() => window.scrollTo({top: 0, behavior: 'instant'}));
             });
 
         combineLatest([
