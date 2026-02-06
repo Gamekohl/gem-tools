@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.5](https://github.com/Gamekohl/gem-tools/compare/v1.1.4...v1.1.5) (2026-02-04)
+
+### Bug Fixes
+
+* updated changelog ([d3fc083](https://github.com/Gamekohl/gem-tools/commit/d3fc083786abf13525c7229692724e2037408e08))
+* updated transitive
+  dependency ([da5c407](https://github.com/Gamekohl/gem-tools/commit/da5c407ef6f0745c18997c5b47ae93a412f1dd89))
+
 ## [1.1.4](https://github.com/Gamekohl/gem-tools/compare/v1.1.3...v1.1.4) (2026-02-03)
 
 

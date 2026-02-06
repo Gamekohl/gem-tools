@@ -17,7 +17,7 @@
         </div>
 
         <div class="rounded-3xl bg-white dark:bg-white/5 p-6 mt-4">
-            <div class="flex flex-wrap items-start justify-between gap-6 lg:gap-4">
+            <div class="flex items-start justify-between gap-6 lg:gap-4">
                 <div class="min-w-0">
                     <h1 class="text-2xl font-semibold text-slate-900 truncate">
                         {{ item()?.title }}
@@ -31,13 +31,13 @@
                 </div>
 
                 <div class="flex lg:flex-col w-full lg:w-fit justify-between">
-                    <div class="flex flex-wrap gap-2 justify-end">
+                    <div class="flex gap-2 justify-end">
                         @if (difficulty()) {
-                            <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                            <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
                                         {{ difficulty() }}
                                   </span>
                         }
-                        <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                        <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
                                 ~{{ readTime().minutes }} min
                                 </span>
                     </div>
@@ -73,8 +73,8 @@
 
     @if (hasToc) {
         <aside class="hidden lg:block lg:sticky top-6 self-start">
-            <div class="rounded-2xl bg-white dark:bg-white/5 p-4">
-                <div class="text-sm font-semibold text-slate-900 dark:text-white">On this Page</div>
+            <div class="rounded-2xl bg-white pb-4 dark:bg-white/5 max-h-[calc(100vh-48px)] overflow-y-scroll scrollbar">
+                <div class="text-sm font-semibold px-4 pt-4 text-slate-900 dark:text-white">On this Page</div>
 
                 <div class="mt-4 space-y-1">
                     @for (sec of toc(); track sec.id) {
@@ -98,12 +98,19 @@
                 [title]="section.title"
                 [fragment]="section.id"
                 [ngClass]="{
-                            'bg-slate-50 dark:bg-white/5 font-medium': activeSectionId() === section.id,
-                            'ml-4 w-[calc(100%-16px)]': isChild
-                        }"
+                    'bg-slate-50 dark:bg-white/5 font-medium': activeSectionId() === section.id,
+                    'mx-6': isChild
+                }"
                 [routerLink]="[]"
-                class="block group text-left rounded-xl px-3 py-2 text-sm transition hover:bg-slate-50 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200">
-            <div class="flex items-center justify-between gap-2">
+                class="relative flex justify-between rounded-xl items-center group text-left mx-2 px-4 py-2 text-sm motion-reduce:transition-none transition-all hover:bg-slate-50 dark:hover:bg-white/5">
+            @if (activeSectionId() === section.id) {
+                <div
+                        [class.-mx-2]="!isChild"
+                        [class.-mx-6]="isChild"
+                        class="absolute h-full w-1 bg-black dark:bg-white left-0"
+                ></div>
+            }
+            <div class="flex items-center justify-between gap-2 w-full">
                 <div class="flex items-center gap-1">
                     <span class="max-w-40 truncate text-slate-800">{{ section.title }}</span>
                     <span (click)="$event.preventDefault(); $event.stopImmediatePropagation(); copySectionLink(section.id)"
