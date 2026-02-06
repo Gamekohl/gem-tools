@@ -7,11 +7,11 @@
         </p>
     </div>
 
-    <div class="rounded-2xl bg-slate-50 dark:bg-white/5 px-4 py-3">
+    <div class="rounded-2xl bg-white dark:bg-white/5 px-4 py-3">
         <div class="text-xs text-slate-500 dark:text-white/50">Showing</div>
         <div class="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
-            {{ stats().shown }} <span
-                class="text-sm font-medium text-slate-500 dark:text-white/50">/ {{ stats().total }}</span>
+            {{ stats().shown }}
+            <span class="text-sm font-medium text-slate-500 dark:text-white/50">/ {{ stats().total }}</span>
         </div>
     </div>
 </div>
@@ -35,12 +35,12 @@
     </div>
 
     <!-- Difficulty chips -->
-    <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-3 h-fit">
+    <div class="rounded-2xl bg-white dark:bg-white/5 p-3 h-fit">
         <div class="flex flex-wrap gap-2">
             <button
                     (click)="setDifficulty(0)"
                     [class.font-medium]="difficulty() === 0"
-                    [ngClass]="{ 'bg-white dark:text-black!': difficulty() === 0 }"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === 0 }"
                     class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
                     type="button">
                 All
@@ -48,7 +48,7 @@
             <button
                     (click)="setDifficulty(difficultyEnum.Beginner)"
                     [class.font-medium]="difficulty() === difficultyEnum.Beginner"
-                    [ngClass]="{ 'bg-white dark:text-black!': difficulty() === difficultyEnum.Beginner }"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === difficultyEnum.Beginner }"
                     class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
                     type="button">
                 Beginner <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Beginner }}</span>
@@ -56,7 +56,7 @@
             <button
                     (click)="setDifficulty(difficultyEnum.Intermediate)"
                     [class.font-medium]="difficulty() === difficultyEnum.Intermediate"
-                    [ngClass]="{ 'bg-white dark:text-black!': difficulty() === difficultyEnum.Intermediate }"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === difficultyEnum.Intermediate }"
                     class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
                     type="button">
                 Intermediate <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Intermediate }}</span>
@@ -64,7 +64,7 @@
             <button
                     (click)="setDifficulty(difficultyEnum.Advanced)"
                     [class.font-medium]="difficulty() === difficultyEnum.Advanced"
-                    [ngClass]="{ 'bg-white dark:text-black!': difficulty() === difficultyEnum.Advanced }"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === difficultyEnum.Advanced }"
                     class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
                     type="button">
                 Advanced <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Advanced }}</span>
@@ -76,7 +76,7 @@
 <!-- Content -->
 <div class="mt-8 min-h-[70vh] flex flex-col gap-6">
     @if (manifest()?.length === 0) {
-        <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-6 text-sm text-slate-600 dark:text-white/50 flex items-center gap-1">
+        <div class="rounded-2xl bg-white dark:bg-white/5 p-6 text-sm text-slate-600 dark:text-white/50 flex items-center gap-1">
             No tutorials have been published yet.
             <a class="flex items-center hover:underline text-white" href="https://github.com/Gamekohl/gem-tools"
                target="_blank">

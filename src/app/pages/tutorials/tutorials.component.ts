@@ -3,7 +3,6 @@ import {ChangeDetectionStrategy, Component, computed, inject, model, signal} fro
 import {toSignal} from '@angular/core/rxjs-interop';
 import {FormsModule} from "@angular/forms";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
-import {RouterModule} from '@angular/router';
 import {NgIcon, provideIcons} from "@ng-icons/core";
 import {tablerBrandGithub} from "@ng-icons/tabler-icons";
 import {SeoService} from "../../services/seo.service";
@@ -14,7 +13,7 @@ type DifficultyFilter = 0 | Difficulty;
 
 @Component({
   selector: 'gem-tutorials',
-  imports: [RouterModule, NgClass, FormsModule, MatPaginatorModule, TutorialCardComponent, NgIcon],
+  imports: [NgClass, FormsModule, MatPaginatorModule, TutorialCardComponent, NgIcon],
   templateUrl: './tutorials.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [

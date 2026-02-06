@@ -70,10 +70,42 @@
   {
     "author": "Gamekohl",
     "id": "editor-commands",
-    "title": "Editor Commands: Controlling Mission Logic",
-    "subtitle": "Reference for commands used in the GEM Editor",
+    "title": "Editor Commands: Glossary",
+    "subtitle": "Glossary for all commands available in the GEM Editor",
     "difficulty": 2,
     "file": "editor-commands/tutorial.md",
     "featured": true
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-other",
+    "title": "Editor Commands: Other",
+    "subtitle": "Other commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-other/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-actor",
+    "title": "Editor Commands: Actor",
+    "subtitle": "Actor commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-actor/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-entity",
+    "title": "Editor Commands: Entity",
+    "subtitle": "Entity commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-entity/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-scene",
+    "title": "Editor Commands: Scene",
+    "subtitle": "Scene commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-scene/tutorial.md"
   }
 ]
