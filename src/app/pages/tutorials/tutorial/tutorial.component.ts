@@ -1,10 +1,11 @@
 import {Clipboard} from "@angular/cdk/clipboard";
 import {isPlatformBrowser, NgClass, NgTemplateOutlet} from '@angular/common';
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     Component,
     computed,
-    effect,
+    DestroyRef,
     ElementRef,
     inject,
     OnDestroy,
@@ -12,13 +13,20 @@ import {
     signal,
     viewChild,
 } from '@angular/core';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {takeUntilDestroyed, toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Title} from "@angular/platform-browser";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
-import {tablerArrowLeft, tablerBrandGithub, tablerLink} from "@ng-icons/tabler-icons";
-import {map} from "rxjs/operators";
+import {
+    tablerArrowLeft,
+    tablerBrandGithub,
+    tablerGitPullRequest,
+    tablerInfoCircle,
+    tablerLink
+} from "@ng-icons/tabler-icons";
+import {auditTime, combineLatest, distinctUntilChanged} from "rxjs";
+import {filter, map} from "rxjs/operators";
 import {environment} from "../../../../environments/environment";
 import {SeoService} from "../../../services/seo.service";
 import {estimateReadTimeFromMarkdown} from "../../../utils/read-time";
@@ -31,7 +39,7 @@ import {TutorialResolved} from "./tutorial.resolver";
     imports: [RouterLink, NgIconComponent, NgClass, NgTemplateOutlet],
     templateUrl: './tutorial.component.html',
     viewProviders: [
-        provideIcons({tablerArrowLeft, tablerBrandGithub, tablerLink})
+        provideIcons({tablerArrowLeft, tablerBrandGithub, tablerLink, tablerInfoCircle, tablerGitPullRequest})
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     styles: `
@@ -48,7 +56,8 @@ import {TutorialResolved} from "./tutorial.resolver";
       }
     `
 })
-export class TutorialComponent implements OnDestroy {
+export class TutorialComponent implements AfterViewInit, OnDestroy {
+    readonly contentContainer = viewChild<ElementRef<HTMLDivElement>>('contentContainer');
     private readonly clipboard = inject(Clipboard);
     private readonly seo = inject(SeoService);
     private readonly contentSvc = inject(TutorialContentService);
@@ -64,7 +73,8 @@ export class TutorialComponent implements OnDestroy {
     };
 
     readonly contentHost = viewChild<ElementRef<HTMLElement>>('contentHost');
-
+    readonly scrollBehavior = signal<ScrollBehavior>('instant');
+    private readonly destroyRef = inject(DestroyRef);
     readonly isBrowser = signal<boolean>(isPlatformBrowser(this.platformId));
     readonly activeSectionId = signal<string>('');
     readonly fragment = toSignal(this.route.fragment, {initialValue: null});
@@ -98,48 +108,100 @@ export class TutorialComponent implements OnDestroy {
     private io: IntersectionObserver | null = null;
 
     constructor() {
-        effect(() => {
-            const html = this.tutorialHtml();
-            const toc = this.toc();
-            const host = this.contentHost()?.nativeElement;
+        combineLatest([
+            toObservable(this.item),
+            toObservable(this.markdown),
+            toObservable(this.rendered),
+            toObservable(this.fragment),
+        ])
+            .pipe(
+                filter(([item, md]) => !!item && !!md),
+                auditTime(0),
+                takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe(([item, _md, rendered, fragment]) => {
+                const it = item!;
 
-            this.disconnectObserver();
+                this.titleService.setTitle(`Tutorial: ${it.title}`);
+                this.setSeo(it);
 
-            if (!host || !html) return;
+                const firstSec = rendered.sections[0]?.id ?? '';
+                this.activeSectionId.set(firstSec);
 
-            if (this.isBrowser()) {
-                queueMicrotask(() => {
-                    if (toc.length) this.setupIntersectionObserver(toc);
-                });
+                if (this.isBrowser() && !fragment)
+                    queueMicrotask(() => window.scrollTo({top: 0, behavior: 'instant'}));
+            });
+
+        combineLatest([
+            toObservable(this.fragment),
+            toObservable(this.tutorialHtml),
+            toObservable(this.contentHost).pipe(map(ref => ref?.nativeElement ?? null)),
+        ])
+            .pipe(
+                filter(([fragment, html, host]) => this.isBrowser() && !!fragment && !!html && !!host),
+                map(([fragment]) => fragment as string),
+                distinctUntilChanged(),
+                auditTime(0),
+                takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe(fragment => {
+                this.scrollToSection(fragment, this.scrollBehavior());
+            });
+
+        combineLatest([
+            toObservable(this.toc),
+            toObservable(this.tutorialHtml),
+            toObservable(this.contentHost).pipe(map(ref => ref?.nativeElement ?? null)),
+        ])
+            .pipe(
+                filter(([, html, host]) => !!host && !!html),
+                auditTime(0),
+                takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe(([toc, _html]) => {
+                this.disconnectObserver();
+
+                if (!this.isBrowser()) return;
+                if (!toc.length) return;
+
+                queueMicrotask(() => this.setupIntersectionObserver(toc));
+        });
+    }
+
+    ngAfterViewInit(): void {
+        if (!this.isBrowser())
+            return;
+
+        this.scrollBehavior.set(
+            window.matchMedia(`(prefers-reduced-motion: reduce)`).matches ? 'instant' : 'smooth'
+        );
+
+        this.contentContainer()?.nativeElement.addEventListener('click', ev => {
+            const target = ev.target as HTMLElement | null;
+
+            let action: 'link' | 'bookmark' | null;
+
+            let btn = target?.closest<HTMLElement>('[data-action="bookmark-heading"]');
+
+            if (!btn) {
+                btn = target?.closest<HTMLElement>('[data-action="link-heading"]');
+                action = 'link';
+            } else {
+                action = 'bookmark';
             }
-        });
 
-        effect(() => {
-            const item = this.item();
-            const markdown = this.markdown();
-            const rendered = this.rendered();
-            const fragment = this.fragment();
+            const parent = btn?.parentElement?.parentElement;
 
-            if (!item || !markdown) return;
+            const headingId = parent?.getAttribute('id');
+            if (!headingId) return;
 
-            this.titleService.setTitle(`Tutorial: ${item.title}`);
-            this.setSeo(item);
-
-            const firstSec = rendered.sections[0]?.id ?? '';
-            this.activeSectionId.set(firstSec);
-
-            if (this.isBrowser() && !fragment)
-                queueMicrotask(() => window.scrollTo({top: 0, behavior: 'smooth'}));
-        });
-
-        effect(() => {
-            const fragment = this.fragment();
-            const host = this.contentHost()?.nativeElement;
-            const html = this.tutorialHtml();
-
-            if (!this.isBrowser() || !fragment || !host || !html) return;
-
-            queueMicrotask(() => this.scrollToSection(fragment, 'smooth'));
+            switch (action) {
+                case 'link':
+                    this.copySectionLink(headingId);
+                    break;
+                default:
+                    break;
+            }
         });
     }
 
@@ -147,7 +209,7 @@ export class TutorialComponent implements OnDestroy {
         this.seo.removeJsonLd();
     }
 
-    scrollToSection(id: string, behavior: ScrollBehavior = 'smooth'): void {
+    scrollToSection(id: string, behavior: ScrollBehavior = this.scrollBehavior()): void {
         const el = document.getElementById(id);
         if (!el) return;
         el.scrollIntoView({behavior, block: 'start'});

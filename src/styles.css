@@ -7,6 +7,12 @@
     --color-black: #181818;
 }
 
+@layer utilities {
+    .scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 .mat-drawer-content, .mat-drawer-container {
     overflow: unset !important;
 }

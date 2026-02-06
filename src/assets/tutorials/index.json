@@ -50,5 +50,62 @@
     "subtitle": "Learn how to use events to control unit behavior",
     "difficulty": 2,
     "file": "mission-scripting-with-events/tutorial.md"
+  },
+  {
+    "author": "Gamekohl/SturmfuhrerPK",
+    "id": "endless-waves",
+    "title": "Endless Waves",
+    "subtitle": "Learn how to script endless waves of units",
+    "difficulty": 1,
+    "file": "endless-waves/tutorial.md"
+  },
+  {
+    "author": "Gamekohl/SturmfuhrerPK",
+    "id": "minimap",
+    "title": "Minimaps",
+    "subtitle": "Learn how to create Minimaps",
+    "difficulty": 1,
+    "file": "minimap/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands",
+    "title": "Editor Commands: Glossary",
+    "subtitle": "Glossary for all commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands/tutorial.md",
+    "featured": true
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-other",
+    "title": "Editor Commands: Other",
+    "subtitle": "Other commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-other/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-actor",
+    "title": "Editor Commands: Actor",
+    "subtitle": "Actor commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-actor/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-entity",
+    "title": "Editor Commands: Entity",
+    "subtitle": "Entity commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-entity/tutorial.md"
+  },
+  {
+    "author": "Gamekohl",
+    "id": "editor-commands-scene",
+    "title": "Editor Commands: Scene",
+    "subtitle": "Scene commands available in the GEM Editor",
+    "difficulty": 2,
+    "file": "editor-commands-scene/tutorial.md"
   }
 ]

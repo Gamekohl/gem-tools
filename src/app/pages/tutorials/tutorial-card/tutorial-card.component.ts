@@ -54,21 +54,12 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
         </div>
       </div>
 
-      @if (item().tags?.length) {
-        <div class="mt-4 flex items-center justify-between gap-3">
-          <div class="flex flex-wrap gap-1.5">
-            @for (tag of item().tags; track tag) {
-              <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-600 dark:bg-white/5 dark:text-white">
-                {{ tag }}
-              </span>
-            }
-          </div>
+      <div class="mt-4 flex justify-between">
+        <div class="text-sm font-medium text-slate-900 dark:text-white group-hover:underline flex items-center gap-1">
+          <span>Open tutorial</span>
+          <ng-icon name="tablerChevronRight"></ng-icon>
         </div>
-      }
-
-      <div class="mt-4 text-sm font-medium text-slate-900 dark:text-white group-hover:underline flex items-center gap-1">
-        <span>Open tutorial</span>
-        <ng-icon name="tablerChevronRight"></ng-icon>
+        <span class="text-sm text-slate-600! dark:text-white/50!">by {{ item().author }}</span>
       </div>
     </a>
   `

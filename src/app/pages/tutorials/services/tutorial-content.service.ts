@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {marked} from 'marked';
 import {youtubeExtension} from "../../../utils/marked-extensions";
+import {linkIcon} from "./content/icons";
 
 export type TutorialSubSection = { id: string; title: string; level: 3 };
 
@@ -96,7 +97,13 @@ export class TutorialContentService {
 
         flat.push({ id, title: cleanText, level: 2 });
 
-        return `<h2 id="${id}">${text}</h2>`;
+        return `
+            <h2 id="${id}" class="group flex items-center gap-2">
+                ${text}
+                <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+                    ${linkIcon}
+                </div>
+            </h2>`;
       }
 
       if (depth === 3) {
@@ -110,7 +117,13 @@ export class TutorialContentService {
           flat.push({ id, title: cleanText, level: 3 });
         }
 
-        return `<h3 id="${id}">${text}</h3>`;
+        return `
+            <h3 id="${id}" class="group relative flex items-center gap-2">
+                ${text}
+                <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+                    ${linkIcon}
+                </div>
+            </h3>`;
       }
 
       return `<h${depth}>${text}</h${depth}>`;
