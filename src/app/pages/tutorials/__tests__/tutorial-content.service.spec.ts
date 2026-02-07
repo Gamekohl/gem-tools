@@ -18,7 +18,7 @@ describe('TutorialContentService', () => {
     let sanitizer: DomSanitizerStub;
 
     const makeHeading = (id: string, text: string, type: 'h2' | 'h3') => normalize(`
-        <${type} id="${id}" class="group flex items-center gap-2">
+        <${type} id="${id}" class="group relative flex items-center gap-2">
             ${text}
             <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
                 ${linkIcon}
@@ -94,6 +94,39 @@ describe('TutorialContentService', () => {
         expect(html).toContain(makeHeading('same', 'Same', 'h2'));
         expect(html).toContain(makeHeading('same-2', 'Same', 'h2'));
         expect(html).toContain(makeHeading('same-3', 'Same', 'h2'));
+    });
+
+    it('collects H3 sections with slugified ids and returns <h3 id="...">', () => {
+        const md = `## Heading
+          Text
+          ### Subheading`;
+
+        const res = service.renderMarkdown(md);
+
+        expect(res.sections).toEqual([
+            {id: 'heading', title: 'Heading', level: 2},
+            {id: 'subheading', title: 'Subheading', level: 3},
+        ]);
+
+        const html = normalize(res.html as unknown as string);
+        expect(html).toContain(makeHeading('heading', 'Heading', 'h2'));
+        expect(html).toContain(makeHeading('subheading', 'Subheading', 'h3'));
+    });
+
+    it('adds H3 to flat sections even when there is no preceding H2 (currentH2 is null)', () => {
+        const md = `
+            ### Lone Subheading
+            Text
+        `;
+
+        const res = service.renderMarkdown(md);
+
+        expect(res.sections).toEqual([
+            {id: 'lone-subheading', title: 'Lone Subheading', level: 3},
+        ]);
+
+        const html = normalize(res.html as unknown as string);
+        expect(html).toContain(makeHeading('lone-subheading', 'Lone Subheading', 'h3'));
     });
 
     it('strips HTML from headings for title/section extraction, but keeps original heading HTML in output', () => {

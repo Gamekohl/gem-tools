@@ -43,7 +43,7 @@
                     class="group w-full hover:font-semibold! flex gap-2 items-center cursor-pointer p-4 border-b border-b-gray-200 dark:border-b-white/5 hover:bg-gray-100 dark:hover:bg-white/5 last:border-b-0"
                     matTreeNodePadding
                     matTreeNodeToggle>
-                <button
+                <!--<button
                         (click)="toggleFavorite(node); $event.stopPropagation()"
                         [attr.aria-pressed]="isFavorite(node) ? 'true' : 'false'"
                         class="px-2 opacity-70 hover:opacity-100 flex items-center"
@@ -51,7 +51,7 @@
                         type="button"
                 >
                     <ng-icon [name]="isFavorite(node) ? 'tablerStarFill' : 'tablerStar'"></ng-icon>
-                </button>
+                </button>-->
 
                 <ng-icon name="tablerBox"></ng-icon>
                 <span [innerHTML]="getText(node.name)" class="flex-1"></span>

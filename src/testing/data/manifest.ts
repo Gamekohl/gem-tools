@@ -17,6 +17,7 @@ export const tutorialManifestMock = {
             difficulty: Difficulty.Beginner,
             tags: ['start', 'overview'],
             file: 'intro.md',
+            featured: false,
         },
         {
             author: 'Bob',
@@ -26,6 +27,7 @@ export const tutorialManifestMock = {
             difficulty: Difficulty.Intermediate,
             tags: ['scripting', 'logic'],
             file: 'ai.md',
+            featured: false,
         },
         {
             author: 'Cara',
@@ -35,6 +37,7 @@ export const tutorialManifestMock = {
             difficulty: Difficulty.Advanced,
             tags: ['performance'],
             file: 'perf.md',
+            featured: false,
         },
         {
             author: 'Dan',
@@ -44,6 +47,17 @@ export const tutorialManifestMock = {
             // difficulty omitted
             tags: ['misc'],
             file: 'no.md',
+            featured: false,
         },
+        {
+            author: 'James',
+            id: 'featured',
+            title: 'Featured Tutorial',
+            subtitle: 'Featured Tutorial',
+            difficulty: Difficulty.Beginner,
+            tags: ['featured'],
+            file: 'featured.md',
+            featured: true
+        }
     ] satisfies TutorialManifest
 }

@@ -12,12 +12,12 @@ export const testStructureData: ResourceNode[] = [
                 name: 'Child1',
                 children: []
             }
-        ]
+        ],
     },
     {
         id: 'Node2',
         path: 'Node2',
         name: 'Node2',
         children: []
-    },
+    }
 ]

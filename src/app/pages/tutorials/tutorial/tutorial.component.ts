@@ -57,7 +57,6 @@ import {TutorialResolved} from "./tutorial.resolver";
     `
 })
 export class TutorialComponent implements AfterViewInit, OnDestroy {
-    readonly contentContainer = viewChild<ElementRef<HTMLDivElement>>('contentContainer');
     private readonly clipboard = inject(Clipboard);
     private readonly seo = inject(SeoService);
     private readonly contentSvc = inject(TutorialContentService);
@@ -65,16 +64,16 @@ export class TutorialComponent implements AfterViewInit, OnDestroy {
     private readonly titleService = inject(Title);
     private readonly platformId = inject(PLATFORM_ID);
     private readonly snackbar = inject(MatSnackBar);
+    readonly contentContainer = viewChild<ElementRef<HTMLDivElement>>('contentContainer');
 
     private readonly difficultyLabels = {
         [Difficulty.Beginner]: 'Beginner',
         [Difficulty.Intermediate]: 'Intermediate',
         [Difficulty.Advanced]: 'Advanced'
     };
-
+    private readonly destroyRef = inject(DestroyRef);
     readonly contentHost = viewChild<ElementRef<HTMLElement>>('contentHost');
     readonly scrollBehavior = signal<ScrollBehavior>('instant');
-    private readonly destroyRef = inject(DestroyRef);
     readonly isBrowser = signal<boolean>(isPlatformBrowser(this.platformId));
     readonly activeSectionId = signal<string>('');
     readonly fragment = toSignal(this.route.fragment, {initialValue: null});

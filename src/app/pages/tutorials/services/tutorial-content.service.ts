@@ -98,7 +98,7 @@ export class TutorialContentService {
         flat.push({ id, title: cleanText, level: 2 });
 
         return `
-            <h2 id="${id}" class="group flex items-center gap-2">
+            <h2 id="${id}" class="group relative flex items-center gap-2">
                 ${text}
                 <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
                     ${linkIcon}

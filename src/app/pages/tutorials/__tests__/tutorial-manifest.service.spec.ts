@@ -1,19 +1,19 @@
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
-import {PLATFORM_ID, TransferState} from '@angular/core';
+import {makeStateKey, PLATFORM_ID, TransferState} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {TutorialManifest, TutorialManifestService} from '../services/tutorial-manifest.service';
 
-describe('TutorialManifestService', () => {
+const basePath = '/assets/tutorials';
+const indexUrl = `${basePath}/index.json`;
+
+const manifest: TutorialManifest = [
+  {author: 'A', id: 'intro', title: 'Intro', subtitle: 'Basics', file: 'intro.md'},
+  {author: 'B', id: 'adv', title: 'Advanced', subtitle: 'Deep', file: 'adv.md'},
+];
+
+describe('TutorialManifestService (browser)', () => {
   let service: TutorialManifestService;
   let httpMock: HttpTestingController;
-
-  const basePath = '/assets/tutorials';
-  const indexUrl = `${basePath}/index.json`;
-
-  const manifest: TutorialManifest = [
-    { author: 'A', id: 'intro', title: 'Intro', subtitle: 'Basics', file: 'intro.md' },
-    { author: 'B', id: 'adv', title: 'Advanced', subtitle: 'Deep', file: 'adv.md' },
-  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -73,5 +73,63 @@ describe('TutorialManifestService', () => {
     expect(req.request.method).toBe('GET');
     expect(req.request.responseType).toBe('text');
     req.flush(md);
+  });
+});
+
+describe('TutorialManifestService (server)', () => {
+  let service: TutorialManifestService;
+  let httpMock: HttpTestingController;
+  let transferState: TransferState;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClientTesting(),
+        TransferState,
+        {provide: PLATFORM_ID, useValue: 'server'},
+        TutorialManifestService
+      ],
+    });
+
+    service = TestBed.inject(TutorialManifestService);
+    httpMock = TestBed.inject(HttpTestingController);
+    transferState = TestBed.inject(TransferState);
+  });
+
+  afterEach(() => httpMock.verify());
+
+  it('getMarkdown$(file) GETs markdown file and stores it in TransferState when running on server', (done) => {
+    const setSpy = jest.spyOn(transferState, 'set');
+
+    const file = 'intro.md';
+    const url = `${basePath}/${file}`;
+    const md = '# Hello';
+
+    service.getMarkdown$(file).subscribe(res => {
+      expect(res).toBe(md);
+      done();
+    });
+
+    const req = httpMock.expectOne(url);
+    req.flush(md);
+
+    const expectedKey = makeStateKey<string>('tutorial-md:intro.md');
+
+    expect(setSpy).toHaveBeenCalledTimes(1);
+    expect(setSpy).toHaveBeenCalledWith(expectedKey, md);
+  });
+
+  it('stores manifest in TransferState when running on server', () => {
+    const setSpy = jest.spyOn(transferState, 'set');
+
+    service.manifest$.subscribe();
+
+    const req = httpMock.expectOne(indexUrl);
+    req.flush(manifest);
+
+    const expectedKey = makeStateKey<TutorialManifest>('tutorial-manifest');
+
+    expect(setSpy).toHaveBeenCalledTimes(1);
+    expect(setSpy).toHaveBeenCalledWith(expectedKey, manifest);
   });
 });
