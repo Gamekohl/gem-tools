@@ -71,16 +71,6 @@
               "assets": [
                 {
                   "glob": "**/*",
-                  "input": "src/assets/",
-                  "output": "/assets/"
-                },
-                {
-                  "glob": "**/*",
-                  "input": "public/",
-                  "output": "/"
-                },
-                {
-                  "glob": "**/*",
                   "input": "src/assets-e2e/",
                   "output": "/assets/"
                 }
