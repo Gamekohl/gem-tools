@@ -118,8 +118,6 @@ describe('TutorialComponent (browser)', () => {
     component = result.component;
   });
 
-  afterEach(() => jest.clearAllMocks());
-
   it('sets title + SEO + activeSectionId and scroll when fragment is not present', () => {
     (window as any).scrollTo = jest.fn();
 
@@ -279,20 +277,19 @@ describe('TutorialComponent (server)', () => {
   let fixture: ComponentFixture<TutorialComponent>;
   let component: TutorialComponent;
 
-  const baseProviders = (platformId: 'browser' | 'server') => ([
-    {
-      provide: ActivatedRoute,
-      useValue: {
-        data: of({}),
-        fragment: of(null)
-      } satisfies Partial<ActivatedRoute>,
-    },
-  ]);
-
   beforeEach(async () => {
     const result = await createComponent(TutorialComponent, {
       imports: [TutorialComponent],
-      providers: baseProviders('server'),
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({}),
+            fragment: of(null)
+          } satisfies Partial<ActivatedRoute>,
+        },
+        {provide: PLATFORM_ID, useValue: 'server'}
+      ],
       override: {
         component: TutorialComponent,
         override: {
@@ -306,8 +303,6 @@ describe('TutorialComponent (server)', () => {
 
     fixture.detectChanges();
   });
-
-  afterEach(() => jest.clearAllMocks());
 
   it('should not add event listener to contentContainer', () => {
     const spy = spyOn(component.contentContainer()!.nativeElement, 'addEventListener');

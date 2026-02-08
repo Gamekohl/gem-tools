@@ -1,8 +1,9 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture} from '@angular/core/testing';
 import {PageEvent} from '@angular/material/paginator';
 import {createSeoServiceMock} from '@testing/mocks/seo-service';
 import {MockTutorialManifest} from '@testing/mocks/tutorial-manifest';
 import {createTutorialManifestServiceMock} from '@testing/mocks/tutorial-manifest-service';
+import {createComponent} from "@testing/utils/testbed";
 
 import {SeoService} from '../../../services/seo.service';
 import {Difficulty, TutorialManifestService} from '../services/tutorial-manifest.service';
@@ -22,23 +23,23 @@ describe('TutorialsComponent', () => {
     seoMock = createSeoServiceMock();
     manifestSvcMock = createTutorialManifestServiceMock();
 
-    await TestBed.configureTestingModule({
+    const result = await createComponent(TutorialsComponent, {
       imports: [TutorialsComponent],
       providers: [
         { provide: SeoService, useValue: seoMock },
         { provide: TutorialManifestService, useValue: manifestSvcMock },
       ],
-    })
-        .overrideComponent(TutorialsComponent, {
-          set: { template: `<div></div>` },
-        })
-        .compileComponents();
+      override: {
+        component: TutorialsComponent,
+        override: {
+          set: {template: `<div></div>`}
+        }
+      }
+    });
 
-    fixture = TestBed.createComponent(TutorialsComponent);
-    component = fixture.componentInstance;
+    fixture = result.fixture;
+    component = result.component;
   });
-
-  afterEach(() => jest.clearAllMocks());
 
   it('applies SEO + JSON-LD in constructor', () => {
     expect(seoMock.apply).toHaveBeenCalledWith({

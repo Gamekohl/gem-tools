@@ -15,7 +15,7 @@ const mockData = structureData;
 
 jest.mock('../data/structure');
 
-describe('ResourcesComponent', () => {
+describe('ResourcesComponent (browser)', () => {
   let component: ResourcesComponent;
 
   beforeEach(async () => {
@@ -136,32 +136,6 @@ describe('ResourcesComponent', () => {
         expect(mockTree.expand).not.toHaveBeenCalled();
     });
 
-    it('applyFilter should do nothing on server platform', async () => {
-        TestBed.resetTestingModule();
-
-        await TestBed.configureTestingModule({
-            imports: [ResourcesComponent, ReactiveFormsModule, MatTreeModule],
-            providers: [
-                provideHttpClient(),
-                provideHttpClientTesting(),
-                {provide: PLATFORM_ID, useValue: 'server'},
-            ],
-        }).compileComponents();
-
-        const serverFixture = TestBed.createComponent(ResourcesComponent);
-        const serverComponent = serverFixture.componentInstance;
-        serverFixture.detectChanges();
-
-        const mockTree = {collapseAll: jest.fn(), expand: jest.fn()};
-        (serverComponent as any).tree = () => mockTree;
-
-        serverComponent.search.set('Node');
-        serverComponent.applyFilter();
-
-        expect(mockTree.collapseAll).not.toHaveBeenCalled();
-        expect(mockTree.expand).not.toHaveBeenCalled();
-    });
-
     it('should open preview with ElementRef and node', () => {
         const el = document.createElement('div');
 
@@ -201,5 +175,33 @@ describe('ResourcesComponent', () => {
         component.closePreview();
 
         expect(closeSpy).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('ResourcesComponent (server', () => {
+    let component: ResourcesComponent;
+
+    beforeEach(async () => {
+        const result = await createComponent(ResourcesComponent, {
+            imports: [ResourcesComponent, ReactiveFormsModule, MatTreeModule],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                {provide: PLATFORM_ID, useValue: 'server'},
+            ],
+        });
+
+        component = result.component;
+    });
+
+    it('applyFilter should do nothing', async () => {
+        const mockTree = {collapseAll: jest.fn(), expand: jest.fn()};
+        (component as any).tree = () => mockTree;
+
+        component.search.set('Node');
+        component.applyFilter();
+
+        expect(mockTree.collapseAll).not.toHaveBeenCalled();
+        expect(mockTree.expand).not.toHaveBeenCalled();
     });
 });

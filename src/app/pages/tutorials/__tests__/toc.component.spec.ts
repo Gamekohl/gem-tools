@@ -1,8 +1,8 @@
 import {PLATFORM_ID} from "@angular/core";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute} from "@angular/router";
+import {MockIntersectionObserver} from "@testing/utils/intersection-observer";
 import {of} from "rxjs";
-import {MockIntersectionObserver} from "../../../../testing/utils/intersection-observer";
 import {TutorialSection} from "../services/tutorial-content.service";
 import {TocComponent} from '../tutorial/toc/toc.component';
 

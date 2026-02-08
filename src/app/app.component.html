@@ -88,17 +88,13 @@
         </a>
 
         <a [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
+           data-testid="tutorials-link"
            class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
            routerLink="/tutorials"
         >
             <ng-icon name="tablerPhotoEdit"></ng-icon>
             <span>Tutorials</span>
         </a>
-                <a data-testid="tutorials-link" routerLink="/tutorials" class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5">
-                    <ng-icon name="tablerPhotoEdit"></ng-icon>
-                    <span>Tutorials</span>
-                </a>
-
         <a
                 [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/maps"

@@ -11,11 +11,11 @@ type ConfigureOpts = TestModuleMetadata & {
     override?: Override
 };
 
-export async function configureTestingModule(opts: ConfigureOpts) {
-    let testBed = TestBed.configureTestingModule(opts);
+export async function configureTestingModule({override, detectChanges, ...rest}: ConfigureOpts) {
+    let testBed = TestBed.configureTestingModule(rest);
 
-    if (opts.override) {
-        testBed = testBed.overrideComponent(opts.override.component, opts.override.override)
+    if (override) {
+        testBed = testBed.overrideComponent(override.component, override.override)
     }
 
     await testBed
@@ -28,8 +28,10 @@ export async function createComponent<T>(
 ) {
     await configureTestingModule(opts);
     const fixture = TestBed.createComponent(component as any) as ComponentFixture<T>;
+
     if (opts.detectChanges !== false) {
         fixture.detectChanges();
     }
+
     return { fixture, component: fixture.componentInstance as T };
 }
