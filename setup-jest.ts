@@ -20,9 +20,16 @@ Object.defineProperty(window, 'matchMedia', {
   }),
 });
 
+Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
+  writable: true,
+  value: jest.fn(),
+});
+
 Object.defineProperty(window, 'scrollTo', jest.fn());
 
 const originalConsoleError = console.error;
+
+console.warn = jest.fn();
 
 console.error = function (...data) {
   if (

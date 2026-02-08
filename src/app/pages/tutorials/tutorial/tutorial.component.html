@@ -2,125 +2,78 @@
     <div class="grid grid-cols-4 gap-6">
         @let hasToc = toc().length;
 
-    <main [class.col-span-4!]="!hasToc" class="min-w-0 col-span-4 lg:col-span-3">
-        <div class="flex items-center justify-between">
-            <button class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2"
-                    routerLink="/tutorials">
-                <ng-icon name="tablerArrowLeft"></ng-icon>
-                <span class="group-hover:underline">Back to Tutorials</span>
-            </button>
-            <a [href]="'https://github.com/Gamekohl/gem-tools/blob/main/src/assets/tutorials/' + item()?.file"
-               class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2"
-               target="_blank">
-                <ng-icon name="tablerBrandGithub"></ng-icon>
-                <span class="group-hover:underline text-sm">Edit on GitHub</span>
-            </a>
-        </div>
+        <main [class.col-span-4!]="!hasToc" class="min-w-0 col-span-4 lg:col-span-3">
+            <div class="flex items-center justify-between">
+                <button class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2"
+                        routerLink="/tutorials">
+                    <ng-icon name="tablerArrowLeft"></ng-icon>
+                    <span class="group-hover:underline">Back to Tutorials</span>
+                </button>
+                <a [href]="'https://github.com/Gamekohl/gem-tools/blob/main/src/assets/tutorials/' + item()?.file"
+                   class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2"
+                   target="_blank">
+                    <ng-icon name="tablerBrandGithub"></ng-icon>
+                    <span class="group-hover:underline text-sm">Edit on GitHub</span>
+                </a>
+            </div>
 
-        <div class="rounded-3xl bg-white dark:bg-white/5 p-6 mt-4">
-            <div class="flex items-start justify-between gap-6 lg:gap-4">
-                <div class="min-w-0">
-                    <h1 class="text-2xl font-semibold text-black truncate">
-                        {{ item()?.title }}
-                    </h1>
+            <div class="rounded-3xl bg-white dark:bg-white/5 p-6 mt-4">
+                <div class="flex items-start justify-between gap-6 lg:gap-4">
+                    <div class="min-w-0">
+                        <h1 class="text-2xl font-semibold text-black truncate">
+                            {{ item()?.title }}
+                        </h1>
 
-                    @if (item()?.subtitle) {
-                        <p class="mt-2 text-sm text-slate-600 dark:text-white/50">
-                            {{ item()!.subtitle }}
-                        </p>
-                    }
-                </div>
-
-                <div class="flex lg:flex-col w-full lg:w-fit justify-between">
-                    <div class="flex gap-2 justify-end">
-                        @if (difficulty()) {
-                            <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
-                                        {{ difficulty() }}
-                                  </span>
+                        @if (item()?.subtitle) {
+                            <p class="mt-2 text-sm text-slate-600 dark:text-white/50">
+                                {{ item()!.subtitle }}
+                            </p>
                         }
-                        <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
-                                ~{{ readTime().minutes }} min
-                                </span>
                     </div>
 
-                    <!-- add click to filter by author on /tutorials?author=... -->
-                    @if (item()?.author) {
-                        <div class="flex justify-end lg:mt-6">
-                            <p class="text-sm text-slate-600 dark:text-white/50">by {{ item()!.author }}</p>
+                    <div class="flex lg:flex-col w-full lg:w-fit justify-between">
+                        <div class="flex gap-2 justify-end">
+                            @if (difficulty()) {
+                                <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                                        {{ difficulty() }}
+                                  </span>
+                            }
+                            <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                                ~{{ readTime().minutes }} min
+                                </span>
                         </div>
-                    }
+
+                        <!-- add click to filter by author on /tutorials?author=... -->
+                        @if (item()?.author) {
+                            <div class="flex justify-end lg:mt-6">
+                                <p class="text-sm text-slate-600 dark:text-white/50">by {{ item()!.author }}</p>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="mt-6">
-            <article
-                #contentHost
-                [ngClass]="[
+            <div class="mt-6">
+                <article
+                        [ngClass]="[
                             'prose-h2:border-b prose-h2:border-b-black/10 dark:prose-h2:border-b-white/10 prose-h2:scroll-mt-24 prose-h2:pb-2',
                             'prose-h3:border-b prose-h3:border-b-black/10 dark:prose-h3:border-b-white/10 prose-h3:pb-2',
                             'prose-p:leading-8',
                             'prose-a:text-black dark:prose-a:text-white prose-a:no-underline prose-a:hover:underline',
                             'prose-img:rounded-md prose-img:max-w-full'
                         ]"
-                class="prose prose-slate dark:prose-invert max-w-none"
-            >
-                <div #contentContainer [innerHTML]="tutorialHtml()"></div>
-            </article>
-        </div>
+                        class="prose prose-slate dark:prose-invert max-w-none"
+                >
+                    <div #contentContainer [innerHTML]="tutorialHtml()"></div>
+                </article>
+            </div>
 
-        <div class="h-12"></div>
-    </main>
+            <div class="h-12"></div>
+        </main>
 
         @if (hasToc) {
-            <aside class="hidden lg:block lg:sticky top-6 self-start">
-                <div class="rounded-2xl bg-white pb-4 dark:bg-white/5 max-h-[calc(100vh-48px)] overflow-y-scroll scrollbar">
-                    <div class="text-sm font-semibold px-4 pt-4 text-black dark:text-white">On this Page</div>
-
-                    <div class="mt-4 space-y-1">
-                        @for (sec of toc(); track sec.id) {
-                            <ng-container
-                                    *ngTemplateOutlet="sectionButton; context: { section: sec, isChild: false }"></ng-container>
-
-                            @if (sec.children.length) {
-                                @for (child of sec.children; track child.id) {
-                                    <ng-container
-                                            *ngTemplateOutlet="sectionButton; context: { section: child, isChild: true }"></ng-container>
-                                }
-                            }
-                        }
-                    </div>
-                </div>
-            </aside>
+            <app-toc [toc]="toc()" [(activeSectionId)]="activeSectionId"></app-toc>
         }
-
-        <ng-template #sectionButton let-isChild="isChild" let-section="section">
-            <a
-                    [fragment]="section.id"
-                    [ngClass]="{
-                    'bg-slate-50 dark:bg-white/5 font-medium': activeSectionId() === section.id,
-                    'mx-6': isChild
-                }"
-                    [replaceUrl]="true"
-                    [routerLink]="[]"
-                    [title]="section.title"
-                    class="relative flex justify-between rounded-xl items-center group text-left mx-2 px-4 py-2 text-sm motion-reduce:transition-none transition-all hover:bg-slate-50 dark:hover:bg-white/5"
-                    queryParamsHandling="preserve">
-                @if (activeSectionId() === section.id) {
-                    <div
-                            [class.-mx-2]="!isChild"
-                            [class.-mx-6]="isChild"
-                            class="absolute h-full w-1 bg-black dark:bg-white left-0"
-                    ></div>
-                }
-                <div class="flex items-center justify-between gap-2 w-full">
-                    <span class="max-w-40 truncate text-slate-800">{{ section.title }}</span>
-                    @if (activeSectionId() === section.id) {
-                        <span class="text-xs text-slate-500 -mt-0.5">•</span>
-                    }
-                </div>
-            </a>
-        </ng-template>
     </div>
 } @else {
     <main class="mx-auto max-w-6xl">

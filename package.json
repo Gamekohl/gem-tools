@@ -21,7 +21,12 @@
       "<rootDir>/setup-jest.ts"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/src/testing/"
+      "<rootDir>/src/testing/*"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "<rootDir>/src/testing/*",
+      "<rootDir>/src/environments/*"
     ],
     "coverageThreshold": {
       "global": {
