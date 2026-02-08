@@ -1,14 +1,14 @@
 import {isPlatformBrowser, NgClass, NgTemplateOutlet} from "@angular/common";
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  input,
-  model,
-  PLATFORM_ID,
-  signal
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    Component,
+    DestroyRef,
+    inject,
+    input,
+    model,
+    PLATFORM_ID,
+    signal
 } from '@angular/core';
 import {takeUntilDestroyed, toObservable, toSignal} from "@angular/core/rxjs-interop";
 import {ActivatedRoute, RouterLink} from "@angular/router";

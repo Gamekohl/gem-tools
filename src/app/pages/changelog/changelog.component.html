@@ -1,6 +1,6 @@
-<div class="flex items-start justify-between gap-6">
+<div class="flex items-start justify-between gap-6" data-testid="container">
     <div>
-        <h1 class="text-2xl font-semibold tracking-tight">Changelog</h1>
+        <h1 class="text-2xl font-semibold tracking-tight" data-testid="title">Changelog</h1>
         <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
             Latest updates, fixes, and improvements.
         </p>
@@ -14,11 +14,12 @@
             <div class="text-xs text-slate-500 dark:text-white/50 mt-0.5">Select a version to view details</div>
         </div>
 
-        <div class="max-h-[70vh] overflow-auto">
+        <div class="max-h-[70vh] overflow-auto" data-testid="list">
             @for (change of changelog; track change.version) {
                 <button
+                        data-testid="entry"
                         (click)="selectEntry(change)"
-                        [attr.aria-current]="selectedEntry().version === change.version ? 'true' : null"
+                        [attr.aria-selected]="selectedEntry().version === change.version ? 'true' : null"
                         [ngClass]="{
                                 'border-l-slate-200! dark:border-l-white!': selectedEntry().version === change.version,
                                 'bg-slate-50 dark:bg-white/5': selectedEntry().version === change.version
@@ -29,7 +30,8 @@
                     <div class="flex items-start justify-between gap-3">
                         <div class="min-w-0">
                             <div class="flex items-center gap-2">
-                                <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ change.version }}</span>
+                                <span class="text-sm font-semibold text-slate-900 dark:text-white"
+                                      data-testid="entry-version">{{ change.version }}</span>
                             </div>
                             <div class="mt-1 text-sm text-slate-700 dark:text-white/50 line-clamp-2">
                                 {{ change.title }}
@@ -50,7 +52,8 @@
             <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0">
                     <div class="flex items-center gap-3">
-                        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+                        <h2 class="text-lg font-semibold text-slate-900 dark:text-white"
+                            data-testid="selected-version-title">
                             {{ selectedEntry().version }}
                         </h2>
                         <span class="text-sm text-slate-500! dark:text-white/50!">{{ selectedEntry().date | date:'mediumDate' }}</span>

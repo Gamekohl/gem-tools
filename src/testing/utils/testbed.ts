@@ -1,0 +1,35 @@
+import {Component, Type} from "@angular/core";
+import {ComponentFixture, MetadataOverride, TestBed, type TestModuleMetadata} from '@angular/core/testing';
+
+type Override = {
+    component: Type<any>,
+    override: MetadataOverride<Component>,
+}
+
+type ConfigureOpts = TestModuleMetadata & {
+    detectChanges?: boolean;
+    override?: Override
+};
+
+export async function configureTestingModule(opts: ConfigureOpts) {
+    let testBed = TestBed.configureTestingModule(opts);
+
+    if (opts.override) {
+        testBed = testBed.overrideComponent(opts.override.component, opts.override.override)
+    }
+
+    await testBed
+        .compileComponents();
+}
+
+export async function createComponent<T>(
+    component: new (...args: any[]) => T,
+    opts: ConfigureOpts = {}
+) {
+    await configureTestingModule(opts);
+    const fixture = TestBed.createComponent(component as any) as ComponentFixture<T>;
+    if (opts.detectChanges !== false) {
+        fixture.detectChanges();
+    }
+    return { fixture, component: fixture.componentInstance as T };
+}

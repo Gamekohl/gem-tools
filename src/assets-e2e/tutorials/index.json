@@ -1,0 +1,33 @@
+[
+  {
+    "author": "E2E Bot",
+    "id": "intro",
+    "title": "Intro to GEM",
+    "subtitle": "Getting started with GEM-Editor.",
+    "difficulty": 1,
+    "file": "intro.md"
+  },
+  {
+    "author": "E2E Bot",
+    "id": "terrain-basics",
+    "title": "Terrain Basics",
+    "subtitle": "Build your first landscape.",
+    "difficulty": 2,
+    "file": "terrain-basics.md"
+  },
+  {
+    "author": "E2E Bot",
+    "id": "advanced-ai",
+    "title": "Advanced AI",
+    "subtitle": "Tuning AI behavior and triggers.",
+    "difficulty": 3,
+    "file": "advanced-ai.md"
+  },
+  {
+    "author": "E2E Bot",
+    "id": "quick-notes",
+    "title": "Quick Notes",
+    "subtitle": "Short notes for quick reference.",
+    "file": "quick-notes.md"
+  }
+]

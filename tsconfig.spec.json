@@ -6,5 +6,9 @@
     "outDir": "./out-tsc/spec",
     "types": ["jest"]
   },
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"],
+  "baseUrl": ".",
+  "paths": {
+    "@testing/*": ["src/testing/*"]
+  }
 }

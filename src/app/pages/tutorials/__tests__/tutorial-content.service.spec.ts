@@ -1,21 +1,17 @@
 import {TestBed} from '@angular/core/testing';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {mockMarked} from "../../../../testing/libs/marked";
-import {normalize} from "../../../../testing/utils/normalize";
+import {DomSanitizer} from '@angular/platform-browser';
+import {mockMarked} from "@testing/libs/marked";
+import {normalize} from "@testing/utils/normalize";
 import {linkIcon} from "../services/content/icons";
-import {TutorialContentService} from '../services/tutorial-content.service';
+import {MockDomSanitizer} from "@testing/utils/dom-sanitizer";
 
 jest.mock('marked', () => mockMarked());
 
-class DomSanitizerStub {
-    bypassSecurityTrustHtml(value: string): SafeHtml {
-        return value as unknown as SafeHtml;
-    }
-}
+import {TutorialContentService} from '../services/tutorial-content.service';
 
 describe('TutorialContentService', () => {
     let service: TutorialContentService;
-    let sanitizer: DomSanitizerStub;
+    let sanitizer: MockDomSanitizer;
 
     const makeHeading = (id: string, text: string, type: 'h2' | 'h3') => normalize(`
         <${type} id="${id}" class="group relative flex items-center gap-2">
@@ -30,7 +26,7 @@ describe('TutorialContentService', () => {
         TestBed.configureTestingModule({
             providers: [
                 TutorialContentService,
-                {provide: DomSanitizer, useClass: DomSanitizerStub},
+                {provide: DomSanitizer, useClass: MockDomSanitizer},
             ],
         });
 

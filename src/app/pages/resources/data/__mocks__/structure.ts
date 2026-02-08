@@ -1,6 +1,6 @@
-import {ResourceNode} from "../../interfaces";
+import {ResourceNode} from "../../../../../interfaces";
 
-export const testStructureData: ResourceNode[] = [
+export const structureData: ResourceNode[] = [
     {
         id: 'Node1',
         path: 'Node1',
@@ -12,12 +12,12 @@ export const testStructureData: ResourceNode[] = [
                 name: 'Child1',
                 children: []
             }
-        ],
+        ]
     },
     {
         id: 'Node2',
         path: 'Node2',
         name: 'Node2',
         children: []
-    }
-]
+    },
+];

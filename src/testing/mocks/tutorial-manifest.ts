@@ -1,14 +1,7 @@
-import {Difficulty, ManifestItem, TutorialManifest} from "../../app/pages/tutorials/services/tutorial-manifest.service";
+import {Difficulty, ManifestItem} from "../../app/pages/tutorials/services/tutorial-manifest.service";
 
-export const tutorialManifestMock = {
-    getItemWithoutDifficulty: (): ManifestItem => tutorialManifestMock.items[3],
-    getItem: (idx: number): ManifestItem => {
-        if (idx < 0 || idx >= tutorialManifestMock.items.length)
-            throw new Error(`Invalid index ${idx} in getItem(idx)`);
-
-        return tutorialManifestMock.items[idx];
-    },
-    items: [
+export class MockTutorialManifest {
+    private readonly _items: ManifestItem[] = [
         {
             author: 'Alice',
             id: 'intro',
@@ -59,5 +52,17 @@ export const tutorialManifestMock = {
             file: 'featured.md',
             featured: true
         }
-    ] satisfies TutorialManifest
+    ];
+    get itemWithoutDifficulty(): ManifestItem {
+        return this._items[3];
+    }
+    get items(): ManifestItem[] {
+        return this._items;
+    }
+    getItem(idx: number): ManifestItem {
+        if (idx < 0 || idx >= this._items.length)
+            throw new Error(`Invalid index ${idx} in getItem(idx)`);
+
+        return this._items[idx];
+    }
 }

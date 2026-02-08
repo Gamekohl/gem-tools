@@ -2,41 +2,32 @@ import {Clipboard} from "@angular/cdk/clipboard";
 import {provideHttpClient} from '@angular/common/http';
 import {provideHttpClientTesting} from '@angular/common/http/testing';
 import {ElementRef, PLATFORM_ID} from "@angular/core";
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatTreeModule} from '@angular/material/tree';
+import {createComponent} from "@testing/utils/testbed";
 import {ResourceNode} from "../../../../interfaces";
-import {testStructureData} from "../../../../testing/data/structure";
+import {structureData} from "../data/structure";
 import {ResourcesComponent} from '../resources.component';
 
-const spyOn = jest.spyOn;
+const mockData = structureData;
 
-const mockData = testStructureData;
-
-// We mock the data here to prevent loading the whole JSON file
-jest.mock('../data/structure', () => {
-  const structureData = testStructureData;
-
-  return { structureData }
-});
+jest.mock('../data/structure');
 
 describe('ResourcesComponent', () => {
   let component: ResourcesComponent;
-  let fixture: ComponentFixture<ResourcesComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    const result = await createComponent(ResourcesComponent, {
       imports: [ResourcesComponent, ReactiveFormsModule, MatTreeModule],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting()
-      ]
-    }).compileComponents();
+      ],
+    });
 
-    fixture = TestBed.createComponent(ResourcesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = result.component;
   });
 
   it('should create the component', () => {
@@ -65,8 +56,8 @@ describe('ResourcesComponent', () => {
     const clipboard = TestBed.inject(Clipboard);
     const snackbar = TestBed.inject(MatSnackBar);
 
-    const clipboardSpy = spyOn(clipboard, 'copy');
-    const snackbarSpy = spyOn(snackbar, 'open');
+    const clipboardSpy = jest.spyOn(clipboard, 'copy');
+    const snackbarSpy = jest.spyOn(snackbar, 'open');
 
     component.copyName('Node1');
     expect(clipboardSpy).toHaveBeenCalledWith('Node1');

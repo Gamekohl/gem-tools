@@ -14,7 +14,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <header class="border-b border-slate-200 dark:border-white/5">
+        <header data-testid="header" class="border-b border-slate-200 dark:border-white/5">
             <div class="mx-auto max-w-6xl px-6 py-4 lg:px-10">
                 <div class="flex gap-4 items-center justify-between">
                     <a class="inline-flex items-center" routerLink="/">
@@ -34,7 +34,7 @@
                             <ng-icon name="tablerMenu2"></ng-icon>
                         </button>
                     } @else {
-                        <nav class="flex flex-wrap items-center gap-2">
+                        <nav data-testid="nav" class="flex flex-wrap items-center gap-2">
                             <ng-container *ngTemplateOutlet="links"></ng-container>
                         </nav>
 
@@ -52,7 +52,8 @@
 
         <footer class="py-4 text-center text-slate-600 dark:text-white/50 flex justify-center items-center gap-2 text-xs">
             <div class="flex justify-center items-center">
-                <a class="flex items-center dark:text-white hover:underline cursor-pointer" href="https://github.com/Gamekohl/gem-tools"
+                <a class="flex items-center dark:text-white hover:underline cursor-pointer"
+                   href="https://github.com/Gamekohl/gem-tools"
                    target="_blank">Start contributing on
                     <ng-icon class="ml-1" name="tablerBrandGithub"></ng-icon>&nbsp;GitHub!</a>
             </div>
@@ -69,6 +70,7 @@
         <a
                 [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/resources"
+                data-testid="resources-link"
                 class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerBox"></ng-icon>
@@ -78,6 +80,7 @@
         <a
                 [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/animations"
+                data-testid="animations-link"
                 class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerArrowsRandom"></ng-icon>
@@ -85,15 +88,21 @@
         </a>
 
         <a [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
-           class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors" routerLink="/tutorials"
+           class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
+           routerLink="/tutorials"
         >
             <ng-icon name="tablerPhotoEdit"></ng-icon>
             <span>Tutorials</span>
         </a>
+                <a data-testid="tutorials-link" routerLink="/tutorials" class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-slate-100 dark:hover:bg-white/5">
+                    <ng-icon name="tablerPhotoEdit"></ng-icon>
+                    <span>Tutorials</span>
+                </a>
 
         <a
                 [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/maps"
+                data-testid="maps-link"
                 class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerMap"></ng-icon>
@@ -107,6 +116,7 @@
                 href="https://github.com/Gamekohl"
                 target="_blank"
                 title="GitHub"
+                data-testid="github-link"
         >
             <ng-icon name="tablerBrandGithub"></ng-icon>
         </a>
@@ -116,6 +126,7 @@
                 href="https://buymeacoffee.com/gamekohl"
                 target="_blank"
                 title="BuyMeACoffee"
+                data-testid="bmac-link"
         >
             <ng-icon name="tablerCoffee"></ng-icon>
         </a>
@@ -124,6 +135,7 @@
                 (click)="toggleTheme()"
                 class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020] cursor-pointer"
                 title="Theme Toggle"
+                data-testid="theme-toggle"
         >
             <ng-icon [name]="theme() !== 'light' ? 'tablerSun' : 'tablerMoon'"></ng-icon>
         </button>

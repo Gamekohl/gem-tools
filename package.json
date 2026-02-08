@@ -13,7 +13,8 @@
     "update-version": "node scripts/update-version.mjs",
     "prebuild": "npm run update-version",
     "check:specs": "node scripts/check-component-tests.mjs",
-    "serve:ssr": "node dist/gem-tools/server/server.mjs"
+    "serve:ssr": "node dist/gem-tools/server/server.mjs",
+    "e2e": "ng e2e"
   },
   "jest": {
     "preset": "jest-preset-angular",
@@ -21,10 +22,12 @@
       "<rootDir>/setup-jest.ts"
     ],
     "testPathIgnorePatterns": [
+      "<rootDir>/e2e/*",
       "<rootDir>/src/testing/*"
     ],
     "coveragePathIgnorePatterns": [
       "node_modules",
+      "<rootDir>/e2e/*",
       "<rootDir>/src/testing/*",
       "<rootDir>/src/environments/*"
     ],
@@ -35,6 +38,9 @@
         "lines": 80,
         "statements": 80
       }
+    },
+    "moduleNameMapper": {
+      "^@testing/(.*)$": "<rootDir>/src/testing/$1"
     }
   },
   "private": true,
@@ -66,6 +72,7 @@
     "@angular/build": "^21.1.3",
     "@angular/cli": "^21.1.3",
     "@angular/compiler-cli": "^21.1.3",
+    "@playwright/test": "1.58.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/express": "^5.0.1",
     "@types/jest": "^30.0.0",
@@ -74,6 +81,7 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "jest-preset-angular": "^16.0.0",
+    "playwright-ng-schematics": "^21.0.3",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3"

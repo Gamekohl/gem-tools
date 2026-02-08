@@ -2,11 +2,12 @@
 
 ## [1.2.0](https://github.com/Gamekohl/gem-tools/compare/v1.1.5...v1.2.0) (2026-02-06)
 
-
 ### Features
 
-* Added endless waves, minimap and editor commands tutorials, UI improvements, package updates ([3d846a2](https://github.com/Gamekohl/gem-tools/commit/3d846a21c9ad11b14d5548816861243bc071fd78))
-* Merge pull request [#83](https://github.com/Gamekohl/gem-tools/issues/83) from Gamekohl/develop ([3d846a2](https://github.com/Gamekohl/gem-tools/commit/3d846a21c9ad11b14d5548816861243bc071fd78))
+* Added endless waves, minimap and editor commands tutorials, UI improvements, package
+  updates ([3d846a2](https://github.com/Gamekohl/gem-tools/commit/3d846a21c9ad11b14d5548816861243bc071fd78))
+* Merge pull request [#83](https://github.com/Gamekohl/gem-tools/issues/83) from
+  Gamekohl/develop ([3d846a2](https://github.com/Gamekohl/gem-tools/commit/3d846a21c9ad11b14d5548816861243bc071fd78))
 
 ## [1.1.5](https://github.com/Gamekohl/gem-tools/compare/v1.1.4...v1.1.5) (2026-02-04)
 
@@ -18,11 +19,12 @@
 
 ## [1.1.4](https://github.com/Gamekohl/gem-tools/compare/v1.1.3...v1.1.4) (2026-02-03)
 
-
 ### Bug Fixes
 
-* Merge pull request [#80](https://github.com/Gamekohl/gem-tools/issues/80) from Gamekohl/develop ([0a87bb6](https://github.com/Gamekohl/gem-tools/commit/0a87bb656687e5860cde618a0576566c0eb979bd))
-* New tutorials and packages updates ([0a87bb6](https://github.com/Gamekohl/gem-tools/commit/0a87bb656687e5860cde618a0576566c0eb979bd))
+* Merge pull request [#80](https://github.com/Gamekohl/gem-tools/issues/80) from
+  Gamekohl/develop ([0a87bb6](https://github.com/Gamekohl/gem-tools/commit/0a87bb656687e5860cde618a0576566c0eb979bd))
+* New tutorials and packages
+  updates ([0a87bb6](https://github.com/Gamekohl/gem-tools/commit/0a87bb656687e5860cde618a0576566c0eb979bd))
 
 ## [1.1.3](https://github.com/Gamekohl/gem-tools/compare/v1.1.2...v1.1.3) (2026-01-31)
 

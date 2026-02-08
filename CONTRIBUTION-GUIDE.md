@@ -100,10 +100,13 @@ my-tutorial/
 ## Step 5: Add YouTube Videos (Optional)
 
 It is also possible to embed YouTube Videos in your tutorial. You can do that by adding:
+
 ```
 @[youtube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 ```
+
 or just reference the Video-ID:
+
 ```
 @[youtube](dQw4w9WgXcQ)
 ```

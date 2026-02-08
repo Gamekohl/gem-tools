@@ -11,7 +11,7 @@ const spyOn = jest.spyOn;
 
 describe('AnimationsComponent', () => {
   let component: AnimationsComponent;
-  let fixture: ComponentFixture<AnimationsComponent>;
+    let fixture: ComponentFixture<AnimationsComponent>;
     let clipboard: Clipboard;
 
     const metadata: TestModuleMetadata = {
@@ -29,8 +29,8 @@ describe('AnimationsComponent', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule(metadata).compileComponents();
 
-    fixture = TestBed.createComponent(AnimationsComponent);
-    component = fixture.componentInstance;
+        fixture = TestBed.createComponent(AnimationsComponent);
+        component = fixture.componentInstance;
         clipboard = TestBed.inject(Clipboard);
   });
 
@@ -43,8 +43,8 @@ describe('AnimationsComponent', () => {
     expect(component.query()).toBe('fade');
   });
 
-  it('should copy animation name to clipboard', async () => {
-    const spy = spyOn(clipboard, 'copy');
+    it('should copy animation name to clipboard', async () => {
+        const spy = spyOn(clipboard, 'copy');
     const animationName = 'fadeIn';
 
     component.copyAnimationName(animationName);

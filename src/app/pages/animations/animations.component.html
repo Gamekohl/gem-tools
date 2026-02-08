@@ -1,6 +1,6 @@
-<div class="flex items-start justify-between gap-6">
+<div class="flex items-start justify-between gap-6" data-testid="container">
     <div>
-        <h1 class="text-2xl font-semibold tracking-tight">Animations</h1>
+        <h1 class="text-2xl font-semibold tracking-tight" data-testid="title">Animations</h1>
         <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
             Browse through animations provided by Call to Arms – Gates of Hell.
         </p>
@@ -11,13 +11,14 @@
     <input
             (input)="query.set(($any($event.target).value ?? '').trim())"
             [value]="query()"
+            data-testid="search"
             class="w-full p-4 my-2 bg-white dark:bg-black dark:text-white outline-none rounded-2xl border border-slate-200 dark:border-white/25"
             id="search"
             placeholder="Search animation..."
     />
 </div>
 <div class="mb-4 flex items-center justify-end gap-4">
-    <div class="text-xs text-slate-500 dark:text-white/50">
+    <div class="text-xs text-slate-500 dark:text-white/50" data-testid="filter-label">
         @if (query().length) {
             Filtered by: <span class="font-medium text-slate-700 dark:text-white/50">{{ query() }}</span>
         } @else {
@@ -26,10 +27,11 @@
     </div>
 </div>
 <section class="rounded-2xl border border-slate-200 bg-white dark:bg-black dark:border-white/5 overflow-hidden">
-    <cdk-virtual-scroll-viewport class="h-[70vh] min-h-fit overflow-auto" itemSize="52">
+    <cdk-virtual-scroll-viewport data-testid="viewport" class="h-[70vh] min-h-fit overflow-auto" itemSize="52">
         <button
                 (click)="copyAnimationName(name)"
                 *cdkVirtualFor="let name of animationNames() | filter:query()"
+                data-testid="animation-item"
                 class="w-full flex items-center justify-between gap-4 p-4 border-b border-slate-100 dark:border-white/5 last:border-b-0 hover:bg-slate-50 dark:hover:bg-white/5 text-left cursor-pointer"
                 type="button"
         >
@@ -39,7 +41,7 @@
     </cdk-virtual-scroll-viewport>
 
     @if ((animationNames() | filter:query()).length === 0) {
-        <div class="p-6 text-sm text-slate-600">
+        <div class="p-6 text-sm text-slate-600" data-testid="no-results">
             No animations match your search.
         </div>
     }
