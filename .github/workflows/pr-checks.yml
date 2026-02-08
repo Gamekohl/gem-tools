@@ -82,6 +82,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: check-specs
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [ 1, 2, 3, 4 ]
 
     steps:
       - name: Checkout
@@ -100,13 +104,13 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run E2E
-        run: npm run e2e
+        run: npm run e2e -- --shard=${{ matrix.shardIndex }}/4
 
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: playwright-report
+          name: playwright-report-shard-${{ matrix.shardIndex }}
           path: |
             playwright-report
             test-results
