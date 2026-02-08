@@ -19,7 +19,7 @@
                 <button
                         data-testid="entry"
                         (click)="selectEntry(change)"
-                        [attr.aria-current]="selectedEntry().version === change.version ? 'true' : null"
+                        [attr.aria-selected]="selectedEntry().version === change.version ? 'true' : null"
                         [ngClass]="{
                                 'border-l-slate-200! dark:border-l-white!': selectedEntry().version === change.version,
                                 'bg-slate-50 dark:bg-white/5': selectedEntry().version === change.version

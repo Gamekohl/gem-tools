@@ -20,6 +20,7 @@
 
 <ng-template #sectionButton let-isChild="isChild" let-section="section">
     <a
+            data-testid="toc-button"
             [fragment]="section.id"
             [ngClass]="{
                 'bg-slate-50 dark:bg-white/5 font-medium': activeSectionId() === section.id,

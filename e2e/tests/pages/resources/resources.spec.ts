@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {ResourcesPage} from "./resources.po";
 
 test.describe('/resources', () => {
@@ -19,7 +19,7 @@ test.describe('/resources', () => {
 
         await resources.expectFilteredBy('__no_resource_should_match__');
         await expect(resources.noResults).toBeVisible();
-        await expect(resources.noResults).toContainText('No resources match your search.');
+        await expect(resources.noResults).toContainText('No resources found.');
     });
 
     test('clicking a leaf node shows copied snackbar', async ({ page }) => {

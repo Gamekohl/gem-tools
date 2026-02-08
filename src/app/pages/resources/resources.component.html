@@ -12,7 +12,7 @@
             [(ngModel)]="search"
             class="w-full p-4 my-2 bg-white dark:bg-black dark:text-white outline-none rounded-2xl border border-slate-200 dark:border-white/25 placeholder:black/25"
             id="search"
-            data-test="search"
+            data-testid="search"
             placeholder="Search object..."
     />
 
@@ -36,7 +36,7 @@
 
         <mat-tree #tree [childrenAccessor]="childrenAccessor" [dataSource]="viewData()">
             <mat-tree-node
-                    data-testid="lead"
+                    data-testid="leaf"
                     #nodeElement
                     (click)="copyName(node.name)"
                     (mouseenter)="openPreview(nodeElement, node)"

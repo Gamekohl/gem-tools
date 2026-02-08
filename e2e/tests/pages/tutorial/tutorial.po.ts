@@ -21,7 +21,7 @@ export class TutorialPage {
         this.subtitle = page.locator('main p').first();
         this.readTime = page.getByText(/~\d+ min/);
         this.tocHeader = page.getByText('On this page');
-        this.tocButtons = page.locator('aside button');
+        this.tocButtons = page.getByTestId('toc-button');
         this.article = page.locator('article');
     }
 

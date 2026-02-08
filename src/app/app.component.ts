@@ -2,7 +2,6 @@ import {BreakpointObserver} from "@angular/cdk/layout";
 import {isPlatformBrowser, NgOptimizedImage, NgTemplateOutlet} from "@angular/common";
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     DestroyRef,
     effect,
@@ -59,23 +58,24 @@ import {SeoService} from "./services/seo.service";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-    opened = false;
-    sidenav = viewChild.required<MatSidenav>('sidenav');
     private readonly seo = inject(SeoService);
     private readonly destroyRef = inject(DestroyRef);
     private readonly breakpointObserver = inject(BreakpointObserver);
+    private readonly router = inject(Router);
 
     readonly version = environment.version;
+
+    theme = signal<'light' | 'dark'>('light');
+    sidenav = viewChild.required<MatSidenav>('sidenav');
+
     showMenu = toSignal(
         this.breakpointObserver.observe(['(max-width: 1050px)']).pipe(
             map(({matches}) => matches),
         ),
         {requireSync: true}
     );
-    private readonly router = inject(Router);
 
-    theme = signal<'light' | 'dark'>('light');
-    private readonly cdr = inject(ChangeDetectorRef);
+    opened = false;
 
     constructor(@Inject(PLATFORM_ID) platformId: Object) {
         this.seo.setConfig({
