@@ -4,7 +4,7 @@
   --text-color: #181818;
   --bg-color: #fff;
 
-  background-color: var(--bg-color);
+  background-color: var(--mat-sidenav-content-background-color);
 
   a, span, h1 {
     color: var(--text-color);
@@ -22,4 +22,6 @@ html.dark {
   --mat-paginator-container-text-color: var(--text-color);
   --mat-paginator-enabled-icon-color: rgb(255, 255, 255);
   --mat-paginator-disabled-icon-color: rgba(255, 255, 255, 0.25);
+  --mat-sidenav-content-background-color: #181818;
+  --mat-sidenav-container-background-color: #181818;
 }

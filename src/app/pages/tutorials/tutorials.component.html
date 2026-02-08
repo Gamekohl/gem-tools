@@ -1,123 +1,136 @@
-<div class="mx-auto max-w-6xl p-6 lg:p-10">
+<!-- Header -->
+<div class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+        <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Tutorials</h1>
+        <p class="mt-1 text-sm text-slate-600 dark:text-white/50">
+            Browse all available editor tutorials.
+        </p>
+    </div>
 
-    <!-- Header -->
-    <div class="flex flex-wrap items-start justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Tutorials</h1>
-            <p class="mt-1 text-sm text-slate-600 dark:text-white/50">
-                Browse all available editor tutorials.
-            </p>
+    <div class="rounded-2xl bg-white dark:bg-white/5 px-4 py-3">
+        <div class="text-xs text-slate-500 dark:text-white/50">Showing</div>
+        <div class="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
+            {{ stats().shown }}
+            <span class="text-sm font-medium text-slate-500 dark:text-white/50">/ {{ stats().total }}</span>
         </div>
+    </div>
+</div>
 
-        <div class="rounded-2xl bg-slate-50 dark:bg-white/5 px-4 py-3">
-            <div class="text-xs text-slate-500 dark:text-white/50">Showing</div>
-            <div class="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
-                {{ stats().shown }} <span
-                    class="text-sm font-medium text-slate-500 dark:text-white/50">/ {{ stats().total }}</span>
+<!-- Controls -->
+<div class="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_auto] items-center">
+    <!-- Search -->
+    <div class="rounded-2xl">
+        <div class="flex items-center gap-3">
+            <div class="w-full">
+                <label class="sr-only" for="tutorialSearch">Search tutorials</label>
+                <input
+                        [(ngModel)]="query"
+                        class="w-full p-4 my-2 bg-white dark:bg-black dark:text-white outline-none rounded-2xl border border-slate-200 dark:border-white/25 placeholder:black/25"
+                        id="tutorialSearch"
+                        placeholder="Search by title..."
+                        type="text"
+                />
             </div>
         </div>
     </div>
 
-    <!-- Controls -->
-    <div class="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_auto] items-center">
-        <!-- Search -->
-        <div class="rounded-2xl">
-            <div class="flex items-center gap-3">
-                <div class="w-full">
-                    <label class="sr-only" for="tutorialSearch">Search tutorials</label>
-                    <input
-                            id="tutorialSearch"
-                            type="text"
-                            class="w-full p-4 my-2 dark:text-white outline-none rounded-2xl border border-slate-200 dark:border-white/25 placeholder:black/25"
-                            placeholder="Search by title, tag, or group…"
-                            [(ngModel)]="query"
-                    />
+    <!-- Difficulty chips -->
+    <div class="rounded-2xl bg-white dark:bg-white/5 p-3 h-fit">
+        <div class="flex flex-wrap gap-2">
+            <button
+                    (click)="setDifficulty(0)"
+                    [class.font-medium]="difficulty() === 0"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === 0 }"
+                    class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
+                    type="button">
+                All
+            </button>
+            <button
+                    (click)="setDifficulty(difficultyEnum.Beginner)"
+                    [class.font-medium]="difficulty() === difficultyEnum.Beginner"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === difficultyEnum.Beginner }"
+                    class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
+                    type="button">
+                Beginner <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Beginner }}</span>
+            </button>
+            <button
+                    (click)="setDifficulty(difficultyEnum.Intermediate)"
+                    [class.font-medium]="difficulty() === difficultyEnum.Intermediate"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === difficultyEnum.Intermediate }"
+                    class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
+                    type="button">
+                Intermediate <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Intermediate }}</span>
+            </button>
+            <button
+                    (click)="setDifficulty(difficultyEnum.Advanced)"
+                    [class.font-medium]="difficulty() === difficultyEnum.Advanced"
+                    [ngClass]="{ 'bg-slate-50 dark:text-black!': difficulty() === difficultyEnum.Advanced }"
+                    class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
+                    type="button">
+                Advanced <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Advanced }}</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="mt-8 min-h-[70vh] flex flex-col gap-6">
+    @if (manifest()?.length === 0) {
+        <div class="rounded-2xl bg-white dark:bg-white/5 p-6 text-sm text-slate-600 dark:text-white/50 flex items-center gap-1">
+            No tutorials have been published yet.
+            <a class="flex items-center hover:underline text-white" href="https://github.com/Gamekohl/gem-tools"
+               target="_blank">
+                Click here to start contributing on
+                <ng-icon class="ml-1" name="tablerBrandGithub"></ng-icon>
+                &nbsp;GitHub!
+            </a>
+        </div>
+    } @else {
+        @if (filteredItems().length === 0) {
+            <div class="rounded-2xl bg-white dark:bg-white/5 p-6">
+                <div class="text-sm font-medium text-slate-900 dark:text-white">No matches</div>
+                <div class="mt-1 mb-6 text-sm text-slate-600 dark:text-white/50">
+                    Try a different search term or clear the difficulty filter.
                 </div>
-            </div>
-        </div>
-
-        <!-- Difficulty chips -->
-        <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-3 h-fit">
-            <div class="flex flex-wrap gap-2">
-                <button
-                        type="button"
-                        (click)="setDifficulty(0)"
-                        class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
-                        [ngClass]="{ 'bg-white dark:text-black!': difficulty() === 0 }"
-                        [class.font-medium]="difficulty() === 0">
-                    All
-                </button>
-                <button
-                        type="button"
-                        (click)="setDifficulty(difficultyEnum.Beginner)"
-                        class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
-                        [ngClass]="{ 'bg-white dark:text-black!': difficulty() === difficultyEnum.Beginner }"
-                        [class.font-medium]="difficulty() === difficultyEnum.Beginner">
-                    Beginner <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Beginner }}</span>
-                </button>
-                <button
-                        type="button"
-                        (click)="setDifficulty(difficultyEnum.Intermediate)"
-                        class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
-                        [ngClass]="{ 'bg-white dark:text-black!': difficulty() === difficultyEnum.Intermediate }"
-                        [class.font-medium]="difficulty() === difficultyEnum.Intermediate">
-                    Intermediate <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Intermediate }}</span>
-                </button>
-                <button
-                        type="button"
-                        (click)="setDifficulty(difficultyEnum.Advanced)"
-                        class="rounded-full px-3 py-2 text-sm transition dark:text-white dark:hover:text-black hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200"
-                        [ngClass]="{ 'bg-white dark:text-black!': difficulty() === difficultyEnum.Advanced }"
-                        [class.font-medium]="difficulty() === difficultyEnum.Advanced">
-                    Advanced <span class="ml-1 text-xs text-slate-500">{{ stats().counts.Advanced }}</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Content -->
-    <div class="mt-8 min-h-[70vh] flex flex-col gap-6">
-        @if (manifest()?.length === 0) {
-            <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-6 text-sm text-slate-600 dark:text-white/50 flex items-center gap-1">
-                No tutorials have been published yet.
-                <a href="https://github.com/Gamekohl/gem-tools" target="_blank" class="flex items-center hover:underline text-white">
-                    Click here to start contributing on
-                    <ng-icon name="tablerBrandGithub" class="ml-1"></ng-icon>
-                    &nbsp;GitHub!
-                </a>
+                <a class="text-sm flex items-center dark:text-white hover:underline cursor-pointer"
+                   href="https://github.com/Gamekohl/gem-tools"
+                   target="_blank">Or click here to
+                    start contributing on
+                    <ng-icon class="ml-1" name="tablerBrandGithub"></ng-icon>&nbsp;GitHub!</a>
             </div>
         } @else {
-            @if (filteredItems().length === 0) {
-                <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-6">
-                    <div class="text-sm font-medium text-slate-900 dark:text-white">No matches</div>
-                    <div class="mt-1 mb-6 text-sm text-slate-600 dark:text-white/50">
-                        Try a different search term or clear the difficulty filter.
-                    </div>
-                    <a href="https://github.com/Gamekohl/gem-tools" target="_blank" class="text-sm flex items-center dark:text-white hover:underline cursor-pointer">Or click here to start contributing on <ng-icon name="tablerBrandGithub" class="ml-1"></ng-icon>&nbsp;GitHub!</a>
-                </div>
-            } @else {
-                <div class="grid grid-cols-1 gap-4 lg:grid-cols-1">
-                    @for (item of pagedItems(); track item.id) {
+            @if (featuredItems().length > 0) {
+                <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Featured</h1>
+                <div class="grid grid-cols-2 gap-4">
+                    @for (item of featuredItems(); track item.id) {
                         <app-tutorial-card [item]="item"></app-tutorial-card>
                     }
                 </div>
+                @if (nonFeaturedItems().length > 0) {
+                    <div class="w-full my-2">
+                        <div class="grow border-t border-t-black/25 dark:border-t-white/25"></div>
+                    </div>
+                }
             }
 
-            <div class="mt-auto">
-                <mat-paginator
-                        class="rounded-2xl p-2 ring-1 ring-slate-100 dark:ring-white/10"
-                        [length]="filteredItems().length"
-                        [pageIndex]="pageIndex()"
-                        [pageSize]="pageSize()"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [showFirstLastButtons]="true"
-                        (page)="onPage($event)"
-                        hidePageSize>
-                </mat-paginator>
-            </div>
-            <div class="w-full flex justify-center items-center">
-                <a href="https://github.com/Gamekohl/gem-tools" target="_blank" class="text-xs flex items-center dark:text-white hover:underline cursor-pointer">Start contributing on <ng-icon name="tablerBrandGithub" class="ml-1"></ng-icon>&nbsp;GitHub!</a>
+            <div class="grid grid-cols-1 gap-4">
+                @for (item of nonFeaturedItems(); track item.id) {
+                    <app-tutorial-card [item]="item"></app-tutorial-card>
+                }
             </div>
         }
-    </div>
+
+        <div class="mt-auto">
+            <mat-paginator
+                    (page)="onPage($event)"
+                    [length]="filteredItems().length"
+                    [pageIndex]="pageIndex()"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageSize]="pageSize()"
+                    [showFirstLastButtons]="true"
+                    class="rounded-2xl p-2 ring-1 ring-slate-100 dark:ring-white/10"
+                    hidePageSize>
+            </mat-paginator>
+        </div>
+    }
 </div>

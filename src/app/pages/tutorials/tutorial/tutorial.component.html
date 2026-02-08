@@ -1,89 +1,123 @@
-<div class="h-full w-full">
-    <div class="mx-auto max-w-6xl p-6">
-        <div class="grid grid-cols-4 lg:grid-cols-[280px_1fr_260px] gap-6">
-            <main class="min-w-0 col-span-2">
-                <div class="flex items-center justify-between">
-                    <button routerLink="/tutorials" class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2">
-                        <ng-icon name="tablerArrowLeft"></ng-icon>
-                        <span class="group-hover:underline">Back to Tutorials</span>
-                    </button>
-                    <a [href]="'https://github.com/Gamekohl/gem-tools/tree/ft-tutorials/src/assets/tutorials/' + item()?.file" target="_blank" class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2">
-                        <ng-icon name="tablerBrandGithub"></ng-icon>
-                        <span class="group-hover:underline text-sm">Edit on GitHub</span>
-                    </a>
-                </div>
+@if (item()) {
+    <div class="grid grid-cols-4 gap-6">
+        @let hasToc = toc().length;
 
-                <div class="rounded-3xl bg-slate-50 dark:bg-white/5 p-6 mt-4">
-                    <div class="flex flex-wrap items-start justify-between gap-4">
-                        <div class="min-w-0">
-                            <h1 class="text-2xl font-semibold text-slate-900 truncate">
-                                {{ item()?.title }}
-                            </h1>
+        <main [class.col-span-4!]="!hasToc" class="min-w-0 col-span-4 lg:col-span-3">
+            <div class="flex items-center justify-between">
+                <button class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2"
+                        routerLink="/tutorials">
+                    <ng-icon name="tablerArrowLeft"></ng-icon>
+                    <span class="group-hover:underline">Back to Tutorials</span>
+                </button>
+                <a [href]="'https://github.com/Gamekohl/gem-tools/blob/main/src/assets/tutorials/' + item()?.file"
+                   class="group text-slate-500 cursor-pointer dark:text-white flex items-center gap-2"
+                   target="_blank">
+                    <ng-icon name="tablerBrandGithub"></ng-icon>
+                    <span class="group-hover:underline text-sm">Edit on GitHub</span>
+                </a>
+            </div>
 
-                            @if (item()?.subtitle) {
-                                <p class="mt-2 text-sm text-slate-600 dark:text-white/50">
-                                    {{ item()!.subtitle }}
-                                </p>
-                            }
-                        </div>
+            <div class="rounded-3xl bg-white dark:bg-white/5 p-6 mt-4">
+                <div class="flex items-start justify-between gap-6 lg:gap-4">
+                    <div class="min-w-0">
+                        <h1 class="text-2xl font-semibold text-black truncate">
+                            {{ item()?.title }}
+                        </h1>
 
-                        <div class="flex flex-wrap gap-2">
+                        @if (item()?.subtitle) {
+                            <p class="mt-2 text-sm text-slate-600 dark:text-white/50">
+                                {{ item()!.subtitle }}
+                            </p>
+                        }
+                    </div>
+
+                    <div class="flex lg:flex-col w-full lg:w-fit justify-between">
+                        <div class="flex gap-2 justify-end">
                             @if (difficulty()) {
-                                <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                                <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
                                         {{ difficulty() }}
                                   </span>
                             }
-                            <span class="rounded-full dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
+                            <span class="rounded-full shrink-0 dark:bg-white/5 px-3 py-1 text-xs bg-white text-slate-600 dark:text-white/50 shadow-sm">
                                 ~{{ readTime().minutes }} min
-                            </span>
+                                </span>
                         </div>
-                    </div>
-                </div>
 
-                <div class="mt-6">
-                    <article
-                        #contentHost
-                        class="prose
-                            prose-slate dark:prose-invert max-w-none prose-h2:scroll-mt-24 prose-img:rounded-md
-                            prose-img:max-w-full prose-a:text-slate-900 dark:prose-a:text-white prose-a:no-underline hover:prose-a:underline">
-                        <div [innerHTML]="tutorialHtml()"></div>
-                    </article>
-                </div>
-
-                <div class="h-12"></div>
-            </main>
-
-            <aside class="hidden lg:block lg:sticky lg:top-6 self-start">
-                <div class="rounded-2xl bg-slate-50 dark:bg-white/5 p-4">
-                    <div class="text-sm font-semibold text-slate-900 dark:text-white">On this page</div>
-
-                    <div class="mt-4 space-y-1">
-                        @if (toc().length) {
-                            @for (sec of toc(); track sec.id) {
-                                <button
-                                        type="button"
-                                        (click)="scrollToSection(sec.id)"
-                                        class="w-full text-left rounded-xl px-3 py-2 text-sm transition
-                         hover:bg-white dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-slate-200"
-                                        [ngClass]="{
-                                            'bg-white dark:bg-white/5': activeSectionId() === sec.id
-                                        }"
-                                        [class.font-medium]="activeSectionId() === sec.id">
-                                    <div class="flex items-center justify-between gap-2">
-                                        <span class="truncate text-slate-800">{{ sec.title }}</span>
-                                        @if (activeSectionId() === sec.id) {
-                                            <span class="text-xs text-slate-500">•</span>
-                                        }
-                                    </div>
-                                </button>
-                            }
-                        } @else {
-                            <div class="text-sm text-slate-500">No sections found (add ## headings)</div>
+                        <!-- add click to filter by author on /tutorials?author=... -->
+                        @if (item()?.author) {
+                            <div class="flex justify-end lg:mt-6">
+                                <p class="text-sm text-slate-600 dark:text-white/50">by {{ item()!.author }}</p>
+                            </div>
                         }
                     </div>
                 </div>
-            </aside>
+            </div>
 
-        </div>
+            <div class="mt-6">
+                <article
+                        [ngClass]="[
+                            'prose-h2:border-b prose-h2:border-b-black/10 dark:prose-h2:border-b-white/10 prose-h2:scroll-mt-24 prose-h2:pb-2',
+                            'prose-h3:border-b prose-h3:border-b-black/10 dark:prose-h3:border-b-white/10 prose-h3:pb-2',
+                            'prose-p:leading-8',
+                            'prose-a:text-black dark:prose-a:text-white prose-a:no-underline prose-a:hover:underline',
+                            'prose-img:rounded-md prose-img:max-w-full'
+                        ]"
+                        class="prose prose-slate dark:prose-invert max-w-none"
+                >
+                    <div #contentContainer [innerHTML]="tutorialHtml()"></div>
+                </article>
+            </div>
+
+            <div class="h-12"></div>
+        </main>
+
+        @if (hasToc) {
+            <app-toc [toc]="toc()" [(activeSectionId)]="activeSectionId"></app-toc>
+        }
     </div>
-</div>
+} @else {
+    <main class="mx-auto max-w-6xl">
+        <div class="rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white dark:bg-white/5 p-6 sm:p-8 shadow-sm">
+            <div class="flex flex-col gap-6">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="min-w-0">
+                        <h1 class="text-xl sm:text-2xl font-semibold text-black dark:text-white">
+                            Tutorial not found
+                        </h1>
+                        <p class="mt-2 text-sm sm:text-base text-black/50 dark:text-white/50">
+                            This tutorial doesn't exist yet or it was an incorrect link. You can start contributing to
+                            provide this tutorial.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-2 text-sm">
+                        <ng-icon name="tablerInfoCircle"></ng-icon>
+                        <span class="text-black! dark:text-white/75!"><b>It's easy:</b> Contributions are done through Markdown.</span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <a
+                                [routerLink]="['/tutorials']"
+                                class="inline-flex items-center justify-center rounded-xl gap-2 px-4 py-2 text-sm font-medium border border-slate-200/70 dark:border-white/10
+                     hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                            <ng-icon name="tablerArrowLeft"></ng-icon>
+                            Back to tutorials
+                        </a>
+
+                        <a
+                                class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold
+                     bg-black text-white! dark:bg-white dark:text-black! hover:opacity-90 transition-opacity"
+                                href="https://github.com/Gamekohl/gem-tools"
+                                rel="noopener noreferrer"
+                                target="_blank">
+                            <ng-icon class="dark:text-black!" name="tablerGitPullRequest"></ng-icon>
+                            Contribute
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+}

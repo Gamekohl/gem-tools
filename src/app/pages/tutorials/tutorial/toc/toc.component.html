@@ -1,0 +1,47 @@
+<aside class="hidden lg:block lg:sticky top-6 self-start">
+    <div class="rounded-2xl bg-white pb-4 dark:bg-white/5 max-h-[calc(100vh-48px)] overflow-y-scroll scrollbar">
+        <div class="text-sm font-semibold px-4 pt-4 text-black dark:text-white">On this Page</div>
+
+        <div class="mt-4 space-y-1">
+            @for (sec of toc(); track sec.id) {
+                <ng-container
+                        *ngTemplateOutlet="sectionButton; context: { section: sec, isChild: false }"></ng-container>
+
+                @if (sec.children.length) {
+                    @for (child of sec.children; track child.id) {
+                        <ng-container
+                                *ngTemplateOutlet="sectionButton; context: { section: child, isChild: true }"></ng-container>
+                    }
+                }
+            }
+        </div>
+    </div>
+</aside>
+
+<ng-template #sectionButton let-isChild="isChild" let-section="section">
+    <a
+            [fragment]="section.id"
+            [ngClass]="{
+                'bg-slate-50 dark:bg-white/5 font-medium': activeSectionId() === section.id,
+                'mx-6': isChild
+            }"
+            [replaceUrl]="true"
+            [routerLink]="[]"
+            [title]="section.title"
+            class="relative flex justify-between rounded-xl items-center group text-left mx-2 px-4 py-2 text-sm motion-reduce:transition-none transition-all hover:bg-slate-50 dark:hover:bg-white/5"
+            queryParamsHandling="preserve">
+        @if (activeSectionId() === section.id) {
+            <div
+                    [class.-mx-2]="!isChild"
+                    [class.-mx-6]="isChild"
+                    class="absolute h-full w-1 bg-black dark:bg-white left-0"
+            ></div>
+        }
+        <div class="flex items-center justify-between gap-2 w-full">
+            <span class="max-w-40 truncate text-slate-800">{{ section.title }}</span>
+            @if (activeSectionId() === section.id) {
+                <span class="text-xs text-slate-500 -mt-0.5">•</span>
+            }
+        </div>
+    </a>
+</ng-template>

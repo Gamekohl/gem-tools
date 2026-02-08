@@ -1,6 +1,8 @@
 import {TestBed} from '@angular/core/testing';
 import {DomSanitizer} from '@angular/platform-browser';
 import {mockMarked} from "@testing/libs/marked";
+import {normalize} from "@testing/utils/normalize";
+import {linkIcon} from "../services/content/icons";
 import {MockDomSanitizer} from "@testing/utils/dom-sanitizer";
 
 jest.mock('marked', () => mockMarked());
@@ -10,6 +12,15 @@ import {TutorialContentService} from '../services/tutorial-content.service';
 describe('TutorialContentService', () => {
     let service: TutorialContentService;
     let sanitizer: MockDomSanitizer;
+
+    const makeHeading = (id: string, text: string, type: 'h2' | 'h3') => normalize(`
+        <${type} id="${id}" class="group relative flex items-center gap-2">
+            ${text}
+            <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+                ${linkIcon}
+            </div>
+        </${type}>
+    `);
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -59,9 +70,9 @@ describe('TutorialContentService', () => {
             {id: 'another-section', title: 'Another Section', level: 2},
         ]);
 
-        const html = res.html as unknown as string;
-        expect(html).toContain('<h2 id="hello-world">Hello World</h2>');
-        expect(html).toContain('<h2 id="another-section">Another Section</h2>');
+        const html = normalize(res.html as unknown as string);
+        expect(html).toContain(makeHeading('hello-world', 'Hello World', 'h2'));
+        expect(html).toContain(makeHeading('another-section', 'Another Section', 'h2'));
     });
 
     it('makes duplicate H2 ids unique by appending -2, -3, ...', () => {
@@ -75,10 +86,43 @@ describe('TutorialContentService', () => {
 
         expect(res.sections.map((s) => s.id)).toEqual(['same', 'same-2', 'same-3']);
 
-        const html = res.html as unknown as string;
-        expect(html).toContain('<h2 id="same">Same</h2>');
-        expect(html).toContain('<h2 id="same-2">Same</h2>');
-        expect(html).toContain('<h2 id="same-3">Same</h2>');
+        const html = normalize(res.html as unknown as string);
+        expect(html).toContain(makeHeading('same', 'Same', 'h2'));
+        expect(html).toContain(makeHeading('same-2', 'Same', 'h2'));
+        expect(html).toContain(makeHeading('same-3', 'Same', 'h2'));
+    });
+
+    it('collects H3 sections with slugified ids and returns <h3 id="...">', () => {
+        const md = `## Heading
+          Text
+          ### Subheading`;
+
+        const res = service.renderMarkdown(md);
+
+        expect(res.sections).toEqual([
+            {id: 'heading', title: 'Heading', level: 2},
+            {id: 'subheading', title: 'Subheading', level: 3},
+        ]);
+
+        const html = normalize(res.html as unknown as string);
+        expect(html).toContain(makeHeading('heading', 'Heading', 'h2'));
+        expect(html).toContain(makeHeading('subheading', 'Subheading', 'h3'));
+    });
+
+    it('adds H3 to flat sections even when there is no preceding H2 (currentH2 is null)', () => {
+        const md = `
+            ### Lone Subheading
+            Text
+        `;
+
+        const res = service.renderMarkdown(md);
+
+        expect(res.sections).toEqual([
+            {id: 'lone-subheading', title: 'Lone Subheading', level: 3},
+        ]);
+
+        const html = normalize(res.html as unknown as string);
+        expect(html).toContain(makeHeading('lone-subheading', 'Lone Subheading', 'h3'));
     });
 
     it('strips HTML from headings for title/section extraction, but keeps original heading HTML in output', () => {
@@ -92,9 +136,9 @@ describe('TutorialContentService', () => {
         expect(res.sections).toEqual([{id: 'intro-code', title: 'Intro Code', level: 2}]);
 
         // but renderer.heading uses `${text}` for the inner HTML
-        const html = res.html as unknown as string;
+        const html = normalize(res.html as unknown as string);
         expect(html).toContain('<h1><em>My</em> <strong>Title</strong></h1>');
-        expect(html).toContain('<h2 id="intro-code"><span>Intro</span> <code>Code</code></h2>');
+        expect(html).toContain(makeHeading('intro-code', `<span>Intro</span> <code>Code</code>`, 'h2'));
     });
 
     it('uses fallback id "section" when slugify results in empty string', () => {
@@ -104,8 +148,8 @@ describe('TutorialContentService', () => {
 
         expect(res.sections).toEqual([{id: 'section', title: '!!!', level: 2}]);
 
-        const html = res.html as unknown as string;
-        expect(html).toContain('<h2 id="section">!!!</h2>');
+        const html = normalize(res.html as unknown as string);
+        expect(html).toContain(makeHeading('section', '!!!', 'h2'));
     });
 
     it('slugify behavior: removes brackets/quotes, converts "&" to "and", collapses spaces/dashes', () => {
@@ -167,8 +211,8 @@ describe('TutorialContentService', () => {
         expect(html).toContain('<a href="#hash"');
 
         // Blocked ones become "#"
-        expect(html).toContain('<a href="#">bad1</a>');
-        expect(html).toContain('<a href="#">bad2</a>');
+        expect(html).toContain('<a href="#">🔗 bad1</a>');
+        expect(html).toContain('<a href="#">🔗 bad2</a>');
         expect(html).not.toContain('javascript:');
         expect(html).not.toContain('data:text/html');
     });
@@ -185,12 +229,12 @@ describe('TutorialContentService', () => {
         const html = res.html as unknown as string;
 
         // external
-        expect(html).toContain('href="https://example.com" rel="noopener noreferrer" target="_blank"');
+        expect(html).toContain('href="https://example.com" rel="noopener noreferrer"');
 
         // internal/hash/mailto should not get rel/target
-        expect(html).toContain('<a href="/docs">int</a>');
-        expect(html).toContain('<a href="#section">hash</a>');
-        expect(html).toContain('<a href="mailto:test@example.com">mail</a>');
+        expect(html).toContain('<a href="/docs">🔗 int</a>');
+        expect(html).toContain('<a href="#section">🔗 hash</a>');
+        expect(html).toContain('<a href="mailto:test@example.com">🔗 mail</a>');
         expect(html).not.toContain('href="/docs" rel="noopener noreferrer"');
         expect(html).not.toContain('href="#section" rel="noopener noreferrer"');
         expect(html).not.toContain('href="mailto:test@example.com" rel="noopener noreferrer"');

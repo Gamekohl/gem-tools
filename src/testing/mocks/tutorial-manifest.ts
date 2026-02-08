@@ -10,6 +10,7 @@ export class MockTutorialManifest {
             difficulty: Difficulty.Beginner,
             tags: ['start', 'overview'],
             file: 'intro.md',
+            featured: false,
         },
         {
             author: 'Bob',
@@ -19,6 +20,7 @@ export class MockTutorialManifest {
             difficulty: Difficulty.Intermediate,
             tags: ['scripting', 'logic'],
             file: 'ai.md',
+            featured: false,
         },
         {
             author: 'Cara',
@@ -28,6 +30,7 @@ export class MockTutorialManifest {
             difficulty: Difficulty.Advanced,
             tags: ['performance'],
             file: 'perf.md',
+            featured: false,
         },
         {
             author: 'Dan',
@@ -37,17 +40,25 @@ export class MockTutorialManifest {
             // difficulty omitted
             tags: ['misc'],
             file: 'no.md',
+            featured: false,
         },
+        {
+            author: 'James',
+            id: 'featured',
+            title: 'Featured Tutorial',
+            subtitle: 'Featured Tutorial',
+            difficulty: Difficulty.Beginner,
+            tags: ['featured'],
+            file: 'featured.md',
+            featured: true
+        }
     ];
-
     get itemWithoutDifficulty(): ManifestItem {
         return this._items[3];
     }
-
     get items(): ManifestItem[] {
         return this._items;
     }
-
     getItem(idx: number): ManifestItem {
         if (idx < 0 || idx >= this._items.length)
             throw new Error(`Invalid index ${idx} in getItem(idx)`);

@@ -1,0 +1,163 @@
+## Frequently Used Commands
+
+### actors_to_waypoint
+
+Directs actors to a waypoint. If outgoing waypoint links exist, actors continue along the connected path.
+
+**Parameters:**
+
+- **selector**: the actor(s) that should start moving (see *Selector*)
+- **waypoint (.uid / .name)**: the destination waypoint (by ID or name)
+- **inactive_at_startup**: if enabled, the actor is not present on the map until the command runs
+- **clone**: if enabled, the original actor does not move; a clone is spawned and moves instead
+  (the clone has its own **mid**; if the original has a **tag**, the clone inherits that tag)
+- **force_approach**: forces a direct approach to the waypoint
+
+### actor_state
+
+Changes an actor’s state and behavior.
+
+**Parameters:**
+
+- **selector**: the actor(s) to modify (see *Selector*)
+- **control**: who controls the actor
+    - `user` (player)
+    - `AI` (computer)
+- **speed**: `slow`, `normal`, `fast`
+- **speed_kmh**: speed in km/h (cannot exceed the actor’s max; `0` uses default speed)
+- **movement** (humans only):
+    - `normal` (standing)
+    - `crawl` (prone movement)
+    - `squat` (crouched movement)
+- **return_fire**: `on` / `off`
+- **hold_position**: `on` / `off`
+- **hide_mode**: `on` (weapon ready) / `off` (weapon hidden)
+- **weapon_prepare**: `on` / `off`
+- **waypoint_only**:
+    - `on` (follow waypoints without combat reactions / without using cover)
+    - `off` (normal behavior)
+
+### event
+
+Changes an event state after an optional delay.
+
+**Parameters:**
+
+- **event**: event name
+- **mode**:
+    - `reset`
+    - `set`
+    - `toggle`
+- **delay**: delay in seconds before applying the mode
+
+### delete
+
+Deletes selected entities (useful for cleanup when units leave the playable area).
+
+**Parameters:**
+
+- **selector**: actors/entities to delete (see *Selector*)
+
+### trigger
+
+Sets or clears a trigger.
+
+**Parameters:**
+
+- **name**: trigger name (selected from existing triggers)
+- **on**: whether to set (`✓`) or clear (`–`) the trigger
+  (when set, commands inside that trigger execute immediately)
+
+## Actors Commands
+
+### actors_watch
+
+Rotates an actor toward a waypoint or scans within a radius.
+
+**Parameters:**
+
+- **selector**: actor that rotates (see *Selector*)
+- **.uid**: waypoint ID to watch toward
+- **.name**: waypoint name to watch toward
+- **radius**: if > 0, the actor rotates to watch within the specified distance
+- **watcher_bone**: optional bone to rotate (if rotating the full entity is not desired/possible)
+
+**Note:** It usually makes sense to specify either a **radius** or a **waypoint**.
+
+### wait_crew
+
+Makes a selected vehicle wait until required crew/passengers have boarded.
+
+**Parameters:**
+
+- **selector**: the vehicle (see *Selector*)
+- **units**: actors that must board (mids listed separated by spaces)
+
+## Entity Commands
+
+### inactive
+
+Makes the selected actor/entity inactive (and can re-activate it later).
+
+**Parameters:**
+
+- **selector**: target actor/entity (see *Selector*)
+- **on**: toggles inactivity on/off
+
+Used when something should temporarily disappear from the map (e.g., entering/leaving a cellar).
+
+
+
+### tag
+
+Adds or removes tags on actors/entities.
+
+**Parameters:**
+
+- **selector**: target actor/entity (see *Selector*)
+- **add**: adds a tag
+- **remove**: removes a tag
+
+## Group Commands
+
+### group_state
+
+Changes the state of a group on a waypoint.
+This command affects **all groups** that reach the waypoint where the command is assigned.
+
+**Parameters:**
+
+- **speed**: group speed (`slow`, `normal`, `fast`)
+- **mode**: if set to `wait_units`, the group waits until all members arrive before continuing
+
+### group_to_waypoint
+
+Assigns a movement path for a group.
+
+**Parameters:**
+
+- **group**: group name
+- **waypoint (.uid / .name)**: destination waypoint
+- **inactive_at_startup**: if enabled, the group is absent from the map until the command runs
+
+### group_wait
+
+Stops a group at a waypoint (similar to `wait` for individual actors).
+
+**Parameters:**
+
+- **time**: stop duration in seconds
+
+## Scene Commands
+
+### message
+
+Shows a message on screen.
+
+**Parameters:**
+
+- **text**: message text
+- **sound**: sound file (`.wav` or `.ogg`) played with the message
+- **delay**: duration in seconds
+- **pause**: `on` / `off`
+  If on, the game is paused while the message is displayed.

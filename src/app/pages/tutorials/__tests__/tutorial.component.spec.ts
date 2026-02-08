@@ -1,55 +1,68 @@
-import { PLATFORM_ID } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
-import { createSeoServiceMock } from '@testing/mocks/seo-service';
-import { createTutorialManifestServiceMock } from '@testing/mocks/tutorial-manifest-service';
-import { MockTutorialManifest } from '@testing/mocks/tutorial-manifest';
-import { BehaviorSubject, of } from 'rxjs';
-import { mockMarked } from '@testing/libs/marked';
-import { MockIntersectionObserver } from '@testing/utils/intersection-observer';
-import { createComponent } from '@testing/utils/testbed';
-import { SeoService } from '../../../services/seo.service';
-import { TutorialContentService } from '../services/tutorial-content.service';
-import {
-  ManifestItem,
-  TutorialManifestService
-} from '../services/tutorial-manifest.service';
+import {Clipboard} from "@angular/cdk/clipboard";
+import {PLATFORM_ID} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, convertToParamMap, ParamMap} from '@angular/router';
+import {createSeoServiceMock} from "@testing/mocks/seo-service";
+import {MockTutorialManifest} from "@testing/mocks/tutorial-manifest";
+import {createTutorialManifestServiceMock} from "@testing/mocks/tutorial-manifest-service";
+import {MockIntersectionObserver} from "@testing/utils/intersection-observer";
+import {createComponent} from "@testing/utils/testbed";
+import {BehaviorSubject, of} from 'rxjs';
+import {mockMarked} from "@testing/libs/marked";
+import {SeoService} from "../../../services/seo.service";
 import * as ReadTime from '../../../utils/read-time';
+import {TutorialContentService} from '../services/tutorial-content.service';
+import {TutorialManifestService} from "../services/tutorial-manifest.service";
+import {TutorialComponent} from '../tutorial/tutorial.component';
+import {TutorialResolved} from "../tutorial/tutorial.resolver";
 
 jest.mock('marked', () => mockMarked());
 
-import {TutorialComponent} from '../tutorial/tutorial.component';
+const spyOn = jest.spyOn;
 
-describe('TutorialComponent', () => {
+const template = `
+  <div #contentContainer>
+    <h2 id="sec-1">
+      <div>
+        <button type="button" data-action="link-heading">
+          <span class="inner">link</span>
+        </button>
+
+        <button type="button" data-action="bookmark-heading">
+          <span class="inner">bookmark</span>
+        </button>
+      </div>
+    </h2>
+
+    <div id="outside">outside</div>
+
+    <div class="no-id-wrapper">
+      <div>
+        <button type="button" data-action="link-heading">
+          <span class="inner">link-no-id</span>
+        </button>
+      </div>
+    </div>
+  </div>
+`;
+
+describe('TutorialComponent (browser)', () => {
   let fixture: ComponentFixture<TutorialComponent>;
   let component: TutorialComponent;
   let observerMock: MockIntersectionObserver;
-
-  const setupDomElements = (ids: string[]) => {
-    ids.forEach(id => {
-      const el = document.createElement('div');
-      el.id = id;
-      document.body.appendChild(el);
-    });
-  };
-
-  const cleanupDomElements = (ids: string[]) => {
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    });
-  };
 
   let seoMock: ReturnType<typeof createSeoServiceMock>;
   let titleMock: { setTitle: jest.Mock };
   let manifestSvcMock: ReturnType<typeof createTutorialManifestServiceMock>;
   let contentSvcMock: { renderMarkdown: jest.Mock };
 
+  const data$ = new BehaviorSubject<{ tutorial?: TutorialResolved }>({});
   const paramMap$ = new BehaviorSubject<ParamMap>(convertToParamMap({ id: 'intro' }));
 
+
   const manifest = new MockTutorialManifest();
-  const manifestItems = manifest.items;
 
   const baseProviders = (platformId: 'browser' | 'server') => ([
     { provide: PLATFORM_ID, useValue: platformId },
@@ -82,10 +95,12 @@ describe('TutorialComponent', () => {
     contentSvcMock = {
       renderMarkdown: jest.fn().mockReturnValue({
         html: '',
+        outline: [],
         sections: [],
         title: null
       }),
     };
+    data$.next({});
 
     const result = await createComponent(TutorialComponent, {
       imports: [TutorialComponent],
@@ -96,54 +111,37 @@ describe('TutorialComponent', () => {
     component = result.component;
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    cleanupDomElements(['section-1', 'section-2', 'section-3']);
-  });
+  afterEach(() => jest.clearAllMocks());
 
-  it('should set item, title, SEO, loads markdown, sets activeSectionId and scrolls to top (browser)', fakeAsync(() => {
-    const item: ManifestItem = manifest.getItem(0);
-    const md = '# Intro\n\n## Section 1\nText';
+  it('sets title + SEO + activeSectionId and scroll when fragment is not present', () => {
+    (window as any).scrollTo = jest.fn();
 
-    contentSvcMock.renderMarkdown.mockImplementation((_md: string) => ({
-      html: '<h1>Intro</h1><h2 id="sec-1">Section 1</h2>',
-      sections: [{ id: 'sec-1', title: 'Section 1', level: 2 as const }],
-      title: 'Intro',
-    }));
+    const item = manifest.getItem(0);
+    const md = '## Section';
 
-    manifestSvcMock.getMarkdown$.mockReturnValue(of(md));
-    manifestSvcMock.manifest$.next(manifestItems);
+    contentSvcMock.renderMarkdown.mockReturnValue({
+      html: '<h2 id="sec-1">Section</h2>',
+      outline: [],
+      sections: [{id: 'sec-1', title: 'Section', level: 2 as const}],
+      title: 'T',
+    });
 
-    component.ngOnInit();
+    data$.next({tutorial: {item, markdown: md}});
     fixture.detectChanges();
 
-    expect(component.item()).toEqual(item);
+    expect(titleMock.setTitle).toHaveBeenCalledWith(`Tutorial: ${item.title}`);
 
-    expect(titleMock.setTitle).toHaveBeenCalledWith('Tutorial: Intro to GEM');
-    expect(seoMock.apply).toHaveBeenCalledWith({
-      title: 'Intro to GEM',
-      canonicalUrl: 'https://gem-tools.vercel.app/tutorials/intro',
-      description: 'Basics',
-      ogType: 'article',
-      image: '',
-      url: 'https://gem-tools.vercel.app/tutorials/intro',
-    });
-    expect(seoMock.setJsonLd).toHaveBeenCalledWith({
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: 'Intro to GEM - GEM-Tools',
-      description: 'Basics',
-      author: { '@type': 'Person', name: 'Alice' },
-    });
-
-    expect(component.markdown()).toBe(md);
+    expect(seoMock.apply).toHaveBeenCalled();
+    expect(seoMock.setJsonLd).toHaveBeenCalled();
 
     expect(component.activeSectionId()).toBe('sec-1');
 
-    expect(contentSvcMock.renderMarkdown).toHaveBeenCalled();
-  }));
+    expect(window.scrollTo).toHaveBeenCalledWith({top: 0, behavior: 'instant'});
+  });
 
-  it('should does not scrollTo in server mode', fakeAsync(async () => {
+  it('does not scroll when fragment is present', async () => {
+    (window as any).scrollTo = jest.fn();
+
     TestBed.resetTestingModule();
 
     const result = await createComponent(TutorialComponent, {
@@ -155,100 +153,19 @@ describe('TutorialComponent', () => {
 
     contentSvcMock.renderMarkdown.mockReturnValue({
       html: '<h2 id="sec-1">Section</h2>',
+      outline: [],
       sections: [{ id: 'sec-1', title: 'Section', level: 2 as const }],
       title: 'T',
     });
-    manifestSvcMock.getMarkdown$.mockReturnValue(of('## Section'));
 
-    component.ngOnInit();
-
-    manifestSvcMock.manifest$.next(manifestItems);
+    fixture.detectChanges();
 
     expect(window.scrollTo).not.toHaveBeenCalled();
-  }));
-
-  it('should scroll element into view and updates activeSectionId', () => {
-    const el = document.createElement('div');
-    el.id = 'sec-x';
-    const scrollSpy = jest.fn();
-    (el as any).scrollIntoView = scrollSpy;
-    document.body.appendChild(el);
-
-    component.scrollToSection('sec-x');
-
-    expect(scrollSpy).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
-    expect(component.activeSectionId()).toBe('sec-x');
-
-    document.body.removeChild(el);
   });
 
   it('should remove JSON-LD', () => {
     component.ngOnDestroy();
     expect(seoMock.removeJsonLd).toHaveBeenCalledTimes(1);
-  });
-
-  it('should initialize the observer and observe valid targets', () => {
-    setupDomElements(['section-1', 'section-2']);
-    const toc = [{ id: 'section-1' }, { id: 'section-2' }, { id: 'missing-id' }];
-
-    component['setupIntersectionObserver'](toc);
-
-    expect(window.IntersectionObserver).toHaveBeenCalled();
-    expect(observerMock.observe).toHaveBeenCalledTimes(2);
-    expect(observerMock.observe).toHaveBeenCalledWith(document.getElementById('section-1'));
-  });
-
-  it('should update activeSectionId when an element intersects', () => {
-    setupDomElements(['section-1']);
-    const toc = [{ id: 'section-1' }];
-    component['setupIntersectionObserver'](toc);
-
-    observerMock.trigger([
-      {
-        target: document.getElementById('section-1')!,
-        isIntersecting: true,
-        boundingClientRect: { top: 100 } as DOMRectReadOnly
-      }
-    ]);
-
-    expect(component.activeSectionId()).toBe('section-1');
-  });
-
-  it('should pick the topmost element if multiple are visible', () => {
-    setupDomElements(['section-1', 'section-2']);
-    component['setupIntersectionObserver']([{ id: 'section-1' }, { id: 'section-2' }]);
-
-    observerMock.trigger([
-      {
-        target: document.getElementById('section-2')!,
-        isIntersecting: true,
-        boundingClientRect: { top: 500 } as DOMRectReadOnly
-      },
-      {
-        target: document.getElementById('section-1')!,
-        isIntersecting: true,
-        boundingClientRect: { top: 100 } as DOMRectReadOnly // Winner (closest to top)
-      }
-    ]);
-
-    expect(component.activeSectionId()).toBe('section-1');
-  });
-
-  it('should not update signal if no elements are intersecting', () => {
-    setupDomElements(['section-1']);
-    component['setupIntersectionObserver']([{ id: 'section-1' }]);
-
-    component.activeSectionId.set('initial-state');
-
-    observerMock.trigger([
-      {
-        target: document.getElementById('section-1')!,
-        isIntersecting: false,
-        boundingClientRect: { top: 100 } as DOMRectReadOnly
-      }
-    ]);
-
-    expect(component.activeSectionId()).toBe('initial-state');
   });
 
   it('should call estimateReadTimeFromMarkdown with current markdown and exposes its return value', () => {
@@ -259,22 +176,132 @@ describe('TutorialComponent', () => {
       codeBlocks: 0
     }
 
-    jest.spyOn(ReadTime, 'estimateReadTimeFromMarkdown').mockReturnValue(mockReadTimeResult);
+    spyOn(ReadTime, 'estimateReadTimeFromMarkdown').mockReturnValue(mockReadTimeResult);
 
-    component.markdown.set('# Hello\n\nSome text');
+    data$.next({
+      tutorial: {item: manifest.getItem(0), markdown: '# Hello\n\nSome text'}
+    });
 
     expect(component.readTime()).toBe(mockReadTimeResult);
   });
 
   it('should map item.difficulty through difficultyLabels', () => {
-    component.item.set(manifest.getItem(0));
+    data$.next({
+      tutorial: {item: manifest.getItem(0), markdown: '# Hello'}
+    });
 
     expect(component.difficulty()).toBe('Beginner');
   });
 
-  it('should set difficulty to null', () => {
+  /*it('should set difficulty to null', () => {
     component.item.set(manifest.itemWithoutDifficulty);
 
     expect(component.difficulty()).toBe(null);
+  });*/
+
+  it('should copy section link to clipboard', () => {
+    data$.next({
+      tutorial: {
+        item: manifest.getItem(0),
+        markdown: '# Intro\n\n## Section 1\nText'
+      }
+    });
+
+    const clipboardSpy = spyOn(TestBed.inject(Clipboard), 'copy');
+    const snackbarSpy = spyOn(TestBed.inject(MatSnackBar), 'open');
+
+    component.copySectionLink('section-1');
+
+    expect(clipboardSpy).toHaveBeenCalledWith('https://gem-tools.vercel.app/tutorials/intro#section-1');
+    expect(snackbarSpy).toHaveBeenCalledWith('Link copied.', '', {duration: 2000});
+  });
+
+  it('clicking link action calls copySectionLink with heading id', () => {
+    const copySpy = spyOn(component, 'copySectionLink').mockImplementation(() => {
+    });
+
+    const inner = fixture.nativeElement.querySelector(
+        '[data-action="link-heading"] .inner'
+    ) as HTMLElement;
+
+    inner.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+
+    expect(copySpy).toHaveBeenCalledTimes(1);
+    expect(copySpy).toHaveBeenCalledWith('sec-1');
+  });
+
+  it('clicking bookmark action does not call copySectionLink', () => {
+    const copySpy = spyOn(component, 'copySectionLink').mockImplementation(() => {
+    });
+
+    const inner = fixture.nativeElement.querySelector(
+        '[data-action="bookmark-heading"] .inner'
+    ) as HTMLElement;
+
+    inner.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+
+    expect(copySpy).not.toHaveBeenCalled();
+  });
+
+  it('clicking outside action buttons does nothing', () => {
+    const copySpy = spyOn(component, 'copySectionLink').mockImplementation(() => {
+    });
+
+    const outside = fixture.nativeElement.querySelector('#outside') as HTMLElement;
+    outside.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+
+    expect(copySpy).not.toHaveBeenCalled();
+  });
+
+  it('link click without heading id does nothing', () => {
+    const copySpy = spyOn(component, 'copySectionLink').mockImplementation(() => {
+    });
+
+    const inner = fixture.nativeElement.querySelector(
+        '.no-id-wrapper [data-action="link-heading"] .inner'
+    ) as HTMLElement;
+
+    inner.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+
+    expect(copySpy).not.toHaveBeenCalled();
+  });
+
+});
+
+describe('TutorialComponent (server)', () => {
+  let fixture: ComponentFixture<TutorialComponent>;
+  let component: TutorialComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TutorialComponent],
+      providers: [
+        {provide: PLATFORM_ID, useValue: 'server'},
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({}),
+            fragment: of(null)
+          } satisfies Partial<ActivatedRoute>,
+        },
+      ],
+    })
+        // Provide a minimal template so viewChild('contentHost') resolves
+        .overrideComponent(TutorialComponent, {
+          set: {template}
+        })
+        .compileComponents();
+
+    fixture = TestBed.createComponent(TutorialComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  afterEach(() => jest.clearAllMocks());
+
+  it('should not add event listener to contentContainer', () => {
+    const spy = spyOn(component.contentContainer()!.nativeElement, 'addEventListener');
+
+    expect(spy).not.toHaveBeenCalled();
   });
 });

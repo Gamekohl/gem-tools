@@ -1,58 +1,57 @@
-<div class="mx-auto max-w-6xl p-6 lg:p-10" data-testid="container">
-    <div class="flex items-start justify-between gap-6">
-        <div>
-            <h1 class="text-2xl font-semibold tracking-tight" data-testid="title">Maps</h1>
-            <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
-                Browse through maps provided by Call to Arms - Gates Of Hell.
-            </p>
-        </div>
-
-        <div class="flex items-center gap-3">
-            <input
-                    class="w-64 input"
-                    placeholder="Search maps..."
-                    data-testid="search"
-                    [value]="query()"
-                    (input)="query.set(($any($event.target).value ?? '').trim())"
-            />
-        </div>
+<div class="flex items-start justify-between gap-6" data-testid="container">
+    <div>
+        <h1 class="text-2xl font-semibold tracking-tight" data-testid="title">Maps</h1>
+        <p class="mt-1 text-sm text-slate-500 dark:text-white/50">
+            Browse through maps provided by Call to Arms - Gates Of Hell.
+        </p>
     </div>
 
-    @if (visibleMaps().length > 0) {
-        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-testid="grid">
-            @for (m of visibleMaps(); track m.name) {
-                <button
-                        data-testid="map-item"
-                        type="button"
-                        class="group text-left rounded-2xl border border-slate-200 dark:border-white/25 overflow-hidden hover:shadow-md transition-shadow"
-                >
-                    <div class="aspect-video overflow-hidden">
-                        <img
-                                class="h-full w-full object-cover transition-transform group-hover:scale-[1.02]"
-                                [ngSrc]="previewUrl(m)"
-                                [alt]="m.name"
-                                loading="lazy"
-                                width="281"
-                                height="158"
-                                (error)="onPreviewError(m)"
-                        />
-                    </div>
+    <div class="flex items-center gap-3">
+        <input
+                (input)="query.set(($any($event.target).value ?? '').trim())"
+                [value]="query()"
+                data-testid="search"
+                class="w-64 input"
+                placeholder="Search maps..."
+        />
+    </div>
+</div>
 
-                    <div class="p-4">
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="min-w-0">
-                                <div class="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                                    {{ m.name }}
-                                </div>
-                            </div>
+<div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-testid="grid">
+    @for (m of visibleMaps(); track m.name) {
+        <button
+                data-testid="map-item"
+                class="group text-left rounded-2xl border border-slate-200 dark:border-white/25 overflow-hidden hover:shadow-md transition-shadow"
+                type="button"
+        >
+            <div class="aspect-video overflow-hidden">
+                <img
+                        (error)="onPreviewError(m)"
+                        [alt]="m.name"
+                        [ngSrc]="previewUrl(m)"
+                        class="h-full w-full object-cover transition-transform group-hover:scale-[1.02]"
+                        height="158"
+                        loading="lazy"
+                        width="281"
+                />
+            </div>
+
+            <div class="p-4">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <div class="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                            {{ m.name }}
                         </div>
                     </div>
-                </button>
-            }
-        </div>
-    } @else {
-        <div class="mt-8 rounded-2xl border border-slate-200 dark:border-white/50 p-6 text-sm text-slate-600 dark:text-white/50" data-testid="no-results">
-            No maps match your search.
-        </div>
+                </div>
+            </div>
+        </button>
     }
 </div>
+
+@if (visibleMaps().length === 0) {
+    <div class="mt-8 rounded-2xl border border-slate-200 dark:border-white/50 p-6 text-sm text-slate-600 dark:text-white/50"
+         data-testid="no-results">
+        No maps match your search.
+    </div>
+}

@@ -80,6 +80,7 @@ describe('TutorialsComponent', () => {
       'ai',
       'perf',
       'nodiff',
+      'featured'
     ]);
   });
 
@@ -89,7 +90,7 @@ describe('TutorialsComponent', () => {
 
     component.setDifficulty(Difficulty.Beginner);
 
-    expect(component.filteredItems().map((i) => i.id)).toEqual(['intro']);
+    expect(component.filteredItems().map((i) => i.id)).toEqual(['intro', 'featured']);
   });
 
   it('filters by query across title, subtitle, and tags (case-insensitive)', () => {
@@ -130,17 +131,17 @@ describe('TutorialsComponent', () => {
     component.difficulty.set(0);
 
     const s1 = component.stats();
-    expect(s1.total).toBe(4);
-    expect(s1.shown).toBe(4);
-    expect(s1.counts).toEqual({ Beginner: 1, Intermediate: 1, Advanced: 1 });
+    expect(s1.total).toBe(5);
+    expect(s1.shown).toBe(5);
+    expect(s1.counts).toEqual({Beginner: 2, Intermediate: 1, Advanced: 1});
 
     // after filtering (Beginner)
     component.difficulty.set(Difficulty.Beginner);
 
     const s2 = component.stats();
-    expect(s2.total).toBe(4);
-    expect(s2.shown).toBe(1);
-    expect(s2.counts).toEqual({ Beginner: 1, Intermediate: 1, Advanced: 1 }); // counts are based on full manifest
+    expect(s2.total).toBe(5);
+    expect(s2.shown).toBe(2);
+    expect(s2.counts).toEqual({Beginner: 2, Intermediate: 1, Advanced: 1}); // counts are based on full manifest
   });
 
   it('setDifficulty updates the difficulty signal', () => {
@@ -174,5 +175,20 @@ describe('TutorialsComponent', () => {
 
     expect(component.pageIndex()).toBe(1);
     expect(component.pageSize()).toBe(2);
+  });
+
+  it('shows featured and non-featured tutorials', () => {
+    manifestSvcMock.manifest$.next(manifestItems);
+
+    const featured = component.featuredItems();
+    const nonFeatured = component.nonFeaturedItems();
+
+    expect(featured.length).toEqual(1);
+    expect(featured).toEqual([tutorialManifestMock.getItem(4)]);
+
+    expect(nonFeatured.length).toEqual(4);
+
+    const expectedItems = manifestItems.filter(i => !i.featured);
+    expect(nonFeatured).toEqual(expectedItems);
   });
 });

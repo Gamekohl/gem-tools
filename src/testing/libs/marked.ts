@@ -9,6 +9,7 @@ export const mockMarked = () => {
         setOptions: jest.fn((opts: any) => {
             activeRenderer = opts?.renderer;
         }),
+        use: jest.fn(),
         parse: jest.fn((md: string) => {
             const out: string[] = [];
             const lines = md.split(/\r?\n/);
@@ -16,6 +17,12 @@ export const mockMarked = () => {
             for (const line of lines) {
                 const trimmed = line.trim();
                 if (!trimmed) continue;
+
+                if (trimmed.startsWith('### ')) {
+                    const text = trimmed.slice(4);
+                    out.push(activeRenderer.heading({text, depth: 3}));
+                    continue;
+                }
 
                 if (trimmed.startsWith('## ')) {
                     const text = trimmed.slice(3);
