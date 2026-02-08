@@ -1,4 +1,4 @@
-import { MockIntersectionObserver } from '@testing/utils/intersection-observer';
+import {MockIntersectionObserver} from '@testing/utils/intersection-observer';
 
 export function installBrowserMocks() {
     // IntersectionObserver
@@ -12,7 +12,14 @@ export function installBrowserMocks() {
         value: { writeText: jest.fn() }
     });
 
+    Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
+        writable: true,
+        value: jest.fn(),
+    });
+
     // Console
+    console.warn = jest.fn();
+
     const originalConsoleError = console.error;
     console.error = function (...data) {
         if (
@@ -24,13 +31,18 @@ export function installBrowserMocks() {
 
     // matchMedia
     if (!window.matchMedia) {
-        (window as any).matchMedia = () => ({
-            matches: false,
-            addListener: jest.fn(),
-            removeListener: jest.fn(),
-            addEventListener: jest.fn(),
-            removeEventListener: jest.fn(),
-            dispatchEvent: jest.fn(),
+        Object.defineProperty(window, 'matchMedia', {
+            writable: true,
+            value: (query: string) => ({
+                matches: false,              // default: no reduced motion
+                media: query,
+                onchange: null,
+                addListener: jest.fn(),      // deprecated
+                removeListener: jest.fn(),   // deprecated
+                addEventListener: jest.fn(),
+                removeEventListener: jest.fn(),
+                dispatchEvent: jest.fn(),
+            }),
         });
     }
 }

@@ -4,13 +4,13 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, convertToParamMap, ParamMap} from '@angular/router';
+import {mockMarked} from "@testing/libs/marked";
 import {createSeoServiceMock} from "@testing/mocks/seo-service";
 import {MockTutorialManifest} from "@testing/mocks/tutorial-manifest";
 import {createTutorialManifestServiceMock} from "@testing/mocks/tutorial-manifest-service";
 import {MockIntersectionObserver} from "@testing/utils/intersection-observer";
 import {createComponent} from "@testing/utils/testbed";
 import {BehaviorSubject, of} from 'rxjs';
-import {mockMarked} from "@testing/libs/marked";
 import {SeoService} from "../../../services/seo.service";
 import * as ReadTime from '../../../utils/read-time';
 import {TutorialContentService} from '../services/tutorial-content.service';
@@ -61,7 +61,6 @@ describe('TutorialComponent (browser)', () => {
   const data$ = new BehaviorSubject<{ tutorial?: TutorialResolved }>({});
   const paramMap$ = new BehaviorSubject<ParamMap>(convertToParamMap({ id: 'intro' }));
 
-
   const manifest = new MockTutorialManifest();
 
   const baseProviders = (platformId: 'browser' | 'server') => ([
@@ -73,7 +72,9 @@ describe('TutorialComponent (browser)', () => {
     {
       provide: ActivatedRoute,
       useValue: {
+        data: data$.asObservable(),
         paramMap: paramMap$.asObservable(),
+        fragment: of(null)
       } satisfies Partial<ActivatedRoute>,
     },
   ]);
@@ -105,6 +106,12 @@ describe('TutorialComponent (browser)', () => {
     const result = await createComponent(TutorialComponent, {
       imports: [TutorialComponent],
       providers: baseProviders('browser'),
+      override: {
+        component: TutorialComponent,
+        override: {
+          set: {template}
+        }
+      }
     });
 
     fixture = result.fixture;
@@ -272,28 +279,31 @@ describe('TutorialComponent (server)', () => {
   let fixture: ComponentFixture<TutorialComponent>;
   let component: TutorialComponent;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TutorialComponent],
-      providers: [
-        {provide: PLATFORM_ID, useValue: 'server'},
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            data: of({}),
-            fragment: of(null)
-          } satisfies Partial<ActivatedRoute>,
-        },
-      ],
-    })
-        // Provide a minimal template so viewChild('contentHost') resolves
-        .overrideComponent(TutorialComponent, {
-          set: {template}
-        })
-        .compileComponents();
+  const baseProviders = (platformId: 'browser' | 'server') => ([
+    {
+      provide: ActivatedRoute,
+      useValue: {
+        data: of({}),
+        fragment: of(null)
+      } satisfies Partial<ActivatedRoute>,
+    },
+  ]);
 
-    fixture = TestBed.createComponent(TutorialComponent);
-    component = fixture.componentInstance;
+  beforeEach(async () => {
+    const result = await createComponent(TutorialComponent, {
+      imports: [TutorialComponent],
+      providers: baseProviders('server'),
+      override: {
+        component: TutorialComponent,
+        override: {
+          set: {template}
+        }
+      }
+    });
+
+    fixture = result.fixture;
+    component = result.component;
+
     fixture.detectChanges();
   });
 

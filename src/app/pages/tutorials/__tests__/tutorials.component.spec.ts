@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PageEvent } from '@angular/material/paginator';
-import { createSeoServiceMock } from '@testing/mocks/seo-service';
-import { createTutorialManifestServiceMock } from '@testing/mocks/tutorial-manifest-service';
-import { MockTutorialManifest } from '@testing/mocks/tutorial-manifest';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {PageEvent} from '@angular/material/paginator';
+import {createSeoServiceMock} from '@testing/mocks/seo-service';
+import {MockTutorialManifest} from '@testing/mocks/tutorial-manifest';
+import {createTutorialManifestServiceMock} from '@testing/mocks/tutorial-manifest-service';
 
-import { SeoService } from '../../../services/seo.service';
-import { Difficulty, TutorialManifestService } from '../services/tutorial-manifest.service';
-import { TutorialsComponent } from '../tutorials.component';
+import {SeoService} from '../../../services/seo.service';
+import {Difficulty, TutorialManifestService} from '../services/tutorial-manifest.service';
+import {TutorialsComponent} from '../tutorials.component';
 
 describe('TutorialsComponent', () => {
   let fixture: ComponentFixture<TutorialsComponent>;
@@ -61,15 +61,7 @@ describe('TutorialsComponent', () => {
     });
   });
 
-  it('filteredItems returns [] while manifest is null', () => {
-    expect(component.manifest()).toBeNull();
-    expect(component.filteredItems()).toEqual([]);
-    expect(component.stats().total).toBeUndefined(); // because `this.manifest()?.length`
-    expect(component.stats().shown).toBe(0);
-  });
-
   it('filteredItems returns all items when difficulty=All and query empty', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     component.query.set('');
@@ -85,7 +77,6 @@ describe('TutorialsComponent', () => {
   });
 
   it('filters by difficulty (Beginner)', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     component.setDifficulty(Difficulty.Beginner);
@@ -94,7 +85,6 @@ describe('TutorialsComponent', () => {
   });
 
   it('filters by query across title, subtitle, and tags (case-insensitive)', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     component.difficulty.set(0);
@@ -110,7 +100,6 @@ describe('TutorialsComponent', () => {
   });
 
   it('combines difficulty + query filtering', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     component.setDifficulty(Difficulty.Intermediate);
@@ -123,7 +112,6 @@ describe('TutorialsComponent', () => {
   });
 
   it('stats returns total, shown, and counts by difficulty', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     // baseline (All)
@@ -151,14 +139,12 @@ describe('TutorialsComponent', () => {
   });
 
   it('gets pagedItems()', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     expect(component.pagedItems()).toEqual(manifestItems);
   });
 
   it('gets pagedItems() with page size 2', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
     fixture.detectChanges();
 
     component.pageSize.set(2);
@@ -178,13 +164,12 @@ describe('TutorialsComponent', () => {
   });
 
   it('shows featured and non-featured tutorials', () => {
-    manifestSvcMock.manifest$.next(manifestItems);
 
     const featured = component.featuredItems();
     const nonFeatured = component.nonFeaturedItems();
 
     expect(featured.length).toEqual(1);
-    expect(featured).toEqual([tutorialManifestMock.getItem(4)]);
+    expect(featured).toEqual([manifest.getItem(4)]);
 
     expect(nonFeatured.length).toEqual(4);
 

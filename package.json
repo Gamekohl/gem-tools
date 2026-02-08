@@ -22,10 +22,12 @@
       "<rootDir>/setup-jest.ts"
     ],
     "testPathIgnorePatterns": [
+      "<rootDir>/e2e/*",
       "<rootDir>/src/testing/*"
     ],
     "coveragePathIgnorePatterns": [
       "node_modules",
+      "<rootDir>/e2e/*",
       "<rootDir>/src/testing/*",
       "<rootDir>/src/environments/*"
     ],
