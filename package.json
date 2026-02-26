@@ -48,9 +48,9 @@
     "@angular/ssr": "^21.2.0",
     "@ng-icons/core": "^33.1.0",
     "@ng-icons/tabler-icons": "^33.1.0",
-    "@tailwindcss/postcss": "^4.2.1",
+    "@tailwindcss/postcss": "^4.2.0",
     "@vercel/analytics": "^1.6.1",
-    "@vercel/node": "^5.6.7",
+    "@vercel/node": "^5.6.6",
     "express": "^5.2.1",
     "marked": "^17.0.3",
     "rxjs": "~7.8.2",
@@ -64,13 +64,13 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.3.1",
-    "autoprefixer": "^10.4.27",
+    "@types/node": "^25.3.0",
+    "autoprefixer": "^10.4.24",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "jest-preset-angular": "^16.0.0",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.2.1",
+    "tailwindcss": "^4.2.0",
     "typescript": "~5.9.3"
   },
   "overrides": {
@@ -85,7 +85,6 @@
     "express": {
       "qs": "6.14.2"
     },
-    "ajv": "8.18.0",
-    "minimatch": "10.2.4"
+    "ajv": "8.18.0"
   }
 }
