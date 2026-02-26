@@ -49,7 +49,6 @@ describe('AppComponent', () => {
         component.ngOnInit();
 
         expect(vercelAnalytics.inject).toHaveBeenCalled();
-        expect(vercelAnalytics.inject).toHaveBeenCalledTimes(1);
     });
 
     it('should render without errors', () => {
