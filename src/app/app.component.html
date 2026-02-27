@@ -14,7 +14,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <header class="border-b border-slate-200 dark:border-white/5">
+        <header data-testid="header" class="border-b border-slate-200 dark:border-white/5">
             <div class="mx-auto max-w-6xl px-6 py-4 lg:px-10">
                 <div class="flex gap-4 items-center justify-between">
                     <a class="inline-flex items-center" routerLink="/">
@@ -34,7 +34,7 @@
                             <ng-icon name="tablerMenu2"></ng-icon>
                         </button>
                     } @else {
-                        <nav class="flex flex-wrap items-center gap-2">
+                        <nav data-testid="nav" class="flex flex-wrap items-center gap-2">
                             <ng-container *ngTemplateOutlet="links"></ng-container>
                         </nav>
 
@@ -52,9 +52,17 @@
 
         <footer class="py-4 text-center text-slate-600 dark:text-white/50 flex justify-center items-center gap-2 text-xs">
             <div class="flex justify-center items-center">
-                <a class="flex items-center dark:text-white hover:underline cursor-pointer" href="https://github.com/Gamekohl/gem-tools"
+                <a class="flex items-center dark:text-white hover:underline cursor-pointer"
+                   href="https://github.com/Gamekohl/gem-tools"
                    target="_blank">Start contributing on
                     <ng-icon class="ml-1" name="tablerBrandGithub"></ng-icon>&nbsp;GitHub!</a>
+            </div>
+            <span class="opacity-25">|</span>
+            <div class="flex justify-center items-center">
+                <a class="flex items-center dark:text-white hover:underline cursor-pointer"
+                   href="https://discord.gg/SKAKdAgB6u"
+                   target="_blank">Join the
+                    <ng-icon class="ml-1" name="tablerBrandDiscord"></ng-icon>&nbsp;Discord</a>
             </div>
             <span class="opacity-25">|</span>
             <span class="text-slate-600">created by Gamekohl</span>
@@ -69,6 +77,7 @@
         <a
                 [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/resources"
+                data-testid="resources-link"
                 class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerBox"></ng-icon>
@@ -78,6 +87,7 @@
         <a
                 [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/animations"
+                data-testid="animations-link"
                 class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerArrowsRandom"></ng-icon>
@@ -85,15 +95,17 @@
         </a>
 
         <a [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
-           class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors" routerLink="/tutorials"
+           data-testid="tutorials-link"
+           class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
+           routerLink="/tutorials"
         >
             <ng-icon name="tablerPhotoEdit"></ng-icon>
             <span>Tutorials</span>
         </a>
-
         <a
                 [routerLinkActive]="['bg-black/5', 'dark:bg-white/5']"
                 routerLink="/maps"
+                data-testid="maps-link"
                 class="flex items-center gap-2 cursor-pointer rounded-xl px-3 py-2 hover:bg-black/10 dark:hover:bg-white/5 transition-colors"
         >
             <ng-icon name="tablerMap"></ng-icon>
@@ -104,11 +116,22 @@
     <ng-template #external>
         <a
                 class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020]"
-                href="https://github.com/Gamekohl"
+                href="https://github.com/Gamekohl/gem-tools"
                 target="_blank"
                 title="GitHub"
+                data-testid="github-link"
         >
             <ng-icon name="tablerBrandGithub"></ng-icon>
+        </a>
+
+        <a
+                class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020]"
+                href="https://discord.gg/SKAKdAgB6u"
+                target="_blank"
+                title="Discord"
+                data-testid="discord-link"
+        >
+            <ng-icon name="tablerBrandDiscord"></ng-icon>
         </a>
 
         <a
@@ -116,14 +139,18 @@
                 href="https://buymeacoffee.com/gamekohl"
                 target="_blank"
                 title="BuyMeACoffee"
+                data-testid="bmac-link"
         >
             <ng-icon name="tablerCoffee"></ng-icon>
         </a>
+
+        <div class="w-px h-6 bg-slate-200 dark:bg-white/25 mx-2"></div>
 
         <button
                 (click)="toggleTheme()"
                 class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020] cursor-pointer"
                 title="Theme Toggle"
+                data-testid="theme-toggle"
         >
             <ng-icon [name]="theme() !== 'light' ? 'tablerSun' : 'tablerMoon'"></ng-icon>
         </button>

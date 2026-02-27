@@ -6,8 +6,7 @@ import {mapData, MapItem} from "./data/maps";
 @Component({
   selector: 'app-maps',
   imports: [NgOptimizedImage],
-  templateUrl: './maps.component.html',
-  styleUrl: './maps.component.scss',
+  templateUrl: './maps.component.html'
 })
 export class MapsComponent {
   private readonly seo = inject(SeoService);

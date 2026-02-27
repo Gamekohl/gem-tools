@@ -92,15 +92,15 @@ export class TutorialContentService {
         const base = this.slugify(cleanText) || 'section';
         const id = uniqueId(base);
 
-        currentH2 = { id, title: cleanText, level: 2, children: [] };
+        currentH2 = {id, title: cleanText, level: 2, children: []};
         outline.push(currentH2);
 
-        flat.push({ id, title: cleanText, level: 2 });
+        flat.push({id, title: cleanText, level: 2});
 
         return `
-            <h2 id="${id}" class="group flex items-center gap-2">
+            <h2 id="${id}" class="group relative flex items-center gap-2">
                 ${text}
-                <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+                <div data-action="link-heading" class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
                     ${linkIcon}
                 </div>
             </h2>`;
@@ -111,16 +111,16 @@ export class TutorialContentService {
         const id = uniqueId(base);
 
         if (currentH2) {
-          currentH2.children.push({ id, title: cleanText, level: 3 });
-          flat.push({ id, title: cleanText, level: 3 });
+          currentH2.children.push({id, title: cleanText, level: 3});
+          flat.push({id, title: cleanText, level: 3});
         } else {
-          flat.push({ id, title: cleanText, level: 3 });
+          flat.push({id, title: cleanText, level: 3});
         }
 
         return `
             <h3 id="${id}" class="group relative flex items-center gap-2">
                 ${text}
-                <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+                <div data-action="link-heading" class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
                     ${linkIcon}
                 </div>
             </h3>`;
@@ -129,7 +129,7 @@ export class TutorialContentService {
       return `<h${depth}>${text}</h${depth}>`;
     };
 
-    marked.setOptions({ gfm: true, breaks: false, renderer });
+    marked.setOptions({gfm: true, breaks: false, renderer});
 
     const rawHtml = marked.parse(md) as string;
     const trusted = this.sanitizer.bypassSecurityTrustHtml(rawHtml);

@@ -12,11 +12,11 @@ Directs actors to a waypoint. If outgoing waypoint links exist, actors continue 
 
 **Parameters:**
 
-- **selector**: the actor(s) that should start moving (see *Selector*)
+- **selector**: the actor(s) that should start moving (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - **waypoint (.uid / .name)**: the destination waypoint (by ID or name)
 - **clone**: if enabled, the original actor does not move; a clone is spawned and moves instead
   (the clone has its own **mid**; if the original has a **tag**, the clone inherits that tag)

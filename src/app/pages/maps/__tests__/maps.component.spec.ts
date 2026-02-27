@@ -1,33 +1,19 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {createComponent} from "@testing/utils/testbed";
 import {MapItem} from "../data/maps";
 
-jest.mock('../data/maps', () => {
-    const mapData = [
-        {name: 'dcg_deulin_chateau'},
-        {name: 'urban ruins'},
-        {name: 'Forest_Battle'},
-    ];
-
-    return {
-        mapData,
-    };
-});
+jest.mock('../data/maps');
 
 import {MapsComponent} from '../maps.component';
 
 describe('MapsComponent', () => {
     let component: MapsComponent;
-    let fixture: ComponentFixture<MapsComponent>;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
+        const result = await createComponent(MapsComponent, {
             imports: [MapsComponent]
-        })
-            .compileComponents();
+        });
 
-        fixture = TestBed.createComponent(MapsComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+        component = result.component;
     });
 
     it('should initialize maps from mapData in constructor', () => {

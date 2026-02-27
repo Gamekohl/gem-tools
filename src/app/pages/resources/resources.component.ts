@@ -3,10 +3,15 @@ import {isPlatformBrowser} from "@angular/common";
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component, computed,
-    DestroyRef, ElementRef, Inject,
-    inject, model,
-    OnInit, PLATFORM_ID, signal,
+    Component,
+    computed,
+    DestroyRef,
+    ElementRef,
+    Inject,
+    inject,
+    model,
+    OnInit,
+    PLATFORM_ID,
     viewChild
 } from '@angular/core';
 import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
@@ -17,7 +22,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatTree, MatTreeModule} from "@angular/material/tree";
 import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {
-    tablerArrowNarrowRight, tablerArrowsDiagonal, tablerArrowsDiagonalMinimize,
+    tablerArrowNarrowRight,
+    tablerArrowsDiagonal,
+    tablerArrowsDiagonalMinimize,
     tablerBox,
     tablerCopy,
     tablerFolder,
@@ -29,7 +36,6 @@ import {tablerStarFill} from "@ng-icons/tabler-icons/fill";
 import {ResourceNode} from "../../../interfaces";
 import {PreviewImageComponent} from "../../preview-image/preview-image.component";
 import {SeoService} from "../../services/seo.service";
-import {FavoritesStore} from "../../store/favorites-store";
 import {structureData} from "./data/structure";
 
 @Component({
@@ -67,35 +73,21 @@ export class ResourcesComponent implements OnInit {
     private readonly clipboard = inject(Clipboard);
     private readonly snackbar = inject(MatSnackBar);
 
-    favoritesStore = inject(FavoritesStore);
-
     private _data: ResourceNode[] = [];
 
     private preview = viewChild.required(PreviewImageComponent);
     private tree = viewChild<MatTree<ResourceNode, ResourceNode>>('tree');
 
-    showFavorites = signal<boolean>(false);
-
     search = model<string>('');
 
     viewData = computed(() => {
-        const showFavorites = this.showFavorites();
-        const favorites = this.favoritesStore.favorites();
         const query = this.search();
 
-        let data = this._data;
-
-        if (showFavorites) {
-            data = this.filterTreeByFavorites(data, favorites);
-        }
-
         if (query.length === 0) {
-            return data;
-        } else if (query.length >= 3) {
-            data = this.filterRecursive(query, this._data);
+            return this._data;
         }
 
-        return data;
+        return this.filterRecursive(query, this._data);
     });
 
     childrenAccessor = (node: ResourceNode) => node.children ?? [];
@@ -139,14 +131,12 @@ export class ResourcesComponent implements OnInit {
 
     applyFilter(): void {
         if (isPlatformBrowser(this.platformId)) {
-            queueMicrotask(() => {
-                const tree = this.tree();
-                tree?.collapseAll();
+            const tree = this.tree();
+            tree?.collapseAll();
 
-                if (this.search().length >= 3) {
-                    this.expandPathsToMatches(this.search(), this.viewData());
-                }
-            });
+            if (this.search().length >= 3) {
+                this.expandPathsToMatches(this.search(), this.viewData());
+            }
         }
     }
 
@@ -173,25 +163,11 @@ export class ResourcesComponent implements OnInit {
         this.preview().close();
     }
 
-    toggleFavorite({ path }: ResourceNode): void {
-        if (!path) return;
-
-        this.favoritesStore.toggle(path);
-    }
-
-    isFavorite({ path }: ResourceNode): boolean {
-        if (!path) return false;
-
-        return this.favoritesStore.isFavorite(path);
-    }
-
     private filterRecursive(
         query: string,
         data: ResourceNode[],
         property: keyof ResourceNode = 'name'
     ): ResourceNode[] {
-        if (!query) return data;
-
         const lowerQuery = query.toLowerCase();
 
         return data
@@ -212,7 +188,6 @@ export class ResourcesComponent implements OnInit {
 
     private expandPathsToMatches(query: string, roots: ResourceNode[]): void {
         const tree = this.tree();
-        if (!tree || !query) return;
 
         const q = query.toLowerCase();
 
@@ -225,36 +200,12 @@ export class ResourcesComponent implements OnInit {
             }
 
             if (childHasMatch) {
-                tree.expand(node);
+                tree?.expand(node);
             }
 
             return selfMatch || childHasMatch;
         };
 
         for (const root of roots) dfs(root);
-    }
-
-    private filterTreeByFavorites(data: ResourceNode[], favs: Set<string>): ResourceNode[] {
-        const out: ResourceNode[] = [];
-
-        for (const node of data) {
-            const filteredChildren = node.children?.length
-                ? this.filterTreeByFavorites(node.children, favs)
-                : [];
-
-            if (!node.path)
-                continue;
-
-            const isFav = favs.has(node.path);
-
-            if (isFav || filteredChildren.length) {
-                out.push({
-                    ...node,
-                    children: filteredChildren,
-                });
-            }
-        }
-
-        return out;
     }
 }

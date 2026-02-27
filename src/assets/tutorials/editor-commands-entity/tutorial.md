@@ -1,4 +1,4 @@
-[This tutorial explains the commands found in **entity**.
+This tutorial explains the commands found in **entity**.
 
 To see the glossary, check it out here: [Editor Commands Glossary](/tutorials/editor-commands)
 
@@ -12,7 +12,7 @@ Invokes a specific scripted effect for the selected entity/actor.
 
 **Parameters:**
 
-- **selector**: target actor/entity (see *Selector*)
+- **selector**: target actor/entity (see [Selector](/tutorials/editor-commands-generic#select))
 - **effect**: effect name
   (available effects depend on the selected actor/entity)
 
@@ -24,5 +24,5 @@ Assigns a specific runtime function to the selected actor/entity.
 
 **Parameters:**
 
-- **selector**: target actor/entity (see *Selector*)
+- **selector**: target actor/entity (see [Selector](/tutorials/editor-commands-generic#select))
 - **call**: function to call for the selected entity

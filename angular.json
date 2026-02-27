@@ -67,6 +67,15 @@
               ],
               "outputHashing": "all"
             },
+            "e2e": {
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "src/assets-e2e/",
+                  "output": "/assets/"
+                }
+              ]
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -84,6 +93,9 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
+            "e2e": {
+              "buildTarget": "gem-tools:build:e2e"
+            },
             "production": {
               "buildTarget": "gem-tools:build:production"
             },
@@ -95,6 +107,17 @@
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "gem-tools:serve:e2e"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "gem-tools:serve:production"
+            }
+          }
         }
       }
     }

@@ -1,6 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {ActivatedRoute} from "@angular/router";
-import {ManifestItem} from "../services/tutorial-manifest.service";
+import { ComponentFixture } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import {MockTutorialManifest} from "@testing/mocks/tutorial-manifest";
+import { createComponent } from '@testing/utils/testbed';
 
 import { TutorialCardComponent } from '../tutorial-card/tutorial-card.component';
 
@@ -8,28 +9,16 @@ describe('TutorialCardComponent', () => {
   let component: TutorialCardComponent;
   let fixture: ComponentFixture<TutorialCardComponent>;
 
-  const mockManifestItem: ManifestItem = {
-    author: 'Test',
-    title: 'Test Item',
-    subtitle: 'Test subtitle',
-    id: 'test',
-    file: 'tutorial.md'
-  }
-
-  const mockRoute = {}
-
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    const result = await createComponent(TutorialCardComponent, {
       imports: [TutorialCardComponent],
-      providers: [
-        { provide: ActivatedRoute, useValue: mockRoute }
-      ]
-    })
-    .compileComponents();
+      providers: [provideRouter([])],
+      detectChanges: false,
+    });
 
-    fixture = TestBed.createComponent(TutorialCardComponent);
-    component = fixture.componentInstance;
-    fixture.componentRef.setInput('item', mockManifestItem);
+    fixture = result.fixture;
+    component = result.component;
+    fixture.componentRef.setInput('item', new MockTutorialManifest().getItem(0));
     fixture.detectChanges();
   });
 

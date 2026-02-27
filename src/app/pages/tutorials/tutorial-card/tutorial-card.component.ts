@@ -11,15 +11,15 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
   imports: [
     NgIcon,
     RouterLink,
-    NgIconComponent,
-    NgOptimizedImage
+      NgIconComponent,
+      NgOptimizedImage
   ],
   viewProviders: [
-    provideIcons({tablerChevronRight, tablerStarFill})
+      provideIcons({tablerChevronRight, tablerStarFill})
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'group rounded-2xl bg-white dark:bg-white/5 shadow-sm ring-1 ring-slate-100 dark:ring-white/10 p-5 transition hover:ring-slate-200 dark:hover:ring-white/20 relative'
+      class: 'group rounded-2xl bg-white dark:bg-white/5 shadow-sm ring-1 ring-slate-100 dark:ring-white/10 p-5 transition hover:ring-slate-200 dark:hover:ring-white/20 relative'
   },
   template: `
     @let preview = item().preview;
@@ -59,7 +59,7 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
           <span>Open tutorial</span>
           <ng-icon name="tablerChevronRight"></ng-icon>
         </div>
-        <span class="text-sm text-slate-600! dark:text-white/50!">by {{ item().author }}</span>
+        <span class="text-sm text-slate-800! dark:text-white/75!">by {{ item().author }}</span>
       </div>
     </a>
   `

@@ -3,7 +3,8 @@ Editor Commands define **what happens** in a mission when certain conditions are
 
 Most commands share a common pattern:
 
-- **selector** determines which actors/entities the command affects. (see *Selector*)
+- **selector** determines which actors/entities the command affects. (
+  see [Selector](/tutorials/editor-commands-generic#select))
 - Additional fields depend on the selected command.
 - A field set to `–` means the command **does not change** that specific property.
 

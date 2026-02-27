@@ -13,7 +13,7 @@ type DifficultyFilter = 0 | Difficulty;
 
 @Component({
   selector: 'gem-tutorials',
-  imports: [NgClass, FormsModule, MatPaginatorModule, TutorialCardComponent, NgIcon],
+    imports: [NgClass, FormsModule, MatPaginatorModule, TutorialCardComponent, NgIcon],
   templateUrl: './tutorials.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
@@ -29,7 +29,7 @@ export class TutorialsComponent {
 
   readonly manifest = toSignal<TutorialManifest | null>(
       this.manifestSvc.manifest$,
-      { initialValue: null }
+      {initialValue: null}
   );
 
   readonly query = model('');

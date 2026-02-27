@@ -15,8 +15,6 @@ The editor uses four different colored lines, each with a specific purpose:
 | Blue       | Camera Boundary        | Limits how far the player camera can move. The camera cannot pass this line.                |
 | Purple     | Unit Movement Boundary | Prevents ground units from crossing this line. Does not affect aircraft.                    |
 
----
-
 ## How Each Line Works
 
 #### Yellow Line – Fog Start
@@ -41,8 +39,6 @@ Aircraft, however, are not affected and can freely fly over this line.
 
 This line must always be placed **at the very edge of the map**.
 
----
-
 ## Critical Placement Rules
 
 - Place the **yellow line first** to define where fog begins.
@@ -56,8 +52,6 @@ Incorrect placement of the purple line can cause serious gameplay issues:
 - Reinforcements may fail to enter or behave correctly
 - Mission flow can break entirely
 
----
-
 ## Editing Maps and Adding New Sections
 
 When expanding a map or adding new terrain sections (set clips):
@@ -65,8 +59,6 @@ When expanding a map or adding new terrain sections (set clips):
 - Adjust **only the yellow and blue lines**
 - Leave the **purple line unchanged**
 - This ensures that unit movement rules remain intact and predictable
-
----
 
 ## Best Practices Summary
 

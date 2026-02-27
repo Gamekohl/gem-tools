@@ -1,14 +1,7 @@
-import {Difficulty, ManifestItem, TutorialManifest} from "../../app/pages/tutorials/services/tutorial-manifest.service";
+import {Difficulty, ManifestItem} from "../../app/pages/tutorials/services/tutorial-manifest.service";
 
-export const tutorialManifestMock = {
-    getItemWithoutDifficulty: (): ManifestItem => tutorialManifestMock.items[3],
-    getItem: (idx: number): ManifestItem => {
-        if (idx < 0 || idx >= tutorialManifestMock.items.length)
-            throw new Error(`Invalid index ${idx} in getItem(idx)`);
-
-        return tutorialManifestMock.items[idx];
-    },
-    items: [
+export class MockTutorialManifest {
+    private readonly _items: ManifestItem[] = [
         {
             author: 'Alice',
             id: 'intro',
@@ -17,6 +10,7 @@ export const tutorialManifestMock = {
             difficulty: Difficulty.Beginner,
             tags: ['start', 'overview'],
             file: 'intro.md',
+            featured: false,
         },
         {
             author: 'Bob',
@@ -26,6 +20,7 @@ export const tutorialManifestMock = {
             difficulty: Difficulty.Intermediate,
             tags: ['scripting', 'logic'],
             file: 'ai.md',
+            featured: false,
         },
         {
             author: 'Cara',
@@ -35,6 +30,7 @@ export const tutorialManifestMock = {
             difficulty: Difficulty.Advanced,
             tags: ['performance'],
             file: 'perf.md',
+            featured: false,
         },
         {
             author: 'Dan',
@@ -44,6 +40,29 @@ export const tutorialManifestMock = {
             // difficulty omitted
             tags: ['misc'],
             file: 'no.md',
+            featured: false,
         },
-    ] satisfies TutorialManifest
+        {
+            author: 'James',
+            id: 'featured',
+            title: 'Featured Tutorial',
+            subtitle: 'Featured Tutorial',
+            difficulty: Difficulty.Beginner,
+            tags: ['featured'],
+            file: 'featured.md',
+            featured: true
+        }
+    ];
+    get itemWithoutDifficulty(): ManifestItem {
+        return this._items[3];
+    }
+    get items(): ManifestItem[] {
+        return this._items;
+    }
+    getItem(idx: number): ManifestItem {
+        if (idx < 0 || idx >= this._items.length)
+            throw new Error(`Invalid index ${idx} in getItem(idx)`);
+
+        return this._items[idx];
+    }
 }

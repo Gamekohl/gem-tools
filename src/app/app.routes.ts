@@ -1,5 +1,5 @@
-import { Routes } from '@angular/router';
-import { tutorialResolver } from './pages/tutorials/tutorial/tutorial.resolver';
+import {Routes} from '@angular/router';
+import {tutorialResolver} from './pages/tutorials/tutorial/tutorial.resolver';
 
 export const routes: Routes = [
     {
@@ -28,11 +28,15 @@ export const routes: Routes = [
         title: 'Tutorials - GEM-Tools'
     },
     {
-        path: 'tutorials/:id',
         loadComponent: () => import('./pages/tutorials/tutorial/tutorial.component').then(m => m.TutorialComponent),
+        path: 'tutorials/:id',
         resolve: {
             tutorial: tutorialResolver
         },
+    },
+    {
+        loadComponent: () => import('./pages/tutorials/tutorial-not-found/tutorial-not-found.component').then(m => m.TutorialNotFoundComponent),
+        path: 'tutorial-not-found',
     },
     {
         path: '**',

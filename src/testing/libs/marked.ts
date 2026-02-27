@@ -18,6 +18,12 @@ export const mockMarked = () => {
                 const trimmed = line.trim();
                 if (!trimmed) continue;
 
+                if (trimmed.startsWith('### ')) {
+                    const text = trimmed.slice(4);
+                    out.push(activeRenderer.heading({text, depth: 3}));
+                    continue;
+                }
+
                 if (trimmed.startsWith('## ')) {
                     const text = trimmed.slice(3);
                     out.push(activeRenderer.heading({text, depth: 2}));

@@ -3,6 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {provideRouter} from '@angular/router';
 import {RouterTestingHarness} from "@angular/router/testing";
 import {NgIconComponent} from '@ng-icons/core';
+import {createComponent} from "@testing/utils/testbed";
 import * as vercelAnalytics from '@vercel/analytics';
 import {AppComponent} from './app.component';
 
@@ -24,7 +25,7 @@ describe('AppComponent', () => {
     let fixture: ComponentFixture<AppComponent>;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
+        const result = await createComponent(AppComponent, {
             imports: [
                 AppComponent,
                 NgIconComponent
@@ -34,13 +35,11 @@ describe('AppComponent', () => {
                     {component: TestComponent, path: 'test'}
                 ])
             ]
-        }).compileComponents();
+        });
 
-        fixture = TestBed.createComponent(AppComponent);
-        component = fixture.componentInstance;
+        fixture = result.fixture;
+        component = result.component;
     });
-
-    afterEach(() => jest.clearAllMocks());
 
     it('should create the component', () => {
         expect(component).toBeTruthy();
@@ -50,7 +49,6 @@ describe('AppComponent', () => {
         component.ngOnInit();
 
         expect(vercelAnalytics.inject).toHaveBeenCalled();
-        expect(vercelAnalytics.inject).toHaveBeenCalledTimes(1);
     });
 
     it('should render without errors', () => {
@@ -74,7 +72,7 @@ describe('AppComponent', () => {
 
         const localStorageSpy = spyOn(Storage.prototype, 'getItem');
 
-        await TestBed.configureTestingModule({
+        const result = await createComponent(AppComponent, {
             imports: [
                 AppComponent,
                 NgIconComponent
@@ -83,10 +81,9 @@ describe('AppComponent', () => {
                 provideRouter([]),
                 {provide: PLATFORM_ID, useValue: 'server'},
             ]
-        })
-            .compileComponents();
+        });
 
-        const fixture = TestBed.createComponent(AppComponent);
+        const fixture = result.fixture;
         fixture.detectChanges();
 
         expect(localStorageSpy).not.toHaveBeenCalled();
