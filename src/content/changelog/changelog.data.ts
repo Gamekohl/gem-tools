@@ -13,6 +13,7 @@ import v120 from './1.2.0.md';
 import v121 from './1.2.1.md';
 import v122 from './1.2.2.md';
 import v123 from './1.2.3.md';
+import v130 from './1.3.0.md';
 
 export interface ChangelogEntry {
     version: string;
@@ -22,19 +23,20 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+    {version: '1.3.0', date: '2026-02-27', title: 'Tutorials and E2E-Test-Setup', markdown: v130},
     {version: '1.2.3', date: '2026-02-26', title: 'Package Updates', markdown: v123},
     {version: '1.2.2', date: '2026-02-20', title: 'Package Updates', markdown: v122},
     {version: '1.2.1', date: '2026-02-18', title: 'Package Updates', markdown: v121},
     {version: '1.2.0', date: '2026-02-06', title: 'Tutorials and Package Updates', markdown: v120},
     {version: '1.1.5', date: '2026-02-04', title: 'Package Updates', markdown: v115},
     {version: '1.1.4', date: '2026-02-04', title: 'Tutorials and Package Updates', markdown: v114},
-    { version: '1.1.3', date: '2026-01-31', title: 'Package Updates', markdown: v113 },
-    { version: '1.1.2', date: '2026-01-30', title: 'Build', markdown: v112 },
-    { version: '1.1.1', date: '2026-01-30', title: 'Added GSF', markdown: v111 },
-    { version: '1.0.1', date: '2026-01-30', title: 'Fixes and Package Updates', markdown: v110 },
-    { version: '1.0.0', date: '2026-01-29', title: 'Maps and Tutorials', markdown: v100 },
-    { version: '0.0.3', date: '2026-01-27', title: 'Data Update', markdown: v003 },
-    { version: '0.0.2', date: '2026-01-26', title: 'Preview Pictures', markdown: v002 },
-    { version: '0.0.1', date: '2026-01-25', title: 'Package Updates', markdown: v001 },
-    { version: '0.0.0', date: '2024-09-12', title: 'Initial Setup', markdown: v000 },
+    {version: '1.1.3', date: '2026-01-31', title: 'Package Updates', markdown: v113},
+    {version: '1.1.2', date: '2026-01-30', title: 'Build', markdown: v112},
+    {version: '1.1.1', date: '2026-01-30', title: 'Added GSF', markdown: v111},
+    {version: '1.0.1', date: '2026-01-30', title: 'Fixes and Package Updates', markdown: v110},
+    {version: '1.0.0', date: '2026-01-29', title: 'Maps and Tutorials', markdown: v100},
+    {version: '0.0.3', date: '2026-01-27', title: 'Data Update', markdown: v003},
+    {version: '0.0.2', date: '2026-01-26', title: 'Preview Pictures', markdown: v002},
+    {version: '0.0.1', date: '2026-01-25', title: 'Package Updates', markdown: v001},
+    {version: '0.0.0', date: '2024-09-12', title: 'Initial Setup', markdown: v000},
 ];

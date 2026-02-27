@@ -21,10 +21,11 @@
                         (click)="selectEntry(change)"
                         [attr.aria-selected]="selectedEntry().version === change.version ? 'true' : null"
                         [ngClass]="{
-                                'border-l-slate-200! dark:border-l-white!': selectedEntry().version === change.version,
-                                'bg-slate-50 dark:bg-white/5': selectedEntry().version === change.version
-                            }"
-                        class="w-full text-left px-4 py-3 border-b cursor-pointer border-l-4 border-slate-100 hover:bg-slate-50 dark:border-white/25 dark:hover:bg-white/5 border-l-transparent!"
+                            'border-l-slate-600! dark:border-l-white!': selectedEntry().version === change.version,
+                            'bg-slate-100 dark:bg-white/5': selectedEntry().version === change.version,
+                            'border-l-transparent!': selectedEntry().version !== change.version
+                        }"
+                        class="w-full text-left px-4 py-3 border-b cursor-pointer border-l-4 border-slate-100 hover:bg-slate-100 dark:border-white/25 dark:hover:bg-white/5 border-l-transparent"
                         type="button"
                 >
                     <div class="flex items-start justify-between gap-3">

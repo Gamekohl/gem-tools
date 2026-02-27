@@ -6,11 +6,10 @@ import {SeoService} from "../../services/seo.service";
 @Component({
   selector: 'app-changelog',
   templateUrl: './changelog.component.html',
-  styleUrl: './changelog.component.scss',
-    imports: [
-        DatePipe,
-        NgClass
-    ],
+  imports: [
+    DatePipe,
+    NgClass
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChangelogComponent {
