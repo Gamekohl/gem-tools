@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/Gamekohl/gem-tools/compare/v1.2.3...v1.3.0) (2026-02-27)
+
+
+### Features
+
+* Added E2E-Tests + Unit-Tests + New tutorial + Discord Link ([9722765](https://github.com/Gamekohl/gem-tools/commit/9722765f81926a3694604d2219b9795d15b62cad))
+* Merge pull request [#103](https://github.com/Gamekohl/gem-tools/issues/103) from Gamekohl/develop ([9722765](https://github.com/Gamekohl/gem-tools/commit/9722765f81926a3694604d2219b9795d15b62cad))
+
 ## [1.2.3](https://github.com/Gamekohl/gem-tools/compare/v1.2.2...v1.2.3) (2026-02-26)
 
 ### Bug Fixes
