@@ -24,9 +24,11 @@ export class AppShellPage {
 
     readonly linkGitHubDesktop: Locator;
     readonly linkBmacDesktop: Locator;
+    readonly linkDiscordDesktop: Locator;
 
     readonly linkGitHubSidenav: Locator;
     readonly linkBmacSidenav: Locator;
+    readonly linkDiscordSidenav: Locator;
 
     readonly changelogLink: Locator;
 
@@ -56,9 +58,11 @@ export class AppShellPage {
         // We scope to header to avoid duplicates with sidenav.
         this.linkGitHubDesktop = this.header.getByTestId('github-link');
         this.linkBmacDesktop = this.header.getByTestId('bmac-link');
+        this.linkDiscordDesktop = this.header.getByTestId('discord-link');
 
         this.linkGitHubSidenav = this.sidenav.getByTestId('github-link');
         this.linkBmacSidenav = this.sidenav.getByTestId('bmac-link');
+        this.linkDiscordSidenav = this.sidenav.getByTestId('discord-link');
 
         this.themeToggleDesktop = this.header.getByTestId('theme-toggle');
         this.themeToggleSidenav = this.sidenav.getByTestId('theme-toggle');

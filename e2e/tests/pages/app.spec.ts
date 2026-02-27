@@ -37,11 +37,14 @@ test.describe('AppShell - Desktop', () => {
         const shell = new AppShellPage(page);
         await shell.goto();
 
-        await expect(shell.linkGitHubDesktop).toHaveAttribute('href', 'https://github.com/Gamekohl');
+        await expect(shell.linkGitHubDesktop).toHaveAttribute('href', 'https://github.com/Gamekohl/gem-tools');
         await expect(shell.linkGitHubDesktop).toHaveAttribute('target', '_blank');
 
         await expect(shell.linkBmacDesktop).toHaveAttribute('href', 'https://buymeacoffee.com/gamekohl');
         await expect(shell.linkBmacDesktop).toHaveAttribute('target', '_blank');
+
+        await expect(shell.linkDiscordDesktop).toHaveAttribute('href', 'https://discord.gg/SKAKdAgB6u');
+        await expect(shell.linkDiscordDesktop).toHaveAttribute('target', '_blank');
 
         // Changelog link text is "v{version}" (dynamic). Just assert it exists and navigates.
         await expect(shell.changelogLink).toBeVisible();

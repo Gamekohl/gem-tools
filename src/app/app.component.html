@@ -58,6 +58,13 @@
                     <ng-icon class="ml-1" name="tablerBrandGithub"></ng-icon>&nbsp;GitHub!</a>
             </div>
             <span class="opacity-25">|</span>
+            <div class="flex justify-center items-center">
+                <a class="flex items-center dark:text-white hover:underline cursor-pointer"
+                   href="https://discord.gg/SKAKdAgB6u"
+                   target="_blank">Join the
+                    <ng-icon class="ml-1" name="tablerBrandDiscord"></ng-icon>&nbsp;Discord</a>
+            </div>
+            <span class="opacity-25">|</span>
             <span class="text-slate-600">created by Gamekohl</span>
             <span class="opacity-25">|</span>
             <a class="cursor-pointer" routerLink="/changelog" title="Changelog">
@@ -109,12 +116,22 @@
     <ng-template #external>
         <a
                 class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020]"
-                href="https://github.com/Gamekohl"
+                href="https://github.com/Gamekohl/gem-tools"
                 target="_blank"
                 title="GitHub"
                 data-testid="github-link"
         >
             <ng-icon name="tablerBrandGithub"></ng-icon>
+        </a>
+
+        <a
+                class="border border-slate-200 dark:border-white/25 flex items-center justify-center rounded-xl p-2 text-white! bg-black hover:bg-[#202020]"
+                href="https://discord.gg/SKAKdAgB6u"
+                target="_blank"
+                title="Discord"
+                data-testid="discord-link"
+        >
+            <ng-icon name="tablerBrandDiscord"></ng-icon>
         </a>
 
         <a
@@ -126,6 +143,8 @@
         >
             <ng-icon name="tablerCoffee"></ng-icon>
         </a>
+
+        <div class="w-px h-6 bg-slate-200 dark:bg-white/25 mx-2"></div>
 
         <button
                 (click)="toggleTheme()"

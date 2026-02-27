@@ -19,6 +19,7 @@ import {NgIconComponent, provideIcons} from '@ng-icons/core';
 import {
     tablerArrowsRandom,
     tablerBox,
+    tablerBrandDiscord,
     tablerBrandGithub,
     tablerCoffee,
     tablerMap,
@@ -52,7 +53,8 @@ import {SeoService} from "./services/seo.service";
         tablerMap,
         tablerMoon,
         tablerSun,
-        tablerMenu2
+        tablerMenu2,
+        tablerBrandDiscord
     })],
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
