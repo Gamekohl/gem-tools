@@ -1,13 +1,12 @@
 import {TestBed} from '@angular/core/testing';
 import {DomSanitizer} from '@angular/platform-browser';
 import {mockMarked} from "@testing/libs/marked";
+import {MockDomSanitizer} from "@testing/utils/dom-sanitizer";
 import {normalize} from "@testing/utils/normalize";
 import {linkIcon} from "../services/content/icons";
-import {MockDomSanitizer} from "@testing/utils/dom-sanitizer";
+import {TutorialContentService} from '../services/tutorial-content.service';
 
 jest.mock('marked', () => mockMarked());
-
-import {TutorialContentService} from '../services/tutorial-content.service';
 
 describe('TutorialContentService', () => {
     let service: TutorialContentService;
@@ -16,7 +15,7 @@ describe('TutorialContentService', () => {
     const makeHeading = (id: string, text: string, type: 'h2' | 'h3') => normalize(`
         <${type} id="${id}" class="group relative flex items-center gap-2">
             ${text}
-            <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+            <div data-action="link-heading" class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
                 ${linkIcon}
             </div>
         </${type}>

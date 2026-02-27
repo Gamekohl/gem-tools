@@ -100,7 +100,7 @@ export class TutorialContentService {
         return `
             <h2 id="${id}" class="group relative flex items-center gap-2">
                 ${text}
-                <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+                <div data-action="link-heading" class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
                     ${linkIcon}
                 </div>
             </h2>`;
@@ -120,7 +120,7 @@ export class TutorialContentService {
         return `
             <h3 id="${id}" class="group relative flex items-center gap-2">
                 ${text}
-                <div class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
+                <div data-action="link-heading" class="flex-1 opacity-0 group-hover:opacity-50 transition-opacity">
                     ${linkIcon}
                 </div>
             </h3>`;

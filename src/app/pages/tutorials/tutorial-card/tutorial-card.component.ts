@@ -59,7 +59,7 @@ import {Difficulty, ManifestItem} from "../services/tutorial-manifest.service";
           <span>Open tutorial</span>
           <ng-icon name="tablerChevronRight"></ng-icon>
         </div>
-        <span class="text-sm text-slate-600! dark:text-white/50!">by {{ item().author }}</span>
+        <span class="text-sm text-slate-800! dark:text-white/75!">by {{ item().author }}</span>
       </div>
     </a>
   `

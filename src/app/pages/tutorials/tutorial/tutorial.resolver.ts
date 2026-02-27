@@ -1,6 +1,6 @@
 import {inject} from '@angular/core';
-import {ResolveFn} from '@angular/router';
-import {of} from 'rxjs';
+import {ResolveFn, Router} from '@angular/router';
+import {of, tap} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import type {ManifestItem} from '../services/tutorial-manifest.service';
 import {TutorialManifestService} from '../services/tutorial-manifest.service';
@@ -12,6 +12,7 @@ export type TutorialResolved = {
 
 export const tutorialResolver: ResolveFn<TutorialResolved | null> = (route) => {
     const manifestSvc = inject(TutorialManifestService);
+    const router = inject(Router)
     const id = route.paramMap.get('id');
 
     if (!id) {
@@ -28,6 +29,11 @@ export const tutorialResolver: ResolveFn<TutorialResolved | null> = (route) => {
                 )
                 : of(null)
         ),
+        tap(value => {
+            if (!value) {
+                void router.navigateByUrl(`/tutorial-not-found`);
+            }
+        }),
         catchError(() => of(null))
     );
 };

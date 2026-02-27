@@ -25,7 +25,7 @@ import {
     tablerInfoCircle,
     tablerLink
 } from "@ng-icons/tabler-icons";
-import {combineLatest} from "rxjs";
+import {combineLatest, fromEvent} from "rxjs";
 import {filter, map} from "rxjs/operators";
 import {environment} from "../../../../environments/environment";
 import {SeoService} from "../../../services/seo.service";
@@ -88,6 +88,8 @@ export class TutorialComponent implements AfterViewInit, OnDestroy {
     readonly item = computed(() => this.resolved()?.item ?? null);
     readonly markdown = computed(() => this.resolved()?.markdown ?? '');
 
+    readonly credits = computed(() => this.item()?.credits ?? []);
+
     readonly difficulty = computed(() => {
         const item = this.item();
         return item?.difficulty ? this.difficultyLabels[item.difficulty] : null;
@@ -133,33 +135,38 @@ export class TutorialComponent implements AfterViewInit, OnDestroy {
         if (!this.isBrowser())
             return;
 
-        this.contentContainer()?.nativeElement.addEventListener('click', ev => {
-            const target = ev.target as HTMLElement | null;
+        fromEvent(window.document.documentElement, 'click').pipe(
+            takeUntilDestroyed(this.destroyRef),
+        )
+            .subscribe({
+                next: ev => {
+                    const target = ev.target as HTMLElement | null;
 
-            let action: 'link' | 'bookmark' | null;
+                    let action: 'link' | 'bookmark' | null;
 
-            let btn = target?.closest<HTMLElement>('[data-action="bookmark-heading"]');
+                    let btn = target?.closest<HTMLElement>('[data-action="bookmark-heading"]');
 
-            if (!btn) {
-                btn = target?.closest<HTMLElement>('[data-action="link-heading"]');
-                action = 'link';
-            } else {
-                action = 'bookmark';
-            }
+                    if (!btn) {
+                        btn = target?.closest<HTMLElement>('[data-action="link-heading"]');
+                        action = 'link';
+                    } else {
+                        action = 'bookmark';
+                    }
 
-            const parent = btn?.parentElement?.parentElement;
+                    const parent = btn?.parentElement?.parentElement;
 
-            const headingId = parent?.getAttribute('id');
-            if (!headingId) return;
+                    const headingId = parent?.getAttribute('id');
+                    if (!headingId) return;
 
-            switch (action) {
-                case 'link':
-                    this.copySectionLink(headingId);
-                    break;
-                default:
-                    break;
-            }
-        });
+                    switch (action) {
+                        case 'link':
+                            this.copySectionLink(headingId);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
     }
 
     ngOnDestroy(): void {

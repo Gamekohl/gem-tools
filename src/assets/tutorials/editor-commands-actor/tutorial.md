@@ -12,13 +12,27 @@ Adds or removes abilities (properties) from selected entities.
 
 **Parameters:**
 
-- **selector**: targeted entity/actor(s) (see *Selector*)
+- **selector**: targeted entity/actor(s) (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - **add**: ability to add (chosen from the dropdown list)
 - **remove**: ability to remove (chosen from the dropdown list)
+
+## action
+
+![action](./images/action.webp)
+
+**Parameters:**
+
+- **selector**: targeted entity/actor(s) (see [Selector](/tutorials/editor-commands-generic#select))
+- **action**: action to perform
+  - *Note*: Only works with few of the actions in the dropdown list. Most of them are obsolete or work only in special
+    ways.
+- **target**: The target of which the action is performed on.
+- **volume**: TBE
+- **waypoint**: TBE
 
 ## actor_fire
 
@@ -28,11 +42,11 @@ Makes selected actors fire at a target waypoint.
 
 **Parameters:**
 
-- **selector**: actor(s) that start firing (see *Selector*)
+- **selector**: actor(s) that start firing (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - attack
     - *position*: actor(s) fire on a specified waypoint
         - When **attack → position** selected:
@@ -57,11 +71,11 @@ Directs actors into cover.
 
 **Parameters:**
 
-- **selector**: actors to send to cover (see *Selector*)
+- **selector**: actors to send to cover (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - **covers**: one or more cover names (optional). If not specified, actors move to the nearest available cover.
 - **mode**:
     - *best*: TBE
@@ -76,7 +90,7 @@ Controls aircraft movement.
 
 **Parameters:**
 
-- **selector**: aircraft (see *Selector*)
+- **selector**: aircraft (see [Selector](/tutorials/editor-commands-generic#select))
 - **ground**:
     - `–` normal flight at the assigned altitude
     - `✓` aircraft moves on the ground (altitude becomes irrelevant)
@@ -92,7 +106,7 @@ You can find the complete list of animations here: [Animations list](/animations
 
 **Parameters:**
 
-- **selector**: actor that plays the animation (see *Selector*)
+- **selector**: actor that plays the animation (see [Selector](/tutorials/editor-commands-generic#select))
 - **collage**: list of animations to play
 - **speed**: animation playback speed
 - **cicledelay**: delay between animations
@@ -122,11 +136,11 @@ Sets actors down (disembark) at a waypoint.
 
 **Parameters:**
 
-- **selector**: determines where actors get off from (see *Selector*)
+- **selector**: determines where actors get off from (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - **waypoint (.uid / .name)**: waypoint to disembark at
 - **crew**: actor(s) which should get off
 - **emit .mode**: who gets off: `all`, `passengers`, `crew`
@@ -141,11 +155,11 @@ Changes which player/side an actor belongs to.
 
 **Parameters:**
 
-- **selector**: actors whose ownership changes (see *Selector*)
+- **selector**: actors whose ownership changes (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - **operation**:
     - *set*: TBE
     - *mask_set*: TBE
@@ -161,11 +175,11 @@ Makes an actor speak a phrase or phrase group (displayed above the actor).
 
 **Parameters:**
 
-- **selector**: the speaker (see *Selector*)
+- **selector**: the speaker (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - **say**: phrase name (from `say.set`). Multiple variants can exist; one is chosen randomly at runtime.
 - **text**: text which should be said
 - **clear_queue**: TBE
@@ -178,9 +192,9 @@ Stops actors for a specified time (commonly used during waypoint movement).
 
 **Parameters:**
 
-- **selector**: actor(s) that should wait (see *Selector*)
+- **selector**: actor(s) that should wait (see [Selector](/tutorials/editor-commands-generic#select))
 - **drop**:
-    - *orders*: TBE
-    - *sensor*: TBE
-    - *senseless*: TBE
+  - *orders*: Drops any previously given orders (e.g., move to waypoint, etc.)
+  - *sensor*: Drops the ability of the AI to detect/see anything
+  - *senseless*: Resets the AI brain
 - **time**: waiting time in seconds

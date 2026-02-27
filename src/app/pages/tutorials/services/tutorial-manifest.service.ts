@@ -22,6 +22,7 @@ export type ManifestItem = {
     file: string;
     preview?: string;
     featured?: boolean
+    credits: string[];
 };
 
 @Injectable({providedIn: 'root'})
