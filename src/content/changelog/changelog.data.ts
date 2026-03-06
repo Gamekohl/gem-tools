@@ -15,6 +15,7 @@ import v122 from './1.2.2.md';
 import v123 from './1.2.3.md';
 import v130 from './1.3.0.md';
 import v131 from './1.3.1.md';
+import v132 from './1.3.2.md';
 
 export interface ChangelogEntry {
     version: string;
@@ -24,6 +25,7 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+    {version: '1.3.2', date: '2026-03-06', title: 'Package Updates', markdown: v132},
     {version: '1.3.1', date: '2026-03-03', title: 'Package Updates', markdown: v131},
     {version: '1.3.0', date: '2026-02-27', title: 'Tutorials and E2E-Test-Setup', markdown: v130},
     {version: '1.2.3', date: '2026-02-26', title: 'Package Updates', markdown: v123},
