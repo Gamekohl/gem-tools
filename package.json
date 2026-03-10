@@ -88,7 +88,7 @@
   },
   "overrides": {
     "@angular/cli": {
-      "@modelcontextprotocol/sdk": "1.26.0"
+      "@modelcontextprotocol/sdk": "1.27.1"
     },
     "@vercel/node": {
       "path-to-regexp": "6.3.0",
