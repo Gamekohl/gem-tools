@@ -18,6 +18,7 @@ import v131 from './1.3.1.md';
 import v132 from './1.3.2.md';
 import v133 from './1.3.3.md';
 import v134 from './1.3.4.md';
+import v135 from './1.3.5.md';
 
 export interface ChangelogEntry {
     version: string;
@@ -27,6 +28,7 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+    {version: '1.3.5', date: '2026-05-06', title: 'Package Updates', markdown: v135},
     {version: '1.3.4', date: '2026-04-05', title: 'Package Updates', markdown: v134},
     {version: '1.3.3', date: '2026-03-13', title: 'Package Updates', markdown: v133},
     {version: '1.3.2', date: '2026-03-06', title: 'Package Updates', markdown: v132},
